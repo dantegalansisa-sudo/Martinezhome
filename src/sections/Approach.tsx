@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { ArrowRight, BarChart3, Home, KeyRound, UserRound } from 'lucide-react';
 import RevealText from '../components/RevealText';
 import { useParallax } from '../components/useParallax';
@@ -10,6 +11,8 @@ const SERVICES = [
   { icon: BarChart3, title: 'Inversión', text: 'Oportunidades con alto potencial.' },
   { icon: UserRound, title: 'Asesoría', text: 'Acompañamiento legal y personalizado.' },
 ];
+
+const MotionLink = motion.create(Link);
 
 const clipX = {
   hidden: { clipPath: 'inset(0 100% 0 0)' },
@@ -28,19 +31,19 @@ export default function Approach() {
     <section className="approach" id="servicios">
       <motion.div ref={ref} className="approach__media" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
         <motion.div className="reveal-clip" variants={clipX}>
-          <motion.img src="./images/penthouse-luz.webp" alt="Interior de apartamento de lujo con ventanales" style={{ y, scale: 1.18 }} />
+          <motion.img src="/props/casa-de-lujo-avenida-ecologica/02.webp" alt="Interior iluminado de una casa de lujo en venta" style={{ y, scale: 1.18 }} />
         </motion.div>
-        <motion.a
-          href="#contacto"
+        <MotionLink
+          to="/vende-con-nosotros"
           className="approach__pill"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.9, duration: 0.7, ease: EASINGS.smooth }}
         >
-          <span>Más que propiedades,<br />creamos oportunidades.</span>
+          <span>¿Quieres vender tu propiedad?<br /><strong>Te ayudamos a venderla.</strong></span>
           <span className="round-btn"><ArrowRight size={16} /></span>
-        </motion.a>
+        </MotionLink>
       </motion.div>
 
       <div className="approach__content">

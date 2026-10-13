@@ -1,9 +1,12 @@
 import { useRef, useState, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 interface Props {
   children: ReactNode;
   href?: string;
+  /** Internal route — rendered as a router Link */
+  to?: string;
   onClick?: () => void;
   className?: string;
   type?: 'button' | 'submit';
@@ -12,7 +15,7 @@ interface Props {
   ariaLabel?: string;
 }
 
-export default function MagneticButton({ children, href, onClick, className = '', type = 'button', strength = 0.3, external, ariaLabel }: Props) {
+export default function MagneticButton({ children, href, to, onClick, className = '', type = 'button', strength = 0.3, external, ariaLabel }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ x: 0, y: 0 });
 
@@ -30,7 +33,11 @@ export default function MagneticButton({ children, href, onClick, className = ''
       animate={pos}
       transition={{ type: 'spring', stiffness: 200, damping: 18, mass: 0.4 }}
     >
-      {href ? (
+      {to ? (
+        <Link to={to} className={className} aria-label={ariaLabel}>
+          {children}
+        </Link>
+      ) : href ? (
         <a href={href} className={className} aria-label={ariaLabel} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
           {children}
         </a>

@@ -1,10 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import { ArrowRight, Mail, MessageSquare, Phone, User } from 'lucide-react';
+import { ArrowRight, Mail, MapPin, MessageSquare, Phone, User } from 'lucide-react';
 import RevealText from '../components/RevealText';
 import MagneticButton from '../components/MagneticButton';
-import { waLink } from '../data';
+import { CONTACT, waLink } from '../data/site';
 import { EASINGS } from '../easings';
 
 export default function Contact() {
@@ -32,7 +32,7 @@ export default function Contact() {
   return (
     <section className="contact" id="contacto" ref={ref}>
       <motion.div className="contact__bg" style={{ y }}>
-        <img src="./images/cta-atardecer.webp" alt="" loading="lazy" />
+        <img src="/images/cta-atardecer.webp" alt="" loading="lazy" />
       </motion.div>
       <div className="contact__veil" />
       <div className="container contact__grid">
@@ -42,6 +42,16 @@ export default function Contact() {
           <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.3 }}>
             Completa el formulario y te contactaremos para asesorarte de manera personalizada.
           </motion.p>
+          <motion.ul className="contact__lines" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.45 }}>
+            {CONTACT.phones.map((ph, i) => (
+              <li key={ph}>
+                <Phone size={15} />
+                <a href={`tel:+1${ph.replace(/\D/g, '')}`}>{ph}</a>
+                {i === 0 && <span className="contact__main">Principal · WhatsApp</span>}
+              </li>
+            ))}
+            <li><MapPin size={15} /> <span>{CONTACT.address}</span></li>
+          </motion.ul>
         </div>
 
         <motion.form

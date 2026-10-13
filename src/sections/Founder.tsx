@@ -3,7 +3,7 @@ import { ArrowRight, BadgeCheck, Quote } from 'lucide-react';
 import RevealText from '../components/RevealText';
 import MagneticButton from '../components/MagneticButton';
 import { useParallax } from '../components/useParallax';
-import { CONTACT } from '../data';
+import { CONTACT } from '../data/site';
 import { EASINGS } from '../easings';
 
 export default function Founder() {
@@ -25,8 +25,8 @@ export default function Founder() {
               <li>Soluciones</li>
             </ul>
           </motion.div>
-          <MagneticButton href="#contacto" className="btn-dark">
-            Conoce más sobre nosotros <span className="btn-dark__icon"><ArrowRight size={15} /></span>
+          <MagneticButton to="/equipo" className="btn-dark">
+            Conoce a nuestro equipo <span className="btn-dark__icon"><ArrowRight size={15} /></span>
           </MagneticButton>
         </div>
 
@@ -39,7 +39,7 @@ export default function Founder() {
                 visible: { clipPath: 'inset(0% 0 0 0)', transition: { duration: 1.2, ease: EASINGS.premium } },
               }}
             >
-              <motion.img src="./images/ceo-vanessa.webp" alt="Lic. Vanessa Martínez, CEO y fundadora de Martínez Home RD" style={{ y, scale: 1.12 }} />
+              <motion.img src="/images/ceo-vanessa.webp" alt="Lic. Vanessa Martínez, CEO y fundadora de Martínez Home RD" style={{ y, scale: 1.12 }} />
             </motion.div>
             <span className="founder__badge"><BadgeCheck size={16} /> CEO · Martínez Home RD</span>
           </motion.div>

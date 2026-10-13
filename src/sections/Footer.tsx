@@ -1,12 +1,8 @@
+import { Link } from 'react-router-dom';
 import { MapPin, Phone } from 'lucide-react';
 import { InstagramIcon, ThreadsIcon, WhatsAppIcon } from '../components/BrandIcons';
-import { CONTACT, NAV } from '../data';
+import { CONTACT, NAV } from '../data/site';
 import { Brand } from './Navbar';
-
-const HREF: Record<string, string> = {
-  Propiedades: '#propiedades', Compra: '#propiedades', Alquiler: '#propiedades', Proyectos: '#propiedades',
-  Servicios: '#servicios', 'Sobre Nosotros': '#fundadora', Contacto: '#contacto',
-};
 
 export default function Footer() {
   return (
@@ -15,7 +11,8 @@ export default function Footer() {
         <div className="footer__top">
           <Brand />
           <nav className="footer__nav" aria-label="Pie de página">
-            {NAV.map((n) => <a key={n} href={HREF[n]}>{n}</a>)}
+            {NAV.map((n) => <Link key={n.label} to={n.to}>{n.label}</Link>)}
+            <Link to="/vende-con-nosotros">Vende con nosotros</Link>
           </nav>
           <div className="footer__social">
             <a href={CONTACT.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /></a>
@@ -29,7 +26,7 @@ export default function Footer() {
         </div>
         <div className="footer__bottom">
           <span>© 2026 Martínez Home Inmobiliaria. Todos los derechos reservados.</span>
-          <span><a href="#inicio">Términos y condiciones</a> | <a href="#inicio">Política de privacidad</a></span>
+          <span><Link to="/">Términos y condiciones</Link> | <Link to="/">Política de privacidad</Link></span>
         </div>
       </div>
     </footer>

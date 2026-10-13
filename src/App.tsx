@@ -1,44 +1,60 @@
-import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
-import { X } from 'lucide-react';
+import { lazy, Suspense, useEffect } from 'react';
+import { BrowserRouter, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import CustomCursor from './components/CustomCursor';
+import VisitModal from './components/VisitModal';
 import { WhatsAppIcon } from './components/BrandIcons';
 import Navbar from './sections/Navbar';
-import Hero from './sections/Hero';
-import Featured from './sections/Featured';
-import Approach from './sections/Approach';
-import Founder from './sections/Founder';
-import Social from './sections/Social';
-import Contact from './sections/Contact';
 import Footer from './sections/Footer';
-import { waLink } from './data';
+import Home from './pages/Home';
+import { StoreProvider } from './store';
+import { waLink } from './data/site';
 
-export default function App() {
-  const [video, setVideo] = useState<string | null>(null);
+const Properties = lazy(() => import('./pages/Properties'));
+const PropertyDetail = lazy(() => import('./pages/PropertyDetail'));
+const Team = lazy(() => import('./pages/Team'));
+const CalculatorPage = lazy(() => import('./pages/CalculatorPage'));
+const Sell = lazy(() => import('./pages/Sell'));
+const Favorites = lazy(() => import('./pages/Favorites'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
+/** Scroll to top on navigation, or to the #anchor when one is present. */
+function ScrollManager() {
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (hash) {
+      const id = hash.slice(1);
+      let tries = 0;
+      const seek = () => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        else if (tries++ < 20) setTimeout(seek, 60);
+      };
+      seek();
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+    }
+    // Query-string changes (catalog filters) intentionally keep the scroll position.
+  }, [pathname, hash]);
+  return null;
+}
+
+function Layout() {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setVideo(null);
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
-
   return (
     <>
       <CustomCursor />
+      <ScrollManager />
       <motion.div className="progress" style={{ scaleX: progress }} />
       <Navbar />
       <main>
-        <Hero onTour={() => setVideo('./videos/casa-sde.mp4')} />
-        <Featured />
-        <Approach />
-        <Founder />
-        <Social onOpen={setVideo} />
-        <Contact />
+        <Suspense fallback={<div className="page-loading" />}>
+          <Outlet />
+        </Suspense>
       </main>
       <Footer />
-
+      <VisitModal />
       <motion.a
         className="wa-float"
         href={waLink('Hola Martínez Home, quiero información.')}
@@ -51,26 +67,27 @@ export default function App() {
       >
         <WhatsAppIcon size={26} />
       </motion.a>
-
-      <AnimatePresence>
-        {video && (
-          <motion.div className="lightbox" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setVideo(null)}>
-            <motion.video
-              key={video}
-              src={video}
-              controls
-              autoPlay
-              playsInline
-              onClick={(e) => e.stopPropagation()}
-              initial={{ scale: 0.9, y: 30 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 30 }}
-              transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-            />
-            <button className="lightbox__close" aria-label="Cerrar video"><X size={22} /></button>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <StoreProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="propiedades" element={<Properties />} />
+            <Route path="propiedades/:slug" element={<PropertyDetail />} />
+            <Route path="equipo" element={<Team />} />
+            <Route path="calculadora" element={<CalculatorPage />} />
+            <Route path="vende-con-nosotros" element={<Sell />} />
+            <Route path="favoritos" element={<Favorites />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </StoreProvider>
   );
 }

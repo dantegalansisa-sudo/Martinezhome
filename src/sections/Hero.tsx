@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, Building2, CalendarDays, ChevronDown, Home, MapPin, Play, Search, Tag, Waves } from 'lucide-react';
 import RevealText from '../components/RevealText';
 import AnimatedCounter from '../components/AnimatedCounter';
 import MagneticButton from '../components/MagneticButton';
 import { EASINGS } from '../easings';
+import { CITIES, ZONES } from '../data/properties';
+
+const MotionLink = motion.create(Link);
 
 const FILTERS = [
   { label: 'Todos', icon: Home },
@@ -12,8 +16,9 @@ const FILTERS = [
   { label: 'Alquiler', icon: CalendarDays },
   { label: 'Proyectos', icon: Building2 },
 ];
-const LOCATIONS = ['Santo Domingo Este, RD', 'Santo Domingo, D.N.', 'Santo Domingo Norte', 'Punta Cana', 'Juan Dolio'];
-const TYPES = ['Apartamento', 'Casa', 'Penthouse', 'Solar', 'Local comercial'];
+const LOCATIONS = ['Todas las zonas', ...CITIES, ...ZONES.filter((z) => !CITIES.includes(z))];
+const TYPES = ['Todos los tipos', 'Casa', 'Apartamento', 'Villa'];
+const OP: Record<string, string> = { Venta: 'op=venta', Alquiler: 'op=alquiler', Proyectos: 'estado=planos' };
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 30 },
@@ -22,6 +27,7 @@ const fadeUp = (delay: number) => ({
 });
 
 export default function Hero({ onTour }: { onTour: () => void }) {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState('Todos');
   const [loc, setLoc] = useState(LOCATIONS[0]);
   const [type, setType] = useState(TYPES[0]);
@@ -31,15 +37,17 @@ export default function Hero({ onTour }: { onTour: () => void }) {
   const contentY = useTransform(scrollY, [0, 900], [0, -60]);
 
   const search = () => {
-    window.dispatchEvent(new CustomEvent('mh:filter', { detail: filter }));
-    document.getElementById('propiedades')?.scrollIntoView({ behavior: 'smooth' });
+    const q = new URLSearchParams(OP[filter] ?? '');
+    if (loc !== LOCATIONS[0]) q.set(CITIES.includes(loc) ? 'ciudad' : 'zona', loc);
+    if (type !== TYPES[0]) q.set('tipo', type);
+    navigate(`/propiedades${q.toString() ? `?${q}` : ''}`);
   };
 
   return (
     <section className="hero" id="inicio">
       <motion.div className="hero__bg" style={{ scale: bgScale, y: bgY }}>
         <motion.img
-          src="./images/hero.webp"
+          src="/images/hero.webp"
           alt="Torre residencial moderna frente al mar al atardecer"
           initial={{ scale: 1.15, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -101,8 +109,8 @@ export default function Hero({ onTour }: { onTour: () => void }) {
           </motion.div>
 
           <div className="hero__bottom">
-            <motion.a
-              href="#propiedades"
+            <MotionLink
+              to="/propiedades"
               className="seal"
               initial={{ opacity: 0, scale: 0.6, rotate: -20 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -115,7 +123,7 @@ export default function Hero({ onTour }: { onTour: () => void }) {
                 <ArrowUpRight size={16} />
                 Encuentra tu propiedad ideal
               </span>
-            </motion.a>
+            </MotionLink>
 
             <motion.div className="stats" {...fadeUp(1.5)}>
               <div><strong><AnimatedCounter target={500} prefix="+" /></strong><span>Propiedades<br />disponibles</span></div>
@@ -128,7 +136,7 @@ export default function Hero({ onTour }: { onTour: () => void }) {
         <div className="hero__right">
           <motion.div className="tour" {...fadeUp(1.1)}>
             <button className="tour__media" onClick={onTour} aria-label="Ver recorrido virtual">
-              <img src="./images/penthouse-luz.webp" alt="" />
+              <img src="/props/villa-amueblada-punta-cana/01-sm.webp" alt="" />
               <span className="tour__play"><Play size={20} fill="currentColor" /></span>
             </button>
             <div className="tour__row">
@@ -144,7 +152,7 @@ export default function Hero({ onTour }: { onTour: () => void }) {
           <motion.div className="social-proof" {...fadeUp(1.4)}>
             <div className="social-proof__row">
               <div className="avatars" aria-hidden>
-                <img src="./images/ceo-vanessa.webp" alt="" />
+                <img src="/team/vanessa-martinez.webp" alt="" />
                 <span style={{ background: '#c9a77c' }}>JP</span>
                 <span style={{ background: '#b9442f' }}>AL</span>
               </div>

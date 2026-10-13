@@ -1,39 +1,38 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, Menu, X } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { ArrowRight, Heart, Menu, X } from 'lucide-react';
 import MagneticButton from '../components/MagneticButton';
-import { NAV, waLink } from '../data';
+import { NAV } from '../data/site';
+import { useStore } from '../store';
 
-const TARGET: Record<string, string> = {
-  Propiedades: '#propiedades',
-  Compra: '#propiedades',
-  Alquiler: '#propiedades',
-  Proyectos: '#propiedades',
-  Servicios: '#servicios',
-  'Sobre Nosotros': '#fundadora',
-  Contacto: '#contacto',
+export const Brand = () => (
+  <Link to="/" className="brand" aria-label="Martínez Home RD — inicio">
+    <img src="/images/logo-mark.png" alt="" className="brand__icon" />
+    <span className="brand__text">
+      <span>MARTÍNEZ</span>
+      <span>HOME RD</span>
+    </span>
+  </Link>
+);
+
+/** Matches the current URL (path + query) so query-based items like "Alquiler" highlight correctly. */
+const useIsActive = () => {
+  const { pathname, search, hash } = useLocation();
+  return (to: string) => {
+    const [path, rest = ''] = to.split(/(?=[?#])/);
+    if (rest.startsWith('#')) return pathname === path && hash === rest;
+    if (rest.startsWith('?')) return pathname === path && search === rest;
+    return path === '/propiedades' ? pathname === path && !search : pathname.startsWith(path) && path !== '/';
+  };
 };
-
-const CITA = waLink('Hola Martínez Home, me gustaría agendar una cita.');
-
-export const Brand = ({ light }: { light?: boolean }) =>
-  light ? (
-    <a href="#inicio" className="brand brand--light" aria-label="Martínez Home Inmobiliaria — inicio">
-      <img src="./images/logo-light.png" alt="Martínez Home Inmobiliaria" className="brand__full" />
-    </a>
-  ) : (
-    <a href="#inicio" className="brand" aria-label="Martínez Home RD — inicio">
-      <img src="./images/logo-icon.png" alt="" className="brand__icon" />
-      <span className="brand__text">
-        <span>MARTÍNEZ</span>
-        <span>HOME RD</span>
-      </span>
-    </a>
-  );
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { favorites, openVisit } = useStore();
+  const isActive = useIsActive();
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -42,6 +41,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => setOpen(false), [location]);
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
   }, [open]);
@@ -57,18 +57,30 @@ export default function Navbar() {
         <Brand />
         <nav className="nav__links" aria-label="Principal">
           {NAV.map((n) => (
-            <a key={n} href={TARGET[n]} className="nav__link">{n}</a>
+            <Link key={n.label} to={n.to} className={`nav__link${isActive(n.to) ? ' is-active' : ''}`}>{n.label}</Link>
           ))}
         </nav>
-        <div className="nav__cta">
-          <MagneticButton href={CITA} external className="btn-pill">
-            <span>Agenda una cita</span>
-            <span className="btn-pill__icon"><ArrowRight size={16} /></span>
-          </MagneticButton>
+        <div className="nav__actions">
+          <Link to="/favoritos" className="nav__fav" aria-label={`Favoritos (${favorites.length})`}>
+            <Heart size={18} />
+            <AnimatePresence>
+              {favorites.length > 0 && (
+                <motion.span key={favorites.length} className="nav__badge" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
+                  {favorites.length}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </Link>
+          <div className="nav__cta">
+            <MagneticButton onClick={() => openVisit()} className="btn-pill">
+              <span>Agenda una cita</span>
+              <span className="btn-pill__icon"><ArrowRight size={16} /></span>
+            </MagneticButton>
+          </div>
+          <button className="nav__burger" aria-label={open ? 'Cerrar menú' : 'Abrir menú'} onClick={() => setOpen(!open)}>
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
-        <button className="nav__burger" aria-label={open ? 'Cerrar menú' : 'Abrir menú'} onClick={() => setOpen(!open)}>
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
       </div>
 
       <AnimatePresence>
@@ -80,21 +92,14 @@ export default function Navbar() {
             exit={{ clipPath: 'inset(0 0 100% 0)' }}
             transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
           >
-            {NAV.map((n, i) => (
-              <motion.a
-                key={n}
-                href={TARGET[n]}
-                onClick={() => setOpen(false)}
-                initial={{ y: 30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 + i * 0.05 }}
-              >
-                {n}
-              </motion.a>
+            {[...NAV, { label: 'Favoritos', to: '/favoritos' }, { label: 'Vende con nosotros', to: '/vende-con-nosotros' }].map((n, i) => (
+              <motion.div key={n.label} initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 + i * 0.04 }}>
+                <Link to={n.to} className="mobile-menu__link">{n.label}</Link>
+              </motion.div>
             ))}
-            <a className="btn-dark" href={CITA} target="_blank" rel="noopener noreferrer">
+            <button className="btn-dark" onClick={() => { setOpen(false); openVisit(); }}>
               Agenda una cita <ArrowRight size={16} />
-            </a>
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

@@ -4,7 +4,7 @@ import { ArrowRight, Play } from 'lucide-react';
 import RevealText from '../components/RevealText';
 import MagneticButton from '../components/MagneticButton';
 import { InstagramIcon } from '../components/BrandIcons';
-import { CONTACT, REELS } from '../data';
+import { CONTACT, REELS } from '../data/site';
 import { EASINGS } from '../easings';
 
 const container = { hidden: {}, visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } } };

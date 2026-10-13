@@ -1,0 +1,106 @@
+import { useCallback, useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Images, X } from 'lucide-react';
+import { gallery, img, type Property } from '../data/properties';
+import { EASINGS } from '../easings';
+
+export default function Gallery({ p }: { p: Property }) {
+  const shots = gallery(p);
+  const [open, setOpen] = useState<number | null>(null);
+  const [dir, setDir] = useState(1);
+
+  const go = useCallback(
+    (d: number) => {
+      setDir(d);
+      setOpen((i) => (i === null ? i : (i + d + shots.length) % shots.length));
+    },
+    [shots.length]
+  );
+
+  useEffect(() => {
+    if (open === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(null);
+      if (e.key === 'ArrowRight') go(1);
+      if (e.key === 'ArrowLeft') go(-1);
+    };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [open, go]);
+
+  const mosaic = shots.slice(0, 5);
+
+  return (
+    <>
+      <motion.div
+        className={`mosaic mosaic--${Math.min(mosaic.length, 5)}`}
+        initial="hidden"
+        animate="visible"
+        variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
+      >
+        {mosaic.map((n, i) => (
+          <motion.button
+            key={n}
+            className="mosaic__item"
+            onClick={() => setOpen(i)}
+            aria-label={`Ver foto ${i + 1}`}
+            variants={{
+              hidden: { opacity: 0, clipPath: 'inset(0 0 100% 0)' },
+              visible: { opacity: 1, clipPath: 'inset(0 0 0% 0)', transition: { duration: 0.9, ease: EASINGS.premium } },
+            }}
+          >
+            <img src={img(p, n, i === 0 ? 'lg' : 'sm')} alt={`${p.title} — foto ${i + 1}`} />
+            {i === mosaic.length - 1 && shots.length > mosaic.length && (
+              <span className="mosaic__more"><Images size={16} /> +{shots.length - mosaic.length} fotos</span>
+            )}
+          </motion.button>
+        ))}
+        <button className="mosaic__all" onClick={() => setOpen(0)}><Images size={15} /> Ver las {shots.length} fotos</button>
+        {p.render && <span className="mosaic__render">Imágenes de referencia</span>}
+      </motion.div>
+
+      <AnimatePresence>
+        {open !== null && (
+          <motion.div className="viewer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <button className="viewer__close" onClick={() => setOpen(null)} aria-label="Cerrar galería"><X size={22} /></button>
+            <span className="viewer__count">{open + 1} / {shots.length}</span>
+            <div className="viewer__stage">
+              <AnimatePresence initial={false} custom={dir} mode="popLayout">
+                <motion.img
+                  key={open}
+                  src={img(p, shots[open])}
+                  alt={`${p.title} — foto ${open + 1}`}
+                  custom={dir}
+                  initial={{ x: dir * 80, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: dir * -80, opacity: 0 }}
+                  transition={{ duration: 0.45, ease: EASINGS.smooth }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.4}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.x < -60) go(1);
+                    else if (info.offset.x > 60) go(-1);
+                  }}
+                />
+              </AnimatePresence>
+            </div>
+            <button className="viewer__nav viewer__nav--prev" onClick={() => go(-1)} aria-label="Anterior"><ChevronLeft size={24} /></button>
+            <button className="viewer__nav viewer__nav--next" onClick={() => go(1)} aria-label="Siguiente"><ChevronRight size={24} /></button>
+            <div className="viewer__thumbs">
+              {shots.map((n, i) => (
+                <button key={n} className={i === open ? 'is-on' : ''} onClick={() => { setDir(i > open ? 1 : -1); setOpen(i); }} aria-label={`Foto ${i + 1}`}>
+                  <img src={img(p, n, 'sm')} alt="" />
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
