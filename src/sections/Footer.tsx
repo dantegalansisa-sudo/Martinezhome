@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Phone } from 'lucide-react';
+import { ArrowUpRight, MapPin, Phone } from 'lucide-react';
 import { InstagramIcon, ThreadsIcon, WhatsAppIcon } from '../components/BrandIcons';
 import { CONTACT, NAV } from '../data/site';
 import { Brand } from './Navbar';
@@ -27,6 +27,12 @@ export default function Footer() {
         <div className="footer__bottom">
           <span>© 2026 Martínez Home Inmobiliaria. Todos los derechos reservados.</span>
           <span><Link to="/">Términos y condiciones</Link> | <Link to="/">Política de privacidad</Link></span>
+        </div>
+        <div className="footer__credit">
+          <span>Diseño y desarrollo web por</span>
+          <a href="https://www.nexixtechstudio.com" target="_blank" rel="noopener">
+            NEXIX Tech Studio <ArrowUpRight size={13} />
+          </a>
         </div>
       </div>
     </footer>

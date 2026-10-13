@@ -7,6 +7,7 @@ import AnimatedCounter from '../components/AnimatedCounter';
 import MagneticButton from '../components/MagneticButton';
 import { EASINGS } from '../easings';
 import { CITIES, ZONES } from '../data/properties';
+import { useIsDesktop } from '../useMedia';
 
 const MotionLink = motion.create(Link);
 
@@ -31,10 +32,10 @@ export default function Hero({ onTour }: { onTour: () => void }) {
   const [filter, setFilter] = useState('Todos');
   const [loc, setLoc] = useState(LOCATIONS[0]);
   const [type, setType] = useState(TYPES[0]);
+  const desktop = useIsDesktop();
   const { scrollY } = useScroll();
-  const bgScale = useTransform(scrollY, [0, 900], [1, 1.12]);
-  const bgY = useTransform(scrollY, [0, 900], [0, 120]);
-  const contentY = useTransform(scrollY, [0, 900], [0, -60]);
+  // Translate-only parallax (no scaling) keeps the large image on the GPU; skipped on touch devices.
+  const bgY = useTransform(scrollY, [0, 900], [0, 140]);
 
   const search = () => {
     const q = new URLSearchParams(OP[filter] ?? '');
@@ -45,7 +46,7 @@ export default function Hero({ onTour }: { onTour: () => void }) {
 
   return (
     <section className="hero" id="inicio">
-      <motion.div className="hero__bg" style={{ scale: bgScale, y: bgY }}>
+      <motion.div className="hero__bg" style={desktop ? { y: bgY } : undefined}>
         <motion.img
           src="/images/hero.webp"
           alt="Torre residencial moderna frente al mar al atardecer"
@@ -55,8 +56,11 @@ export default function Hero({ onTour }: { onTour: () => void }) {
         />
       </motion.div>
       <div className="hero__veil" />
+      <motion.button className="hero__tour-pill" onClick={onTour} {...fadeUp(0.2)}>
+        <span><Play size={12} fill="currentColor" /></span> Recorrido virtual
+      </motion.button>
 
-      <motion.div className="container hero__grid" style={{ y: contentY }}>
+      <div className="container hero__grid">
         <div className="hero__left">
           <motion.p className="eyebrow" {...fadeUp(0.3)}>Tu próximo hogar en República Dominicana</motion.p>
           <h1 className="hero__title" aria-label="Martínez Home RD">
@@ -161,7 +165,7 @@ export default function Hero({ onTour }: { onTour: () => void }) {
             <a href="#redes" className="social-proof__link">Conoce sus historias <ArrowUpRight size={16} /></a>
           </motion.div>
         </div>
-      </motion.div>
+      </div>
 
       <motion.div className="hotspot hotspot--sea" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.7, duration: 0.8 }}>
         <span className="hotspot__icon"><Waves size={16} /></span> Vista al mar

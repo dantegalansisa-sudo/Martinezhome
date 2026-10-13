@@ -13,7 +13,6 @@ import { waLink } from './data/site';
 const Properties = lazy(() => import('./pages/Properties'));
 const PropertyDetail = lazy(() => import('./pages/PropertyDetail'));
 const Team = lazy(() => import('./pages/Team'));
-const CalculatorPage = lazy(() => import('./pages/CalculatorPage'));
 const Sell = lazy(() => import('./pages/Sell'));
 const Favorites = lazy(() => import('./pages/Favorites'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -83,7 +82,6 @@ export default function App() {
             <Route path="propiedades" element={<Properties />} />
             <Route path="propiedades/:slug" element={<PropertyDetail />} />
             <Route path="equipo" element={<Team />} />
-            <Route path="calculadora" element={<CalculatorPage />} />
             <Route path="vende-con-nosotros" element={<Sell />} />
             <Route path="favoritos" element={<Favorites />} />
             <Route path="casita" element={<CursorPreview />} />

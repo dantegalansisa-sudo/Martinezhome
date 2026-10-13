@@ -1,11 +1,12 @@
-import { useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useRef, type ReactNode } from 'react';
+import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import { ArrowRight, Play } from 'lucide-react';
 import RevealText from '../components/RevealText';
 import MagneticButton from '../components/MagneticButton';
 import { InstagramIcon } from '../components/BrandIcons';
 import { CONTACT, REELS } from '../data/site';
 import { EASINGS } from '../easings';
+import { useIsMobile } from '../useMedia';
 
 const container = { hidden: {}, visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } } };
 const card = {
@@ -37,7 +38,21 @@ function Reel({ reel, onOpen }: { reel: (typeof REELS)[number]; onOpen: () => vo
   );
 }
 
+/** Mobile: cards pin one over another; the ones underneath shrink back like a deck. */
+function StackItem({ i, total, progress, children }: { i: number; total: number; progress: MotionValue<number>; children: ReactNode }) {
+  const scale = useTransform(progress, [i / total, 1], [1, 1 - (total - 1 - i) * 0.06]);
+  const filter = useTransform(progress, [i / total, 1], ['brightness(1)', `brightness(${1 - (total - 1 - i) * 0.12})`]);
+  return (
+    <div className="stack-item" style={{ top: `calc(84px + ${i * 14}px)` }}>
+      <motion.div style={{ scale, filter, transformOrigin: '50% 0%' }}>{children}</motion.div>
+    </div>
+  );
+}
+
 export default function Social({ onOpen }: { onOpen: (src: string) => void }) {
+  const mobile = useIsMobile();
+  const stack = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: stack, offset: ['start start', 'end end'] });
   return (
     <section className="section social" id="redes">
       <div className="container social__grid">
@@ -51,9 +66,19 @@ export default function Social({ onOpen }: { onOpen: (src: string) => void }) {
             <InstagramIcon size={16} /> Síguenos en Instagram <span className="btn-dark__icon"><ArrowRight size={15} /></span>
           </MagneticButton>
         </div>
-        <motion.div className="reels" variants={container} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.25 }}>
-          {REELS.map((r) => <Reel key={r.src} reel={r} onOpen={() => onOpen(r.src)} />)}
-        </motion.div>
+        {mobile ? (
+          <div ref={stack} className="reels-stack">
+            {REELS.map((r, i) => (
+              <StackItem key={r.src} i={i} total={REELS.length} progress={scrollYProgress}>
+                <Reel reel={r} onOpen={() => onOpen(r.src)} />
+              </StackItem>
+            ))}
+          </div>
+        ) : (
+          <motion.div className="reels" variants={container} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.25 }}>
+            {REELS.map((r) => <Reel key={r.src} reel={r} onOpen={() => onOpen(r.src)} />)}
+          </motion.div>
+        )}
       </div>
     </section>
   );

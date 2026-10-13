@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Images, X } from 'lucide-react';
 import { gallery, img, type Property } from '../data/properties';
 import { EASINGS } from '../easings';
+import { useIsMobile } from '../useMedia';
 
 export default function Gallery({ p }: { p: Property }) {
   const shots = gallery(p);
@@ -33,9 +34,32 @@ export default function Gallery({ p }: { p: Property }) {
   }, [open, go]);
 
   const mosaic = shots.slice(0, 5);
+  const mobile = useIsMobile();
+  const strip = useRef<HTMLDivElement>(null);
+  const [current, setCurrent] = useState(0);
+  const onStrip = () => {
+    const el = strip.current;
+    if (el) setCurrent(Math.round(el.scrollLeft / el.clientWidth));
+  };
 
   return (
     <>
+      {mobile ? (
+        <motion.div className="carousel" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASINGS.smooth }}>
+          <div ref={strip} className="carousel__strip" onScroll={onStrip}>
+            {shots.map((n, i) => (
+              <button key={n} className="carousel__slide" onClick={() => setOpen(i)} aria-label={`Ver foto ${i + 1}`}>
+                <img src={img(p, n, i === 0 ? 'lg' : 'sm')} alt={`${p.title} — foto ${i + 1}`} loading={i > 1 ? 'lazy' : undefined} />
+              </button>
+            ))}
+          </div>
+          <span className="carousel__count">{current + 1} / {shots.length}</span>
+          <div className="carousel__dots" aria-hidden>
+            {shots.map((n, i) => <motion.span key={n} animate={{ width: i === current ? 18 : 6, opacity: i === current ? 1 : 0.5 }} />)}
+          </div>
+          {p.render && <span className="mosaic__render">Imágenes de referencia</span>}
+        </motion.div>
+      ) : (
       <motion.div
         className={`mosaic mosaic--${Math.min(mosaic.length, 5)}`}
         initial="hidden"
@@ -62,6 +86,7 @@ export default function Gallery({ p }: { p: Property }) {
         <button className="mosaic__all" onClick={() => setOpen(0)}><Images size={15} /> Ver las {shots.length} fotos</button>
         {p.render && <span className="mosaic__render">Imágenes de referencia</span>}
       </motion.div>
+      )}
 
       <AnimatePresence>
         {open !== null && (

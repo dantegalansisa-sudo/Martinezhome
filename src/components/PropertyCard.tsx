@@ -32,11 +32,17 @@ export function FavoriteButton({ id, className = '' }: { id: number; className?:
   );
 }
 
-export default function PropertyCard({ p, variants = true }: { p: Property; variants?: boolean }) {
+/** `inView` makes the card reveal itself when scrolled to (used in long grids, where a parent stagger would fire too early). */
+export default function PropertyCard({ p, variants = true, inView = false }: { p: Property; variants?: boolean; inView?: boolean }) {
   const { currency } = useStore();
   const tags = autoTags(p);
   return (
-    <motion.article className="prop" variants={variants ? cardVariants : undefined} whileHover={{ y: -8, transition: { duration: 0.25 } }}>
+    <motion.article
+      className="prop"
+      variants={variants || inView ? cardVariants : undefined}
+      {...(inView ? { initial: 'hidden', whileInView: 'visible', viewport: { once: true, amount: 0.2 } } : {})}
+      whileHover={{ y: -8, transition: { duration: 0.25 } }}
+    >
       <Link to={`/propiedades/${p.slug}`} className="prop__link" aria-label={p.title}>
         <div className="prop__media">
           <img src={img(p, 1, 'sm')} alt={p.title} loading="lazy" />

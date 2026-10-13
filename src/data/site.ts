@@ -19,12 +19,12 @@ export const NAV: { label: string; to: string }[] = [
   { label: 'Compra', to: '/propiedades?op=venta' },
   { label: 'Alquiler', to: '/propiedades?op=alquiler' },
   { label: 'Proyectos', to: '/propiedades?estado=planos' },
-  { label: 'Calculadora', to: '/calculadora' },
   { label: 'Equipo', to: '/equipo' },
   { label: 'Contacto', to: '/#contacto' },
 ];
 
 export const REELS = [
+  { src: '/videos/nuevo-recorrido.mp4', poster: '/videos/nuevo-recorrido.jpg', views: '9.8K', title: 'Recorrido: casa con fachada en piedra' },
   { src: '/videos/casa-sde.mp4', poster: '/videos/casa-sde.jpg', views: '12.4K', title: 'Casa 210 m² · ¡Casi lista para entrega!' },
   { src: '/videos/oportunidad-sde.mp4', poster: '/videos/oportunidad-sde.jpg', views: '8.7K', title: 'A 2 min de City Center y Lady Lee' },
   { src: '/videos/ultimas-unidades.mp4', poster: '/videos/ultimas-unidades.jpg', views: '15.2K', title: '¡Últimas unidades disponibles!' },

@@ -81,7 +81,7 @@ const P: Property[] = [
     tags: ['Dúplex'],
     images: 8,
     featured: true,
-    agent: 'chris-daniel',
+    agent: 'cristhian-almanzar',
   },
   {
     id: 2,
@@ -204,7 +204,7 @@ const P: Property[] = [
     ],
     tags: ['A estrenar'],
     images: 7,
-    agent: 'chris-daniel',
+    agent: 'cristhian-almanzar',
   },
   {
     id: 7,
@@ -333,7 +333,7 @@ const P: Property[] = [
     ],
     tags: [],
     images: 5,
-    agent: 'chris-daniel',
+    agent: 'cristhian-almanzar',
   },
   {
     id: 13,
@@ -477,7 +477,7 @@ const P: Property[] = [
     tags: ['Con piscina', 'Lujo'],
     images: 8,
     featured: true,
-    agent: 'chris-daniel',
+    agent: 'cristhian-almanzar',
   },
   {
     id: 19,
@@ -536,6 +536,30 @@ const P: Property[] = [
     tags: ['Ideal para familias'],
     images: 8,
     agent: 'vanessa-martinez',
+  },
+  {
+    id: 21,
+    slug: 'apartamentos-ensanche-isabelita',
+    title: 'Apartamentos modernos en Ensanche Isabelita',
+    kind: 'Apartamento',
+    operation: 'venta',
+    zone: 'Ensanche Isabelita',
+    city: 'Santo Domingo Este',
+    coords: [18.4935, -69.8642],
+    price: { amount: 7150000, currency: 'DOP', from: true },
+    beds: '2 – 3', bedsMin: 2,
+    summary: 'Planta tipo de 2 y 3 habitaciones con walk-in closet, seguridad 24/7 y garantía real de 1 año.',
+    description:
+      'Apartamentos modernos y funcionales, diseñados para brindarte comodidad, seguridad y excelente terminación. Construidos con estructura en concreto armado bajo estándares ASTM y acabados de estándar americano.',
+    highlights: ['Garantía real de 1 año', 'Seguridad 24/7', 'Inversor en área común', 'Baños en porcelanato español'],
+    sections: [
+      { title: 'Planta tipo', items: ['2 y 3 habitaciones', 'Sala / comedor', 'Cocina modular con desayunador', 'Habitación principal con walk-in closet + baño', 'Opción de parqueo(s) adicional(es) — aplican condiciones'] },
+      { title: 'Terminaciones', items: ['Estructura en concreto armado (estándares ASTM)', 'Pisos en porcelanato', 'Baños en porcelanato español', 'Puertas en láminas de roble', 'Puerta principal en roble prensado', 'Piezas de baño monolíticas', 'Estándares americanos en general'] },
+      { title: 'Amenidades del proyecto', items: ['Cisterna', 'Pozo tubular', 'Preinstalación para tinacos', 'Área de tendedero', 'Inversor en área común', 'Portón eléctrico', 'Seguridad 24/7', 'Garantía real de 1 año'] },
+    ],
+    tags: ['Garantía 1 año'],
+    images: 7,
+    agent: 'joel-polanco',
   },
 ];
 

@@ -7,13 +7,14 @@ Sitio web de **Martínez Home Inmobiliaria** (Lic. Vanessa Martínez, CEO) — S
 ## Páginas
 | Ruta | Contenido |
 |---|---|
-| `/` | Home: hero con buscador, destacadas, servicios, calculadora rápida, fundadora, equipo, reels y contacto |
+| `/` | Home: hero con buscador, destacadas, servicios, fundadora, equipo, reels y formulario de contacto en 2 pasos |
 | `/propiedades` | Catálogo con filtros (operación, tipo, estado, ciudad, sector, presupuesto, habitaciones), orden, vista de cuadrícula o mapa |
-| `/propiedades/:slug` | Ficha: galería con visor, características, unidades, plan de pago, mapa, asesor, cuota estimada, similares |
+| `/propiedades/:slug` | Ficha: galería con visor (carrusel en móvil), características, unidades, plan de pago, mapa, asesor, similares |
 | `/equipo` | Equipo de trabajo con contacto directo |
-| `/calculadora` | Préstamo hipotecario, plan de pago en planos y "¿Cuánto puedo comprar?" |
 | `/vende-con-nosotros` | Captación de propietarios |
 | `/favoritos` | Favoritos guardados y comparador (hasta 3) |
+
+En móvil: hero a pantalla completa, carrusel centrado de propiedades, equipo con scroll horizontal fijado y videos apilados.
 
 Extras: selector de moneda (original / US$ / RD$), agendador de visitas por WhatsApp, etiquetas automáticas.
 

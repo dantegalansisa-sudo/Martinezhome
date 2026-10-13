@@ -54,7 +54,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 .btn-pill {
   display: inline-flex; align-items: center; gap: 14px; padding: 6px 6px 6px 24px;
   border: 1.5px solid var(--ink); border-radius: 999px; font-size: 14px; font-weight: 500;
-  background: rgba(255,255,255,.25); backdrop-filter: blur(8px);
+  background: rgba(255,255,255,.45);
   transition: background .3s, color .3s;
 }
 .btn-pill:hover { background: var(--ink); color: #fff; }
@@ -99,7 +99,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 
 /* ---------- Hero ---------- */
 .hero { position: relative; min-height: max(100svh, 760px); overflow: hidden; display: flex; align-items: stretch; background: #f1d8c0; }
-.hero__bg { position: absolute; inset: 0; transform-origin: 60% 60%; }
+.hero__bg { position: absolute; inset: 0; transform-origin: 60% 60%; will-change: transform; }
 .hero__bg img { width: 100%; height: 100%; object-fit: cover; object-position: 62% 70%; }
 .hero__veil {
   position: absolute; inset: 0; pointer-events: none;
@@ -117,7 +117,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
 .chip {
   display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 999px;
-  background: rgba(255,255,255,.72); backdrop-filter: blur(10px); font-size: 14px; font-weight: 500;
+  background: rgba(255,255,255,.86); font-size: 14px; font-weight: 500;
   transition: background .3s, color .3s, transform .3s;
 }
 .chip:hover { transform: translateY(-2px); background: #fff; }
@@ -125,7 +125,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 
 .searchbar {
   display: flex; align-items: center; gap: 8px; padding: 12px; width: min(100%, 590px);
-  background: rgba(255,255,255,.82); backdrop-filter: blur(16px); border-radius: 20px; box-shadow: var(--shadow);
+  background: rgba(255,255,255,.94); border-radius: 20px; box-shadow: var(--shadow);
 }
 .searchbar__field { position: relative; flex: 1; display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-radius: 14px; transition: background .3s; min-width: 0; }
 .searchbar__field:hover { background: rgba(27,36,51,.04); }
@@ -139,7 +139,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 
 .hero__bottom { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 16px; }
 .seal { position: relative; width: 122px; height: 122px; display: grid; place-items: center; text-align: center; }
-.seal__shape { position: absolute; inset: 0; width: 100%; height: 100%; fill: rgba(255,255,255,.4); stroke: rgba(255,255,255,.9); stroke-width: 1; backdrop-filter: blur(6px); filter: drop-shadow(0 8px 20px rgba(0,0,0,.08)); animation: spin 26s linear infinite; }
+.seal__shape { position: absolute; inset: 0; width: 100%; height: 100%; fill: rgba(255,255,255,.6); stroke: rgba(255,255,255,.9); stroke-width: 1; filter: drop-shadow(0 8px 20px rgba(0,0,0,.08)); animation: spin 26s linear infinite; }
 .seal__content { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 13px; font-weight: 500; line-height: 1.3; max-width: 90px; }
 .seal:hover .seal__shape { fill: rgba(255,255,255,.75); }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -151,7 +151,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 .stats span { font-size: 13px; line-height: 1.3; opacity: .92; }
 
 .hero__right { display: flex; flex-direction: column; padding-top: 0; }
-.tour { position: relative; padding: 10px; border-radius: 18px; background: rgba(255,255,255,.55); backdrop-filter: blur(14px); box-shadow: var(--shadow-sm); }
+.tour { position: relative; padding: 10px; border-radius: 18px; background: rgba(255,255,255,.82); box-shadow: var(--shadow-sm); }
 .tour__media { position: relative; display: block; width: 100%; aspect-ratio: 16/10; border-radius: 12px; overflow: hidden; }
 .tour__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s ease; }
 .tour__media:hover img { transform: scale(1.08); }
@@ -180,7 +180,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 
 .hotspot {
   position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: 10px; padding: 5px 18px 5px 5px;
-  background: rgba(255,255,255,.88); backdrop-filter: blur(10px); border-radius: 999px; font-size: 13px; font-weight: 500; box-shadow: var(--shadow-sm);
+  background: rgba(255,255,255,.95); border-radius: 999px; font-size: 13px; font-weight: 500; box-shadow: var(--shadow-sm);
 }
 .hotspot__icon { width: 34px; height: 34px; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; }
 .hotspot--sea { left: 44%; top: 46%; }

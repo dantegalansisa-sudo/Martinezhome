@@ -10,8 +10,7 @@ import { WhatsAppIcon } from '../components/BrandIcons';
 import { PROPERTIES, statusLabel, type Property } from '../data/properties';
 import { member, telHref, waHref } from '../data/team';
 import { waLink } from '../data/site';
-import { formatPrice, priceUSD, useStore } from '../store';
-import { mortgage } from '../calc';
+import { formatPrice, useStore } from '../store';
 import { EASINGS } from '../easings';
 import { useTitle } from '../useTitle';
 import NotFound from './NotFound';
@@ -40,8 +39,6 @@ export default function PropertyDetail() {
 
   const agent = member(p.agent);
   const status = statusLabel(p);
-  const usd = priceUSD(p);
-  const estimate = usd ? mortgage({ price: usd, downPct: 20, rate: 11, years: 20 }) : null;
   const specs = [
     { icon: BedDouble, label: 'Habitaciones', value: p.beds },
     { icon: Bath, label: 'Baños', value: p.baths },
@@ -191,14 +188,6 @@ export default function PropertyDetail() {
                 </div>
               )}
 
-              {estimate && (
-                <div className="estimate">
-                  <small>Cuota hipotecaria estimada</small>
-                  <strong>US$ {Math.round(estimate.monthly).toLocaleString('en-US')}<em>/mes</em></strong>
-                  <span>20% de inicial · 11% anual · 20 años</span>
-                  <Link to={`/calculadora?precio=${Math.round(usd!)}`}>Ajustar en la calculadora <ArrowRight size={14} /></Link>
-                </div>
-              )}
             </motion.div>
           </aside>
         </div>

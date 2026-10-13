@@ -21,8 +21,6 @@ const SORTS = [
   { value: 'precio-desc', label: 'Precio: mayor a menor' },
 ];
 
-const grid = { hidden: {}, visible: { transition: { staggerChildren: 0.06 } } };
-
 export default function Properties() {
   const [params, setParams] = useSearchParams();
   const [drawer, setDrawer] = useState(false);
@@ -211,9 +209,9 @@ export default function Properties() {
             ) : vista === 'mapa' ? (
               <PropertyMap properties={list} height="min(70vh, 640px)" />
             ) : (
-              <motion.div key={params.toString()} className="catalog__cards" variants={grid} initial="hidden" animate="visible">
-                {list.map((p) => <PropertyCard key={p.id} p={p} />)}
-              </motion.div>
+              <div key={params.toString()} className="catalog__cards">
+                {list.map((p) => <PropertyCard key={p.id} p={p} inView />)}
+              </div>
             )}
 
             <div className="catalog__cta">

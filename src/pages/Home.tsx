@@ -4,7 +4,6 @@ import { X } from 'lucide-react';
 import Hero from '../sections/Hero';
 import Featured from '../sections/Featured';
 import Approach from '../sections/Approach';
-import CalcTeaser from '../sections/CalcTeaser';
 import Founder from '../sections/Founder';
 import TeamStrip from '../sections/TeamStrip';
 import Social from '../sections/Social';
@@ -26,7 +25,6 @@ export default function Home() {
       <Hero onTour={() => setVideo('/videos/casa-sde.mp4')} />
       <Featured />
       <Approach />
-      <CalcTeaser />
       <Founder />
       <TeamStrip />
       <Social onOpen={setVideo} />
