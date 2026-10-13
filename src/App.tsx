@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import CustomCursor from './components/CustomCursor';
 import VisitModal from './components/VisitModal';
 import { WhatsAppIcon } from './components/BrandIcons';
 import Navbar from './sections/Navbar';
@@ -44,7 +43,6 @@ function Layout() {
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
   return (
     <>
-      <CustomCursor />
       <ScrollManager />
       <motion.div className="progress" style={{ scaleX: progress }} />
       <Navbar />
