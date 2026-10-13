@@ -3,10 +3,18 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, CalendarCheck, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../store';
-import { waLink } from '../data/site';
+import LeadDone from './LeadDone';
+import { sendLead, warmLead, type LeadResult } from '../lib/lead';
 import { EASINGS } from '../easings';
 
-const SLOTS = ['9:00 a. m.', '10:30 a. m.', '12:00 p. m.', '2:00 p. m.', '3:30 p. m.', '5:00 p. m.'];
+const SLOTS = [
+  { label: '9:00 a. m.', hour: 9, minute: 0 },
+  { label: '10:30 a. m.', hour: 10, minute: 30 },
+  { label: '12:00 p. m.', hour: 12, minute: 0 },
+  { label: '2:00 p. m.', hour: 14, minute: 0 },
+  { label: '3:30 p. m.', hour: 15, minute: 30 },
+  { label: '5:00 p. m.', hour: 17, minute: 0 },
+];
 
 /** Next 12 days, skipping Sundays. */
 const nextDays = () => {
@@ -21,18 +29,25 @@ const nextDays = () => {
 
 const fmtDay = (d: Date) => d.toLocaleDateString('es-DO', { weekday: 'short' }).replace('.', '');
 const fmtLong = (d: Date) => d.toLocaleDateString('es-DO', { weekday: 'long', day: 'numeric', month: 'long' });
+const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
 export default function VisitModal() {
   const { visit, closeVisit } = useStore();
   const days = useMemo(nextDays, []);
   const [day, setDay] = useState(0);
-  const [slot, setSlot] = useState('');
+  const [slot, setSlot] = useState(-1);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [trap, setTrap] = useState('');
   const [mode, setMode] = useState<'Presencial' | 'Videollamada'>('Presencial');
+  const [sending, setSending] = useState(false);
+  const [result, setResult] = useState<LeadResult | null>(null);
+  const [lastText, setLastText] = useState('');
 
   useEffect(() => {
     if (!visit.open) return;
+    warmLead();
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closeVisit();
     window.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
@@ -42,20 +57,49 @@ export default function VisitModal() {
     };
   }, [visit.open, closeVisit]);
 
-  const submit = (e: FormEvent) => {
+  // Start fresh every time the scheduler opens.
+  useEffect(() => {
+    if (visit.open) setResult(null);
+  }, [visit.open]);
+
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
+    if (sending || slot < 0) return;
     const p = visit.property;
+    const s = SLOTS[slot];
+    const property = p ? `${p.title} (${p.zone})` : 'Aún no decide — quiere asesoría';
     const text = [
       'Hola Martínez Home, quiero agendar una visita.',
-      p ? `Propiedad: ${p.title} (${p.zone})` : 'Propiedad: aún no decido, quiero asesoría.',
+      `Propiedad: ${property}`,
       `Fecha: ${fmtLong(days[day])}`,
-      `Hora: ${slot}`,
+      `Hora: ${s.label}`,
       `Modalidad: ${mode}`,
       `Nombre: ${name}`,
       `Teléfono: ${phone}`,
+      `Correo: ${email}`,
     ].join('\n');
-    window.open(waLink(text), '_blank', 'noopener');
-    closeVisit();
+    setSending(true);
+    const r = await sendLead(
+      {
+        type: 'visita',
+        name,
+        phone,
+        email,
+        website: trap,
+        fields: [
+          ['Propiedad', property],
+          ['Fecha', fmtLong(days[day])],
+          ['Hora', s.label],
+          ['Modalidad', mode],
+          ...(p ? ([['Enlace', `https://www.martinezhomerd.com/propiedades/${p.slug}`]] as [string, string][]) : []),
+        ],
+        visit: { date: iso(days[day]), hour: s.hour, minute: s.minute },
+      },
+      text
+    );
+    setLastText(text);
+    setResult(r);
+    setSending(false);
   };
 
   return (
@@ -75,45 +119,59 @@ export default function VisitModal() {
             aria-labelledby="visit-title"
           >
             <button type="button" className="modal__close" onClick={closeVisit} aria-label="Cerrar"><X size={18} /></button>
-            <span className="visit__icon"><CalendarCheck size={22} /></span>
-            <h2 id="visit-title" className="visit__title">Agenda tu visita</h2>
-            <p className="visit__sub">{visit.property ? visit.property.title : 'Te acompañamos a conocer la propiedad ideal para ti.'}</p>
 
-            <p className="visit__label">Elige el día</p>
-            <div className="days">
-              {days.map((d, i) => (
-                <button type="button" key={i} className={`day${day === i ? ' is-on' : ''}`} onClick={() => setDay(i)}>
-                  <small>{fmtDay(d)}</small>
-                  <strong>{d.getDate()}</strong>
+            {result ? (
+              <LeadDone result={result} name={name} email={email} whatsappText={lastText} onAgain={closeVisit} againLabel="Cerrar" />
+            ) : (
+              <>
+                <span className="visit__icon"><CalendarCheck size={22} /></span>
+                <h2 id="visit-title" className="visit__title">Agenda tu visita</h2>
+                <p className="visit__sub">{visit.property ? visit.property.title : 'Te acompañamos a conocer la propiedad ideal para ti.'}</p>
+
+                <p className="visit__label">Elige el día</p>
+                <div className="days">
+                  {days.map((d, i) => (
+                    <button type="button" key={i} className={`day${day === i ? ' is-on' : ''}`} onClick={() => setDay(i)}>
+                      <small>{fmtDay(d)}</small>
+                      <strong>{d.getDate()}</strong>
+                    </button>
+                  ))}
+                </div>
+
+                <p className="visit__label">Hora</p>
+                <div className="slots">
+                  {SLOTS.map((s, i) => (
+                    <button type="button" key={s.label} className={`slot${slot === i ? ' is-on' : ''}`} onClick={() => setSlot(i)}>{s.label}</button>
+                  ))}
+                </div>
+
+                <div className="visit__mode">
+                  {(['Presencial', 'Videollamada'] as const).map((m) => (
+                    <label key={m} className={`radio${mode === m ? ' is-on' : ''}`}>
+                      <input type="radio" name="mode" checked={mode === m} onChange={() => setMode(m)} /> {m}
+                    </label>
+                  ))}
+                </div>
+
+                <div className="visit__fields">
+                  <input required placeholder="Tu nombre" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
+                  <input required type="tel" placeholder="Teléfono / WhatsApp" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" />
+                  <input required type="email" className="visit__email" placeholder="Correo electrónico (te enviamos la confirmación)" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
+                  <input className="hp" tabIndex={-1} autoComplete="off" aria-hidden value={trap} onChange={(e) => setTrap(e.target.value)} name="website" />
+                </div>
+
+                <button type="submit" className="btn-submit" disabled={slot < 0 || sending}>
+                  <span>
+                    {sending ? 'Agendando…' : slot >= 0 ? `Confirmar ${fmtDay(days[day])} ${days[day].getDate()} · ${SLOTS[slot].label}` : 'Selecciona una hora'}
+                  </span>
+                  <ArrowRight size={16} />
                 </button>
-              ))}
-            </div>
-
-            <p className="visit__label">Hora</p>
-            <div className="slots">
-              {SLOTS.map((s) => (
-                <button type="button" key={s} className={`slot${slot === s ? ' is-on' : ''}`} onClick={() => setSlot(s)}>{s}</button>
-              ))}
-            </div>
-
-            <div className="visit__mode">
-              {(['Presencial', 'Videollamada'] as const).map((m) => (
-                <label key={m} className={`radio${mode === m ? ' is-on' : ''}`}>
-                  <input type="radio" name="mode" checked={mode === m} onChange={() => setMode(m)} /> {m}
-                </label>
-              ))}
-            </div>
-
-            <div className="visit__fields">
-              <input required placeholder="Tu nombre" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
-              <input required type="tel" placeholder="Teléfono / WhatsApp" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" />
-            </div>
-
-            <button type="submit" className="btn-submit" disabled={!slot}>
-              <span>{slot ? `Confirmar ${fmtDay(days[day])} ${days[day].getDate()} · ${slot}` : 'Selecciona una hora'}</span>
-              <ArrowRight size={16} />
-            </button>
-            <p className="visit__note">Te confirmaremos la cita por WhatsApp. Al enviar aceptas nuestra <Link to="/privacidad" onClick={closeVisit}>Política de privacidad</Link>.</p>
+                <p className="visit__note">
+                  Recibirás la confirmación por correo, con la cita para tu calendario. Al enviar aceptas nuestra{' '}
+                  <Link to="/privacidad" onClick={closeVisit}>Política de privacidad</Link>.
+                </p>
+              </>
+            )}
           </motion.form>
         </motion.div>
       )}

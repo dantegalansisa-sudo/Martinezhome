@@ -32,6 +32,12 @@ npm run dev
 npm run build   # salida en dist/
 ```
 
+## Formularios y correos
+- Contacto, agendar visita y vende con nosotros envían a `/api/lead` (función de Vercel en `api/lead.js`).
+- Con Resend activo se mandan dos correos: aviso a la empresa (`LEADS_TO`, por defecto el correo de Vanessa) y confirmación al cliente (las visitas incluyen archivo .ics para el calendario).
+- Mientras no exista `RESEND_API_KEY`, los formularios abren WhatsApp con la solicitud, para no perder ningún cliente.
+- Variables en Vercel: `RESEND_API_KEY` (obligatoria), `LEADS_TO`, `RESEND_FROM` (p. ej. `Martínez Home <notificaciones@martinezhomerd.com>` cuando el dominio esté verificado en Resend).
+
 ## SEO
 - `sitemap.xml` y `robots.txt` se generan en cada `npm run build` (plugin en `vite.config.ts`) a partir de `src/data/properties.ts`.
 - Cada página define título, descripción, canónico y Open Graph con `useSeo` (`src/useTitle.ts`). Datos estructurados `RealEstateAgent` en `index.html`.

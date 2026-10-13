@@ -8,6 +8,7 @@ import PropertyMap from '../components/PropertyMap';
 import CurrencySwitch from '../components/CurrencySwitch';
 import RangeSlider from '../components/RangeSlider';
 import { CITIES, PROPERTIES, ZONES } from '../data/properties';
+import { zoneGroup } from '../data/zones';
 import { waLink } from '../data/site';
 import { fromUSD, money, priceUSD, useStore } from '../store';
 import { useSeo } from '../useTitle';
@@ -29,6 +30,7 @@ export default function Properties() {
   const op = params.get('op') ?? '';
   const tipo = params.get('tipo') ?? '';
   const zona = params.get('zona') ?? '';
+  const area = zoneGroup(params.get('area') ?? '');
   const ciudad = params.get('ciudad') ?? '';
   const estado = params.get('estado') ?? '';
   const hab = Number(params.get('hab') ?? 0);
@@ -66,6 +68,7 @@ export default function Properties() {
       if (op && p.operation !== op) return false;
       if (tipo && p.kind !== tipo) return false;
       if (zona && p.zone !== zona) return false;
+      if (area && !area.match(p)) return false;
       if (ciudad && p.city !== ciudad) return false;
       if (estado && p.status !== estado) return false;
       if (hab && (p.bedsMin ?? 0) < hab) return false;
@@ -85,9 +88,9 @@ export default function Properties() {
       out.sort((a, b) => key(a) - key(b) || 0);
     }
     return out;
-  }, [op, tipo, zona, ciudad, estado, hab, min, max, budgetActive, orden]);
+  }, [op, tipo, zona, area, ciudad, estado, hab, min, max, budgetActive, orden]);
 
-  const active = [op, tipo, zona, ciudad, estado, hab ? 1 : '', budgetActive ? 1 : ''].filter(Boolean).length;
+  const active = [op, tipo, zona, area?.id, ciudad, estado, hab ? 1 : '', budgetActive ? 1 : ''].filter(Boolean).length;
   const showCur = currency === 'DOP' ? 'DOP' : 'USD';
   const fmtBudget = (n: number) => money(fromUSD(n, showCur), showCur, true);
 
@@ -167,6 +170,11 @@ export default function Properties() {
                 <motion.strong key={list.length} initial={{ y: -8, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>{list.length}</motion.strong>{' '}
                 {list.length === 1 ? 'propiedad' : 'propiedades'}
               </p>
+              {area && (
+                <button className="toolbar__area" onClick={() => set('area', '')} aria-label={`Quitar zona ${area.name}`}>
+                  {area.name} <X size={13} />
+                </button>
+              )}
               <button className="toolbar__filters" onClick={() => setDrawer(true)}>
                 <SlidersHorizontal size={16} /> Filtros {active > 0 && <span className="toolbar__badge">{active}</span>}
               </button>

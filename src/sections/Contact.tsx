@@ -1,10 +1,11 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Check, Mail, MapPin, MessageSquare, Phone, User } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Mail, MapPin, MessageSquare, Phone, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import RevealText from '../components/RevealText';
-import { WhatsAppIcon } from '../components/BrandIcons';
-import { CONTACT, waLink } from '../data/site';
+import { CONTACT } from '../data/site';
+import LeadDone from '../components/LeadDone';
+import { sendLead, warmLead, type LeadResult } from '../lib/lead';
 import { EASINGS } from '../easings';
 import { useIsDesktop } from '../useMedia';
 
@@ -30,7 +31,12 @@ export default function Contact() {
 
   const [step, setStep] = useState(0);
   const [dir, setDir] = useState(1);
-  const [sent, setSent] = useState(false);
+  const [result, setResult] = useState<LeadResult | null>(null);
+  const [sending, setSending] = useState(false);
+  const [trap, setTrap] = useState('');
+  const [lastText, setLastText] = useState('');
+
+  useEffect(warmLead, []);
   const [interest, setInterest] = useState<Interest>('Comprar');
   const [kind, setKind] = useState('Casa');
   const [budget, setBudget] = useState('');
@@ -45,9 +51,10 @@ export default function Contact() {
     setStep(n);
   };
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (step === 0) return go(1);
+    if (sending) return;
     const text = [
       `Hola Martínez Home, quiero ${interest.toLowerCase()} una propiedad.`,
       `Tipo: ${kind}`,
@@ -59,12 +66,23 @@ export default function Contact() {
       `Prefiero que me contacten por: ${channel}`,
       form.message && `Mensaje: ${form.message}`,
     ].filter(Boolean).join('\n');
-    window.open(waLink(text), '_blank', 'noopener');
-    setSent(true);
+    setSending(true);
+    const fields: [string, string][] = [
+      ['Interés', interest],
+      ['Tipo de propiedad', kind],
+      [selling ? 'Precio esperado' : 'Presupuesto', budget],
+      ['Zona de interés', zone],
+      ['Contactar por', channel],
+      ['Mensaje', form.message],
+    ];
+    const r = await sendLead({ type: 'contacto', name: form.name, phone: form.phone, email: form.email, fields, website: trap }, text);
+    setLastText(text);
+    setResult(r);
+    setSending(false);
   };
 
   const restart = () => {
-    setSent(false);
+    setResult(null);
     setStep(0);
     setForm({ name: '', phone: '', email: '', message: '' });
   };
@@ -102,15 +120,9 @@ export default function Contact() {
           transition={{ duration: 0.9, ease: EASINGS.premium }}
         >
           <AnimatePresence mode="wait" initial={false}>
-            {sent ? (
-              <motion.div key="done" className="cform__done" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
-                <motion.span className="cform__check" initial={{ scale: 0, rotate: -40 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }}>
-                  <Check size={30} strokeWidth={2.5} />
-                </motion.span>
-                <h3>¡Gracias, {form.name.split(' ')[0] || 'por escribirnos'}!</h3>
-                <p>Abrimos WhatsApp con tu solicitud. Si no se abrió, escríbenos directamente y te respondemos en menos de 24 horas.</p>
-                <a className="btn-wa" href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer"><WhatsAppIcon size={17} /> Abrir WhatsApp</a>
-                <button type="button" className="cform__again" onClick={restart}>Enviar otra solicitud</button>
+            {result ? (
+              <motion.div key="done" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
+                <LeadDone result={result} name={form.name} email={form.email} whatsappText={lastText} onAgain={restart} />
               </motion.div>
             ) : (
               <motion.form key="form" onSubmit={submit} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -148,7 +160,8 @@ export default function Contact() {
                       <>
                         <label className="field"><User size={16} /><input required placeholder="Nombre completo" value={form.name} onChange={set('name')} autoComplete="name" /></label>
                         <label className="field"><Phone size={16} /><input type="tel" required placeholder="Teléfono / WhatsApp" value={form.phone} onChange={set('phone')} autoComplete="tel" /></label>
-                        <label className="field"><Mail size={16} /><input type="email" required={channel === 'Correo'} placeholder={`Correo electrónico${channel === 'Correo' ? '' : ' (opcional)'}`} value={form.email} onChange={set('email')} autoComplete="email" /></label>
+                        <label className="field"><Mail size={16} /><input type="email" required placeholder="Correo electrónico" value={form.email} onChange={set('email')} autoComplete="email" /></label>
+                        <input className="hp" tabIndex={-1} autoComplete="off" aria-hidden value={trap} onChange={(e) => setTrap(e.target.value)} name="website" />
                         <p className="cform__label">Prefiero que me contacten por</p>
                         <div className="cform__chips">
                           {CHANNELS.map((c) => (
@@ -165,8 +178,8 @@ export default function Contact() {
                   {step === 1 && (
                     <button type="button" className="cform__back" onClick={() => go(0)} aria-label="Volver al paso anterior"><ArrowLeft size={18} /></button>
                   )}
-                  <button type="submit" className="btn-submit">
-                    <span>{step === 0 ? 'Continuar' : 'Enviar solicitud'}</span> <ArrowRight size={16} />
+                  <button type="submit" className="btn-submit" disabled={sending}>
+                    <span>{step === 0 ? 'Continuar' : sending ? 'Enviando…' : 'Enviar solicitud'}</span> <ArrowRight size={16} />
                   </button>
                 </div>
                 <p className="cform__note">Tus datos solo se usan para contactarte sobre tu solicitud. <Link to="/privacidad">Política de privacidad</Link></p>

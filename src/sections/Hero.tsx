@@ -1,25 +1,13 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowUpRight, Building2, CalendarDays, ChevronDown, Home, MapPin, Play, Search, Tag, Waves } from 'lucide-react';
+import { ArrowUpRight, Building2, Play, Waves } from 'lucide-react';
 import RevealText from '../components/RevealText';
 import AnimatedCounter from '../components/AnimatedCounter';
-import MagneticButton from '../components/MagneticButton';
 import { EASINGS } from '../easings';
-import { CITIES, ZONES } from '../data/properties';
+import HeroSearch from './HeroSearch';
 import { useIsDesktop } from '../useMedia';
 
 const MotionLink = motion.create(Link);
-
-const FILTERS = [
-  { label: 'Todos', icon: Home },
-  { label: 'Venta', icon: Tag },
-  { label: 'Alquiler', icon: CalendarDays },
-  { label: 'Proyectos', icon: Building2 },
-];
-const LOCATIONS = ['Todas las zonas', ...CITIES, ...ZONES.filter((z) => !CITIES.includes(z))];
-const TYPES = ['Todos los tipos', 'Casa', 'Apartamento', 'Villa'];
-const OP: Record<string, string> = { Venta: 'op=venta', Alquiler: 'op=alquiler', Proyectos: 'estado=planos' };
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 30 },
@@ -28,21 +16,10 @@ const fadeUp = (delay: number) => ({
 });
 
 export default function Hero({ onTour }: { onTour: () => void }) {
-  const navigate = useNavigate();
-  const [filter, setFilter] = useState('Todos');
-  const [loc, setLoc] = useState(LOCATIONS[0]);
-  const [type, setType] = useState(TYPES[0]);
   const desktop = useIsDesktop();
   const { scrollY } = useScroll();
   // Translate-only parallax (no scaling) keeps the large image on the GPU; skipped on touch devices.
   const bgY = useTransform(scrollY, [0, 900], [0, 140]);
-
-  const search = () => {
-    const q = new URLSearchParams(OP[filter] ?? '');
-    if (loc !== LOCATIONS[0]) q.set(CITIES.includes(loc) ? 'ciudad' : 'zona', loc);
-    if (type !== TYPES[0]) q.set('tipo', type);
-    navigate(`/propiedades${q.toString() ? `?${q}` : ''}`);
-  };
 
   return (
     <section className="hero" id="inicio">
@@ -71,46 +48,7 @@ export default function Hero({ onTour }: { onTour: () => void }) {
             Propiedades que se adaptan a tu estilo de vida. Compra, vende o invierte con asesoría experta y acompañamiento personalizado.
           </motion.p>
 
-          <motion.div className="chips" {...fadeUp(1.05)} role="tablist" aria-label="Tipo de operación">
-            {FILTERS.map(({ label, icon: Icon }) => (
-              <button
-                key={label}
-                role="tab"
-                aria-selected={filter === label}
-                className={`chip${filter === label ? ' chip--active' : ''}`}
-                onClick={() => setFilter(label)}
-              >
-                <Icon size={15} /> {label}
-              </button>
-            ))}
-          </motion.div>
-
-          <motion.div className="searchbar" {...fadeUp(1.2)}>
-            <label className="searchbar__field">
-              <MapPin size={18} />
-              <span className="searchbar__text">
-                <small>Ubicación</small>
-                <select value={loc} onChange={(e) => setLoc(e.target.value)}>
-                  {LOCATIONS.map((l) => <option key={l}>{l}</option>)}
-                </select>
-              </span>
-              <ChevronDown size={16} className="searchbar__chev" />
-            </label>
-            <span className="searchbar__divider" />
-            <label className="searchbar__field">
-              <Home size={18} />
-              <span className="searchbar__text">
-                <small>Tipo de propiedad</small>
-                <select value={type} onChange={(e) => setType(e.target.value)}>
-                  {TYPES.map((t) => <option key={t}>{t}</option>)}
-                </select>
-              </span>
-              <ChevronDown size={16} className="searchbar__chev" />
-            </label>
-            <MagneticButton className="searchbar__btn" onClick={search} ariaLabel="Buscar propiedades" strength={0.4}>
-              <Search size={20} />
-            </MagneticButton>
-          </motion.div>
+          <HeroSearch />
 
           <div className="hero__bottom">
             <MotionLink

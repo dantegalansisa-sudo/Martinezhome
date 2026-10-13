@@ -4,6 +4,9 @@ import { X } from 'lucide-react';
 import Hero from '../sections/Hero';
 import Featured from '../sections/Featured';
 import Approach from '../sections/Approach';
+import TrustBar from '../sections/TrustBar';
+import ExploreZones from '../sections/ExploreZones';
+import HowItWorks from '../sections/HowItWorks';
 import Founder from '../sections/Founder';
 import TeamStrip from '../sections/TeamStrip';
 import Social from '../sections/Social';
@@ -23,7 +26,10 @@ export default function Home() {
   return (
     <>
       <Hero onTour={() => setVideo('/videos/casa-sde.mp4')} />
+      <TrustBar />
       <Featured />
+      <ExploreZones />
+      <HowItWorks />
       <Approach />
       <Founder />
       <TeamStrip />
