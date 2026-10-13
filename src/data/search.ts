@@ -9,21 +9,36 @@ export const ANY_TYPE = 'Todos los tipos';
 export const LOCATIONS = [ANY_LOCATION, ...CITIES, ...ZONES.filter((z) => !CITIES.includes(z))];
 export const TYPES = [ANY_TYPE, 'Casa', 'Apartamento', 'Villa'];
 
-/** Budget presets in USD (RD$ listings are converted with the reference rate). */
-export const BUDGETS: { id: string; label: string; min?: number; max?: number }[] = [
-  { id: 'any', label: 'Cualquier presupuesto' },
-  { id: 'hasta-120', label: 'Hasta US$120K', max: 120000 },
-  { id: '120-180', label: 'US$120K – 180K', min: 120000, max: 180000 },
-  { id: '180-250', label: 'US$180K – 250K', min: 180000, max: 250000 },
-  { id: '250-400', label: 'US$250K – 400K', min: 250000, max: 400000 },
-  { id: 'mas-400', label: 'Más de US$400K', min: 400000 },
+/** Slider bounds in USD (RD$ listings are converted with the reference rate). The top value means "no limit". */
+export const BUDGET_MIN = 50000;
+export const BUDGET_MAX = 500000;
+export const BUDGET_STEP = 5000;
+export const ANY_BUDGET: [number, number] = [BUDGET_MIN, BUDGET_MAX];
+
+/** Quick shortcuts shown above the slider. */
+export const BUDGETS: { label: string; range: [number, number] }[] = [
+  { label: 'Hasta 120K', range: [BUDGET_MIN, 120000] },
+  { label: '120K – 180K', range: [120000, 180000] },
+  { label: '180K – 250K', range: [180000, 250000] },
+  { label: '250K – 400K', range: [250000, 400000] },
+  { label: '400K +', range: [400000, BUDGET_MAX] },
 ];
+
+export const budgetActive = ([lo, hi]: [number, number]) => lo > BUDGET_MIN || hi < BUDGET_MAX;
+
+const k = (n: number) => `${Math.round(n / 1000)}K`;
+export function budgetLabel([lo, hi]: [number, number]) {
+  if (!budgetActive([lo, hi])) return 'Cualquier presupuesto';
+  if (lo <= BUDGET_MIN) return `Hasta US$${k(hi)}`;
+  if (hi >= BUDGET_MAX) return `Desde US$${k(lo)}`;
+  return `US$${k(lo)} – ${k(hi)}`;
+}
 
 export interface SearchState {
   op: OperationFilter;
   loc: string;
   type: string;
-  budget: string;
+  budget: [number, number];
 }
 
 export function matches(p: Property, s: SearchState) {
@@ -32,13 +47,13 @@ export function matches(p: Property, s: SearchState) {
   if (s.op === 'Proyectos' && p.status !== 'planos') return false;
   if (s.loc !== ANY_LOCATION && p.city !== s.loc && p.zone !== s.loc) return false;
   if (s.type !== ANY_TYPE && p.kind !== s.type) return false;
-  const b = BUDGETS.find((x) => x.id === s.budget);
-  if (b && (b.min !== undefined || b.max !== undefined)) {
+  if (budgetActive(s.budget)) {
+    const [lo, hi] = s.budget;
     const usd = priceUSD(p);
     // Listings without a published price can't be placed in a budget range.
     if (usd === undefined) return false;
-    if (b.min !== undefined && usd < b.min) return false;
-    if (b.max !== undefined && usd > b.max) return false;
+    if (usd < lo) return false;
+    if (hi < BUDGET_MAX && usd > hi) return false;
   }
   return true;
 }
@@ -53,9 +68,22 @@ export function toQuery(s: SearchState) {
   if (s.op === 'Proyectos') q.set('estado', 'planos');
   if (s.loc !== ANY_LOCATION) q.set(CITIES.includes(s.loc) ? 'ciudad' : 'zona', s.loc);
   if (s.type !== ANY_TYPE) q.set('tipo', s.type);
-  const b = BUDGETS.find((x) => x.id === s.budget);
-  if (b?.min) q.set('min', String(b.min));
-  if (b?.max) q.set('max', String(b.max));
+  const [lo, hi] = s.budget;
+  if (lo > BUDGET_MIN) q.set('min', String(lo));
+  if (hi < BUDGET_MAX) q.set('max', String(hi));
   const str = q.toString();
   return `/propiedades${str ? `?${str}` : ''}`;
+}
+
+/** Price distribution for the slider histogram: how many listings fall in each bucket. */
+export function histogram(buckets = 18) {
+  const size = (BUDGET_MAX - BUDGET_MIN) / buckets;
+  const counts = Array.from({ length: buckets }, () => 0);
+  PROPERTIES.forEach((p) => {
+    const usd = priceUSD(p);
+    if (usd === undefined) return;
+    const i = Math.min(Math.max(Math.floor((usd - BUDGET_MIN) / size), 0), buckets - 1);
+    counts[i]++;
+  });
+  return { counts, size };
 }

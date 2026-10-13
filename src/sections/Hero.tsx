@@ -23,26 +23,38 @@ export default function Hero({ onTour }: { onTour: () => void }) {
 
   return (
     <section className="hero" id="inicio">
-      <motion.div className="hero__bg" style={desktop ? { y: bgY } : undefined}>
-        <motion.img
-          src="/images/hero.webp"
-          alt="Torre residencial moderna frente al mar al atardecer"
-          initial={{ scale: 1.15, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.8, ease: EASINGS.smooth }}
-        />
-      </motion.div>
-      <div className="hero__veil" />
+      {/* Background lives in its own clipped layer so the search menus can overflow the hero. */}
+      <div className="hero__media">
+        <motion.div className="hero__bg" style={desktop ? { y: bgY } : undefined}>
+          <motion.img
+            src="/images/hero.webp"
+            alt="Torre residencial moderna frente al mar al atardecer"
+            initial={{ scale: 1.15, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.8, ease: EASINGS.smooth }}
+          />
+        </motion.div>
+        <div className="hero__veil" />
+      </div>
       <motion.button className="hero__tour-pill" onClick={onTour} {...fadeUp(0.2)}>
-        <span><Play size={12} fill="currentColor" /></span> Recorrido virtual
+        <span>
+          <Play size={12} fill="currentColor" />
+        </span>{' '}
+        Recorrido virtual
       </motion.button>
 
       <div className="container hero__grid">
         <div className="hero__left">
-          <motion.p className="eyebrow" {...fadeUp(0.3)}>Tu próximo hogar en República Dominicana</motion.p>
+          <motion.p className="eyebrow" {...fadeUp(0.3)}>
+            Tu próximo hogar en República Dominicana
+          </motion.p>
           <h1 className="hero__title" aria-label="Martínez Home RD">
-            <RevealText tag="span" className="hero__title-a" delay={0.4} immediate>MARTÍNEZ</RevealText>
-            <RevealText tag="span" className="hero__title-b" delay={0.6} immediate>HOME RD</RevealText>
+            <RevealText tag="span" className="hero__title-a" delay={0.4} immediate>
+              MARTÍNEZ
+            </RevealText>
+            <RevealText tag="span" className="hero__title-b" delay={0.6} immediate>
+              HOME RD
+            </RevealText>
           </h1>
           <motion.p className="hero__lead" {...fadeUp(0.9)}>
             Propiedades que se adaptan a tu estilo de vida. Compra, vende o invierte con asesoría experta y acompañamiento personalizado.
@@ -68,9 +80,36 @@ export default function Hero({ onTour }: { onTour: () => void }) {
             </MotionLink>
 
             <motion.div className="stats" {...fadeUp(1.5)}>
-              <div><strong><AnimatedCounter target={500} prefix="+" /></strong><span>Propiedades<br />disponibles</span></div>
-              <div><strong><AnimatedCounter target={300} prefix="+" /></strong><span>Familias<br />felices</span></div>
-              <div><strong><AnimatedCounter target={15} prefix="+" /></strong><span>Años de<br />experiencia</span></div>
+              <div>
+                <strong>
+                  <AnimatedCounter target={500} prefix="+" />
+                </strong>
+                <span>
+                  Propiedades
+                  <br />
+                  disponibles
+                </span>
+              </div>
+              <div>
+                <strong>
+                  <AnimatedCounter target={300} prefix="+" />
+                </strong>
+                <span>
+                  Familias
+                  <br />
+                  felices
+                </span>
+              </div>
+              <div>
+                <strong>
+                  <AnimatedCounter target={15} prefix="+" />
+                </strong>
+                <span>
+                  Años de
+                  <br />
+                  experiencia
+                </span>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -79,11 +118,19 @@ export default function Hero({ onTour }: { onTour: () => void }) {
           <motion.div className="tour" {...fadeUp(1.1)}>
             <button className="tour__media" onClick={onTour} aria-label="Ver recorrido virtual">
               <img src="/props/villa-amueblada-punta-cana/01-sm.webp" alt="" />
-              <span className="tour__play"><Play size={20} fill="currentColor" /></span>
+              <span className="tour__play">
+                <Play size={20} fill="currentColor" />
+              </span>
             </button>
             <div className="tour__row">
-              <span className="tour__title">Recorrido virtual<br />3D</span>
-              <button className="tour__go" onClick={onTour} aria-label="Abrir recorrido"><ArrowUpRight size={18} /></button>
+              <span className="tour__title">
+                Recorrido virtual
+                <br />
+                3D
+              </span>
+              <button className="tour__go" onClick={onTour} aria-label="Abrir recorrido">
+                <ArrowUpRight size={18} />
+              </button>
             </div>
             <span className="tour__line" aria-hidden />
           </motion.div>
@@ -98,19 +145,30 @@ export default function Hero({ onTour }: { onTour: () => void }) {
                 <span style={{ background: '#c9a77c' }}>JP</span>
                 <span style={{ background: '#b9442f' }}>AL</span>
               </div>
-              <div className="social-proof__num"><strong>+300</strong><span>Clientes satisfechos</span></div>
+              <div className="social-proof__num">
+                <strong>+300</strong>
+                <span>Clientes satisfechos</span>
+              </div>
             </div>
-            <a href="#redes" className="social-proof__link">Conoce sus historias <ArrowUpRight size={16} /></a>
+            <a href="#redes" className="social-proof__link">
+              Conoce sus historias <ArrowUpRight size={16} />
+            </a>
           </motion.div>
         </div>
       </div>
 
       <motion.div className="hotspot hotspot--sea" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.7, duration: 0.8 }}>
-        <span className="hotspot__icon"><Waves size={16} /></span> Vista al mar
+        <span className="hotspot__icon">
+          <Waves size={16} />
+        </span>{' '}
+        Vista al mar
         <span className="hotspot__tail" aria-hidden />
       </motion.div>
       <motion.div className="hotspot hotspot--amen" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.9, duration: 0.8 }}>
-        <span className="hotspot__icon"><Building2 size={16} /></span> Amenidades
+        <span className="hotspot__icon">
+          <Building2 size={16} />
+        </span>{' '}
+        Amenidades
       </motion.div>
     </section>
   );

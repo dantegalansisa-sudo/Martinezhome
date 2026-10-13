@@ -1,5 +1,5 @@
-import { useRef, useState, type ReactNode, type RefObject } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useEffect, useRef, useState, type RefObject } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import RevealText from '../components/RevealText';
@@ -15,18 +15,44 @@ const TABS: { label: string; match: (p: Property) => boolean }[] = [
   { label: 'En planos', match: (p) => p.status === 'planos' },
 ];
 
-/** Mobile carousel item: scales and fades by its distance from the centre of the track. */
-function FocusItem({ track, children }: { track: RefObject<HTMLDivElement>; children: ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollXProgress } = useScroll({ container: track, target: ref, axis: 'x', offset: ['start end', 'end start'] });
-  const scale = useTransform(scrollXProgress, [0, 0.5, 1], [0.86, 1, 0.86]);
-  const opacity = useTransform(scrollXProgress, [0, 0.5, 1], [0.5, 1, 0.5]);
-  const rotate = useTransform(scrollXProgress, [0, 0.5, 1], [3, 0, -3]);
-  return (
-    <motion.div ref={ref} className="focus-item" style={{ scale, opacity, rotate }}>
-      {children}
-    </motion.div>
-  );
+/**
+ * Mobile carousel focus: side cards shrink a little, the centred one is exactly scale(1).
+ * Computed by hand from the track's scroll position (reliable on iOS Safari), with no opacity
+ * or rotation so cards never look washed out or blurry.
+ */
+function useFocusCarousel(track: RefObject<HTMLDivElement>, enabled: boolean, key: unknown) {
+  useEffect(() => {
+    const el = track.current;
+    if (!el) return;
+    const items = Array.from(el.querySelectorAll<HTMLElement>('.focus-item'));
+    if (!enabled) {
+      items.forEach((it) => (it.style.transform = ''));
+      return;
+    }
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const box = el.getBoundingClientRect();
+      const center = box.left + box.width / 2;
+      items.forEach((it) => {
+        const r = it.getBoundingClientRect();
+        const d = Math.min(Math.abs(r.left + r.width / 2 - center) / box.width, 1);
+        const scale = d < 0.04 ? 1 : 1 - Math.min(d, 0.8) * 0.12;
+        it.style.transform = scale === 1 ? '' : `scale(${scale.toFixed(3)})`;
+      });
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    el.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [track, enabled, key]);
 }
 
 const container = { hidden: {}, visible: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } } };
@@ -36,6 +62,7 @@ export default function Featured() {
   const mobile = useIsMobile();
   const track = useRef<HTMLDivElement>(null);
   const list = PROPERTIES.filter(TABS[tab].match).slice(0, 8);
+  useFocusCarousel(track, mobile, tab);
 
   const slide = (dir: number) => {
     const el = track.current;
@@ -81,9 +108,9 @@ export default function Featured() {
         >
           {list.map((p) =>
             mobile ? (
-              <FocusItem key={p.id} track={track}>
+              <div key={p.id} className="focus-item">
                 <PropertyCard p={p} variants={false} />
-              </FocusItem>
+              </div>
             ) : (
               <PropertyCard key={p.id} p={p} />
             )
