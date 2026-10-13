@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { useSeo } from '../useTitle';
 
 export default function NotFound() {
+  useSeo({ title: 'Página no encontrada', noindex: true });
   return (
     <section className="notfound">
       <div className="container">

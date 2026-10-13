@@ -10,7 +10,7 @@ import RangeSlider from '../components/RangeSlider';
 import { CITIES, PROPERTIES, ZONES } from '../data/properties';
 import { waLink } from '../data/site';
 import { fromUSD, money, priceUSD, useStore } from '../store';
-import { useTitle } from '../useTitle';
+import { useSeo } from '../useTitle';
 
 const BUDGET: [number, number] = [50000, 500000];
 const STEP = 5000;
@@ -38,7 +38,10 @@ export default function Properties() {
   const max = Number(params.get('max') ?? BUDGET[1]);
   const budgetActive = min > BUDGET[0] || max < BUDGET[1];
 
-  useTitle(op === 'alquiler' ? 'Propiedades en alquiler' : estado === 'planos' ? 'Proyectos' : 'Propiedades');
+  useSeo({
+    title: op === 'alquiler' ? 'Propiedades en alquiler' : estado === 'planos' ? 'Proyectos en planos' : 'Casas y apartamentos en venta',
+    description: `${PROPERTIES.length} propiedades en venta: casas, apartamentos, villas y proyectos en Santo Domingo Este, Distrito Nacional, Punta Cana y Baní. Filtra por zona, presupuesto y habitaciones.`,
+  });
 
   useEffect(() => {
     document.body.style.overflow = drawer ? 'hidden' : '';

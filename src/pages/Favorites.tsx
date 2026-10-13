@@ -7,7 +7,7 @@ import PropertyCard from '../components/PropertyCard';
 import CurrencySwitch from '../components/CurrencySwitch';
 import { img, PROPERTIES, statusLabel, type Property } from '../data/properties';
 import { formatPrice, useStore } from '../store';
-import { useTitle } from '../useTitle';
+import { useSeo } from '../useTitle';
 
 const MAX_COMPARE = 3;
 
@@ -26,7 +26,7 @@ const ROWS: { label: string; get: (p: Property, cur: ReturnType<typeof useStore>
 ];
 
 export default function Favorites() {
-  useTitle('Favoritos');
+  useSeo({ title: 'Favoritos', noindex: true });
   const { favorites, toggleFavorite, currency } = useStore();
   const saved = favorites.map((id) => PROPERTIES.find((p) => p.id === id)).filter(Boolean) as Property[];
   const [picked, setPicked] = useState<number[]>(() => favorites.slice(0, MAX_COMPARE));

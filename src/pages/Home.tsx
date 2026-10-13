@@ -8,11 +8,11 @@ import Founder from '../sections/Founder';
 import TeamStrip from '../sections/TeamStrip';
 import Social from '../sections/Social';
 import Contact from '../sections/Contact';
-import { useTitle } from '../useTitle';
+import { useSeo } from '../useTitle';
 
 export default function Home() {
   const [video, setVideo] = useState<string | null>(null);
-  useTitle();
+  useSeo();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setVideo(null);

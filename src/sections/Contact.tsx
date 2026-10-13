@@ -1,6 +1,7 @@
 import { useRef, useState, type FormEvent } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, Mail, MapPin, MessageSquare, Phone, User } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import RevealText from '../components/RevealText';
 import { WhatsAppIcon } from '../components/BrandIcons';
 import { CONTACT, waLink } from '../data/site';
@@ -168,7 +169,7 @@ export default function Contact() {
                     <span>{step === 0 ? 'Continuar' : 'Enviar solicitud'}</span> <ArrowRight size={16} />
                   </button>
                 </div>
-                <p className="cform__note">Tus datos solo se usan para contactarte sobre tu solicitud.</p>
+                <p className="cform__note">Tus datos solo se usan para contactarte sobre tu solicitud. <Link to="/privacidad">Política de privacidad</Link></p>
               </motion.form>
             )}
           </AnimatePresence>

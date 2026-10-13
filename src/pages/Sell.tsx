@@ -5,7 +5,7 @@ import PageHeader from '../components/PageHeader';
 import RevealText from '../components/RevealText';
 import { waLink } from '../data/site';
 import { EASINGS } from '../easings';
-import { useTitle } from '../useTitle';
+import { useSeo } from '../useTitle';
 
 const BENEFITS = [
   { icon: TrendingUp, title: 'Valoración de mercado', text: 'Te ayudamos a definir un precio competitivo basado en la zona y el mercado actual.' },
@@ -22,7 +22,7 @@ const item = {
 };
 
 export default function Sell() {
-  useTitle('Vende con nosotros');
+  useSeo({ title: 'Vende o alquila tu propiedad', description: 'Vende o alquila tu casa o apartamento con Martínez Home: valoración de mercado, fotos profesionales, difusión en redes y acompañamiento legal hasta el cierre.' });
   const [f, setF] = useState({ tipo: 'Casa', operacion: 'Vender', zona: '', precio: '', nombre: '', telefono: '', detalle: '' });
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setF({ ...f, [k]: e.target.value });
 

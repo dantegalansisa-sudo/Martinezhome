@@ -26,7 +26,7 @@ export default function Footer() {
         </div>
         <div className="footer__bottom">
           <span>© 2026 Martínez Home Inmobiliaria. Todos los derechos reservados.</span>
-          <span><Link to="/">Términos y condiciones</Link> | <Link to="/">Política de privacidad</Link></span>
+          <span><Link to="/terminos">Términos y condiciones</Link> | <Link to="/privacidad">Política de privacidad</Link></span>
         </div>
         <div className="footer__credit">
           <span>Diseño y desarrollo web por</span>

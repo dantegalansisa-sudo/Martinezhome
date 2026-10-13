@@ -7,7 +7,7 @@ import MagneticButton from '../components/MagneticButton';
 import { TEAM } from '../data/team';
 import { waLink } from '../data/site';
 import { EASINGS } from '../easings';
-import { useTitle } from '../useTitle';
+import { useSeo } from '../useTitle';
 
 const VALUES = [
   { icon: ShieldCheck, title: 'Confianza', text: 'Procesos claros y documentación revisada en cada operación.' },
@@ -18,7 +18,7 @@ const VALUES = [
 const grid = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
 
 export default function Team() {
-  useTitle('Nuestro equipo');
+  useSeo({ title: 'Nuestro equipo', description: 'Conoce al equipo de asesores inmobiliarios de Martínez Home, liderado por la Lic. Vanessa Martínez, en Prado Oriental, Santo Domingo Este.' });
   const [lead, ...rest] = TEAM;
   return (
     <>

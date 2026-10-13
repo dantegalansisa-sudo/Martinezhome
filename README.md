@@ -13,6 +13,8 @@ Sitio web de **Martínez Home Inmobiliaria** (Lic. Vanessa Martínez, CEO) — S
 | `/equipo` | Equipo de trabajo con contacto directo |
 | `/vende-con-nosotros` | Captación de propietarios |
 | `/favoritos` | Favoritos guardados y comparador (hasta 3) |
+| `/privacidad` | Política de privacidad (Ley 172-13) |
+| `/terminos` | Términos y condiciones |
 
 En móvil: hero a pantalla completa, carrusel centrado de propiedades, equipo con scroll horizontal fijado y videos apilados.
 
@@ -29,6 +31,11 @@ npm install
 npm run dev
 npm run build   # salida en dist/
 ```
+
+## SEO
+- `sitemap.xml` y `robots.txt` se generan en cada `npm run build` (plugin en `vite.config.ts`) a partir de `src/data/properties.ts`.
+- Cada página define título, descripción, canónico y Open Graph con `useSeo` (`src/useTitle.ts`). Datos estructurados `RealEstateAgent` en `index.html`.
+- Dominio canónico: `SITE_URL` en `src/data/site.ts` (https://www.martinezhomerd.com).
 
 ## Despliegue
 Es una SPA con rutas reales: el servidor debe redirigir todas las rutas a `index.html`.

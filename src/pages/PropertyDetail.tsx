@@ -12,7 +12,7 @@ import { member, telHref, waHref } from '../data/team';
 import { waLink } from '../data/site';
 import { formatPrice, useStore } from '../store';
 import { EASINGS } from '../easings';
-import { useTitle } from '../useTitle';
+import { useSeo } from '../useTitle';
 import NotFound from './NotFound';
 
 const fade = (delay = 0) => ({
@@ -34,7 +34,15 @@ export default function PropertyDetail() {
   const { slug } = useParams();
   const p = PROPERTIES.find((x) => x.slug === slug);
   const { currency, openVisit } = useStore();
-  useTitle(p?.title ?? 'Propiedad no encontrada');
+  useSeo(
+    p
+      ? {
+          title: `${p.title} — ${p.zone}`,
+          description: `${p.summary} ${p.kind} en ${p.operation} en ${p.zone}, ${p.city}.`,
+          image: `/props/${p.slug}/01.webp`,
+        }
+      : { title: 'Propiedad no encontrada', noindex: true }
+  );
   if (!p) return <NotFound />;
 
   const agent = member(p.agent);

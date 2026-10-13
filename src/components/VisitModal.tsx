@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, CalendarCheck, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useStore } from '../store';
 import { waLink } from '../data/site';
 import { EASINGS } from '../easings';
@@ -112,7 +113,7 @@ export default function VisitModal() {
               <span>{slot ? `Confirmar ${fmtDay(days[day])} ${days[day].getDate()} · ${slot}` : 'Selecciona una hora'}</span>
               <ArrowRight size={16} />
             </button>
-            <p className="visit__note">Te confirmaremos la cita por WhatsApp.</p>
+            <p className="visit__note">Te confirmaremos la cita por WhatsApp. Al enviar aceptas nuestra <Link to="/privacidad" onClick={closeVisit}>Política de privacidad</Link>.</p>
           </motion.form>
         </motion.div>
       )}

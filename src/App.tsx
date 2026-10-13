@@ -17,6 +17,8 @@ const Sell = lazy(() => import('./pages/Sell'));
 const Favorites = lazy(() => import('./pages/Favorites'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const CursorPreview = lazy(() => import('./pages/CursorPreview'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const Terms = lazy(() => import('./pages/Terms'));
 
 /** Scroll to top on navigation, or to the #anchor when one is present. */
 function ScrollManager() {
@@ -85,6 +87,8 @@ export default function App() {
             <Route path="vende-con-nosotros" element={<Sell />} />
             <Route path="favoritos" element={<Favorites />} />
             <Route path="casita" element={<CursorPreview />} />
+            <Route path="privacidad" element={<Privacy />} />
+            <Route path="terminos" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

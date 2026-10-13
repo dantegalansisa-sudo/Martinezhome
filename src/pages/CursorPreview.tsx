@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { HouseFigure, type Pose } from '../components/HouseCursor';
-import { useTitle } from '../useTitle';
+import { useSeo } from '../useTitle';
 
 const POSES: { pose: Pose; title: string; text: string }[] = [
   { pose: 'idle', title: 'En reposo', text: 'Sigue tu mouse con los brazos arriba. El clic ocurre justo entre sus manos.' },
@@ -14,7 +14,7 @@ const POSES: { pose: Pose; title: string; text: string }[] = [
 
 /** Internal page to evaluate the mascot cursor before turning it on for the whole site. */
 export default function CursorPreview() {
-  useTitle('Vista previa: cursor casita');
+  useSeo({ title: 'Vista previa: cursor casita', noindex: true });
   const [demo, setDemo] = useState<Pose>('idle');
   const [active, setActive] = useState(false);
 

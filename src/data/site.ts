@@ -1,3 +1,6 @@
+/** Canonical production origin (apex redirects here). Used for the sitemap, canonical links and social previews. */
+export const SITE_URL = 'https://www.martinezhomerd.com';
+
 export const CONTACT = {
   phone: '829-798-2079',
   phoneHref: 'tel:+18297982079',
