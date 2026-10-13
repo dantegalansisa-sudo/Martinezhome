@@ -477,3 +477,29 @@ input[type='range']::-moz-range-thumb { width: 14px; height: 14px; border-radius
   .specs li:nth-child(odd) { border-left: 0; }
   .agent__lines { flex-direction: column; }
 }
+
+/* ============ House cursor (preview, ?casita=1) ============ */
+.has-house, .has-house * { cursor: none !important; }
+.has-house :is(input, textarea, select, [contenteditable], [data-native-cursor], [data-native-cursor] *) { cursor: auto !important; }
+.has-house input[type='range'] { cursor: pointer !important; }
+.has-house .leaflet-container, .has-house .leaflet-container * { cursor: grab !important; }
+.house-cursor { position: fixed; top: 0; left: 0; z-index: 100000; pointer-events: none; filter: drop-shadow(0 4px 6px rgba(27,36,51,.25)); }
+.house-cursor svg { display: block; }
+.house-cursor__bob { animation: house-bob 2.4s ease-in-out infinite; }
+@keyframes house-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.2px); } }
+.house-cursor__ripple { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; border: 2px solid var(--red); }
+.casita { padding-top: 20px; }
+.casita__hero { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+.casita__stage { position: relative; display: grid; place-items: center; min-height: 420px; border-radius: 28px; background: radial-gradient(circle at 50% 40%, #fff, var(--sand-2)); box-shadow: var(--shadow-sm); }
+.casita__stage svg { filter: drop-shadow(0 18px 24px rgba(27,36,51,.22)); }
+.casita__label { position: absolute; bottom: 20px; padding: 7px 14px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 13px; font-weight: 600; }
+.casita__try .lead { margin: 16px 0 24px; }
+.casita__buttons { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.casita__buttons .btn-dark { margin-top: 0; }
+.casita__targets { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 30px; padding: 20px; border-radius: 18px; border: 1px dashed rgba(27,36,51,.2); }
+.casita__targets .input { flex: 1 1 220px; }
+.casita__poses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 40px; }
+.casita__pose { padding: 24px; border-radius: 22px; background: #fff; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 6px; }
+.casita__mini { display: grid; place-items: center; height: 150px; margin-bottom: 8px; border-radius: 16px; background: var(--bg); }
+.casita__pose p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.5; }
+@media (max-width: 860px) { .casita__hero, .casita__poses { grid-template-columns: 1fr; } }

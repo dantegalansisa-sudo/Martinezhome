@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import VisitModal from './components/VisitModal';
+import HouseCursor, { useHouseCursorEnabled } from './components/HouseCursor';
 import { WhatsAppIcon } from './components/BrandIcons';
 import Navbar from './sections/Navbar';
 import Footer from './sections/Footer';
@@ -16,6 +17,7 @@ const CalculatorPage = lazy(() => import('./pages/CalculatorPage'));
 const Sell = lazy(() => import('./pages/Sell'));
 const Favorites = lazy(() => import('./pages/Favorites'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const CursorPreview = lazy(() => import('./pages/CursorPreview'));
 
 /** Scroll to top on navigation, or to the #anchor when one is present. */
 function ScrollManager() {
@@ -41,8 +43,10 @@ function ScrollManager() {
 function Layout() {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  const house = useHouseCursorEnabled();
   return (
     <>
+      {house && <HouseCursor />}
       <ScrollManager />
       <motion.div className="progress" style={{ scaleX: progress }} />
       <Navbar />
@@ -82,6 +86,7 @@ export default function App() {
             <Route path="calculadora" element={<CalculatorPage />} />
             <Route path="vende-con-nosotros" element={<Sell />} />
             <Route path="favoritos" element={<Favorites />} />
+            <Route path="casita" element={<CursorPreview />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
