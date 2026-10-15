@@ -325,6 +325,8 @@ export const EN: Record<string, string> = {
   'Ubicación aproximada': 'Approximate location',
   'Entrega {d}': 'Delivery {d}',
   'Lista para entrega': 'Ready to move in',
+  'En construcción': 'Under construction',
+  'En fase de terminación': 'Finishing stage',
 
   // Catalog
   'Catálogo': 'Catalog',

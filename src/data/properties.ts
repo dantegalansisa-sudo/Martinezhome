@@ -1,7 +1,7 @@
 import { t } from '../i18n';
 export type Operation = 'venta' | 'alquiler';
 export type PropertyKind = 'Casa' | 'Apartamento' | 'Villa' | 'Penthouse';
-export type Status = 'planos' | 'entrega';
+export type Status = 'planos' | 'construccion' | 'terminacion' | 'entrega';
 export type Currency = 'USD' | 'DOP';
 
 export interface Price {
@@ -315,7 +315,7 @@ const P: Property[] = [
     title: 'Casa moderna con terraza, pérgola y BBQ',
     kind: 'Casa',
     operation: 'venta',
-    status: 'planos',
+    status: 'construccion',
     zone: 'Santo Domingo Este',
     city: 'Santo Domingo Este',
     coords: [18.4898, -69.8312],
@@ -509,6 +509,7 @@ const P: Property[] = [
       { title: 'Segundo nivel', items: ['Sala de estar y sala íntima', 'Terraza', '3 habitaciones, cada una con su baño', 'Habitación principal con balcón'] },
     ],
     tags: ['Ideal para familias'],
+    sold: true,
     images: 8,
     agent: 'vanessa-martinez',
   },
@@ -590,21 +591,22 @@ const P: Property[] = [
     title: 'Elegante casa en Gurabo, Santiago',
     kind: 'Casa',
     operation: 'venta',
+    status: 'terminacion',
     zone: 'Urb. Don Fernando, Gurabo',
     city: 'Santiago',
     coords: [19.4793, -70.6676],
     price: { amount: 25000000, currency: 'DOP' },
     beds: '4', bedsMin: 4, baths: '4.5', area: '300 m²', lot: '302 m²', parking: '4',
-    summary: 'Proyecto cerrado con seguridad 24/7: 4 habitaciones con baño, cocina fría con isla y patio de 100 m². Precio negociable.',
+    summary: 'Proyecto cerrado con seguridad 24/7: 4 habitaciones con baño, cocina fría con isla y patio de 100 m².',
     description:
       'Ubicada en la Urbanización Don Fernando, un proyecto cerrado con acceso controlado y seguridad 24/7. Una casa elegante con family room, cocina fría con isla y cocina caliente, terraza integrada a un patio de 100 m² y terminaciones de primera.',
-    highlights: ['Precio negociable', 'Patio de 100 m²', 'Cocina con isla y tope de cuarzo', 'Marquesina para 4 vehículos'],
+    highlights: ['En fase de terminación', 'Patio de 100 m²', 'Cocina con isla y tope de cuarzo', 'Marquesina para 4 vehículos'],
     sections: [
       { title: 'Primer nivel', items: ['Recibidor y sala de estar', 'Amplio comedor', 'Habitación con clóset y baño', 'Cocina fría con isla', 'Cocina caliente', 'Área de lavado', 'Terraza con acceso directo al patio', 'Baño de visitas'] },
       { title: 'Segundo nivel', items: ['Family room', 'Clóset de ropa blanca', 'Principal con walk-in closet, baño y balcón', '2 habitaciones con walk-in closet y baño'] },
       { title: 'Equipamiento y terminaciones', items: ['Estufa empotrable, extractor y horno de gas', 'Topes en cuarzo', 'Ventanas P92', 'Sistema de cámaras y alarma', 'Calentador eléctrico', 'Cisterna de 4,000 galones'] },
     ],
-    tags: ['Negociable', 'Proyecto cerrado'],
+    tags: ['Proyecto cerrado'],
     images: 8,
     render: true,
     agent: 'cristhian-almanzar',
@@ -690,7 +692,15 @@ export const ZONES = Array.from(new Set(P.map((p) => p.zone))).sort();
 export const CITIES = Array.from(new Set(P.map((p) => p.city)));
 
 export const statusLabel = (p: Property) =>
-  p.status === 'planos' ? (p.delivery ? t('Entrega {d}', { d: p.delivery }) : t('En planos')) : p.status === 'entrega' ? t('Lista para entrega') : undefined;
+  p.status === 'planos'
+    ? p.delivery ? t('Entrega {d}', { d: p.delivery }) : t('En planos')
+    : p.status === 'construccion'
+      ? t('En construcción')
+      : p.status === 'terminacion'
+        ? t('En fase de terminación')
+        : p.status === 'entrega'
+          ? t('Lista para entrega')
+          : undefined;
 
 /** Auto + manual tags shown on cards */
 export const autoTags = (p: Property) => {

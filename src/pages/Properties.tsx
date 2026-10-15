@@ -71,7 +71,8 @@ export default function Properties() {
       if (zona && p.zone !== zona) return false;
       if (area && !area.match(p)) return false;
       if (ciudad && p.city !== ciudad) return false;
-      if (estado && p.status !== estado) return false;
+      // "En construcción" also covers homes in the finishing stage.
+      if (estado && p.status !== estado && !(estado === 'construccion' && p.status === 'terminacion')) return false;
       if (hab && (p.bedsMin ?? 0) < hab) return false;
       if (budgetActive) {
         const usd = priceUSD(p);
@@ -117,7 +118,7 @@ export default function Properties() {
       <div className="filters__group">
         <p className="filters__label">{t('Estado')}</p>
         <div className="pills">
-          {[['', 'Todos'], ['planos', 'En planos'], ['entrega', 'Lista para entrega']].map(([v, l]) => (
+          {[['', 'Todos'], ['planos', 'En planos'], ['construccion', 'En construcción'], ['entrega', 'Lista para entrega']].map(([v, l]) => (
             <button key={l} className={`pill${estado === v ? ' is-on' : ''}`} onClick={() => set('estado', v)}>{t(l)}</button>
           ))}
         </div>

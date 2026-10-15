@@ -281,16 +281,16 @@ export const LISTINGS_EN: Record<string, ListingCopy> = {
   },
   'casa-gurabo-santiago': {
     title: 'Elegant home in Gurabo, Santiago',
-    summary: 'Gated community with 24/7 security: 4 en-suite bedrooms, show kitchen with island and a 100 m² backyard. Price negotiable.',
+    summary: 'Gated community with 24/7 security: 4 en-suite bedrooms, show kitchen with island and a 100 m² backyard.',
     description:
       'Located in Urbanización Don Fernando, a gated community with controlled access and 24/7 security. An elegant home with a family room, show kitchen with island and working kitchen, a terrace that opens onto a 100 m² backyard, and premium finishes.',
-    highlights: ['Price negotiable', '100 m² backyard', 'Kitchen with island and quartz countertop', 'Carport for 4 vehicles'],
+    highlights: ['In the finishing stage', '100 m² backyard', 'Kitchen with island and quartz countertop', 'Carport for 4 vehicles'],
     sections: [
       { title: 'First floor', items: ['Foyer and living room', 'Spacious dining room', 'Bedroom with closet and bathroom', 'Show kitchen with island', 'Working kitchen', 'Laundry area', 'Terrace with direct backyard access', 'Guest bathroom'] },
       { title: 'Second floor', items: ['Family room', 'Linen closet', 'Primary with walk-in closet, bathroom and balcony', '2 bedrooms with walk-in closet and bathroom'] },
       { title: 'Equipment and finishes', items: ['Built-in cooktop, range hood and gas oven', 'Quartz countertops', 'P92 windows', 'Camera and alarm system', 'Electric water heater', '4,000-gallon cistern'] },
     ],
-    tags: ['Negotiable', 'Gated community'],
+    tags: ['Gated community'],
   },
   'viviendas-exclusivas-prado-oriental': {
     title: 'Exclusive project of only 4 homes',
