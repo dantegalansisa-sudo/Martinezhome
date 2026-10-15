@@ -14,6 +14,8 @@ import { formatPrice, useStore } from '../store';
 import { EASINGS } from '../easings';
 import { useSeo } from '../useTitle';
 import NotFound from './NotFound';
+import { t } from '../i18n';
+import { localize } from '../data/localize';
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -32,36 +34,37 @@ const similar = (p: Property) =>
 
 export default function PropertyDetail() {
   const { slug } = useParams();
-  const p = PROPERTIES.find((x) => x.slug === slug);
+  const raw = PROPERTIES.find((x) => x.slug === slug);
+  const p = raw && localize(raw);
   const { currency, openVisit } = useStore();
   useSeo(
     p
       ? {
           title: `${p.title} — ${p.zone}`,
-          description: `${p.summary} ${p.kind} en ${p.operation} en ${p.zone}, ${p.city}.`,
+          description: `${p.summary} ${t(p.operation === 'venta' ? '{k} en venta en {z}, {c}.' : '{k} en alquiler en {z}, {c}.', { k: t(p.kind), z: p.zone, c: p.city })}`,
           image: `/props/${p.slug}/01.webp`,
         }
-      : { title: 'Propiedad no encontrada', noindex: true }
+      : { title: t('Propiedad no encontrada'), noindex: true }
   );
-  if (!p) return <NotFound />;
+  if (!p || !raw) return <NotFound />;
 
   const agent = member(p.agent);
   const status = statusLabel(p);
   const specs = [
-    { icon: BedDouble, label: 'Habitaciones', value: p.beds },
-    { icon: Bath, label: 'Baños', value: p.baths },
-    { icon: Maximize, label: 'Construcción', value: p.area },
-    { icon: LandPlot, label: 'Solar', value: p.lot },
-    { icon: Car, label: 'Parqueos', value: p.parking },
+    { icon: BedDouble, label: t('Habitaciones'), value: p.beds },
+    { icon: Bath, label: t('Baños'), value: p.baths },
+    { icon: Maximize, label: t('Construcción'), value: p.area },
+    { icon: LandPlot, label: t('Solar'), value: p.lot },
+    { icon: Car, label: t('Parqueos'), value: p.parking },
   ].filter((s) => s.value);
 
   return (
     <article className="detail">
       <div className="container">
-        <motion.nav className="crumbs crumbs--detail" aria-label="Ruta" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <Link to="/">Inicio</Link>
+        <motion.nav className="crumbs crumbs--detail" aria-label={t('Ruta')} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <Link to="/">{t('Inicio')}</Link>
           <ChevronRight size={13} />
-          <Link to="/propiedades">Propiedades</Link>
+          <Link to="/propiedades">{t('Propiedades')}</Link>
           <ChevronRight size={13} />
           <span aria-current="page">{p.zone}</span>
         </motion.nav>
@@ -69,10 +72,10 @@ export default function PropertyDetail() {
         <div className="detail__head">
           <div>
             <motion.div className="detail__chips" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-              <span className="chip-tag chip-tag--dark">{p.operation === 'venta' ? 'En venta' : 'En alquiler'}</span>
-              <span className="chip-tag">{p.kind}</span>
+              <span className="chip-tag chip-tag--dark">{p.operation === 'venta' ? t('En venta') : t('En alquiler')}</span>
+              <span className="chip-tag">{t(p.kind)}</span>
               {status && <span className="chip-tag chip-tag--accent">{status}</span>}
-              {p.tags.map((t) => <span key={t} className="chip-tag">{t}</span>)}
+              {p.tags.map((tg) => <span key={tg} className="chip-tag">{tg}</span>)}
             </motion.div>
             <RevealText tag="h1" className="detail__title" delay={0.15} immediate>{p.title}</RevealText>
             <motion.p className="detail__loc" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
@@ -80,9 +83,9 @@ export default function PropertyDetail() {
             </motion.p>
           </div>
           <motion.div className="detail__price" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-            <small>{p.price?.from ? 'Precios' : 'Precio'}</small>
+            <small>{p.price?.from ? t('Precios') : t('Precio')}</small>
             <strong className={p.price ? '' : 'is-ask'}>{formatPrice(p.price, currency)}</strong>
-            {p.price?.to && <span>hasta {formatPrice({ ...p.price, amount: p.price.to, from: false }, currency)}</span>}
+            {p.price?.to && <span>{t('hasta')} {formatPrice({ ...p.price, amount: p.price.to, from: false }, currency)}</span>}
             <div className="detail__price-tools">
               <CurrencySwitch id="detail" />
               <FavoriteButton id={p.id} className="detail__fav" />
@@ -93,11 +96,11 @@ export default function PropertyDetail() {
         {p.sold && (
           <div className="sold-banner" role="status">
             <div>
-              <strong>Esta propiedad ya fue vendida</strong>
-              <p>Te ayudamos a encontrar una similar en la misma zona y presupuesto.</p>
+              <strong>{t('Esta propiedad ya fue vendida')}</strong>
+              <p>{t('Te ayudamos a encontrar una similar en la misma zona y presupuesto.')}</p>
             </div>
-            <a className="btn-dark" href={waLink(`Hola, vi que ${p.title} ya se vendió. Busco algo similar en ${p.zone}.`)} target="_blank" rel="noopener noreferrer">
-              Busco algo similar <span className="btn-dark__icon"><ArrowRight size={15} /></span>
+            <a className="btn-dark" href={waLink(t('Hola, vi que {p} ya se vendió. Busco algo similar en {z}.', { p: p.title, z: p.zone }))} target="_blank" rel="noopener noreferrer">
+              {t('Busco algo similar')} <span className="btn-dark__icon"><ArrowRight size={15} /></span>
             </a>
           </div>
         )}
@@ -118,7 +121,7 @@ export default function PropertyDetail() {
             )}
 
             <motion.section className="detail__block" {...fade()}>
-              <h2 className="detail__h2">Sobre la propiedad</h2>
+              <h2 className="detail__h2">{t('Sobre la propiedad')}</h2>
               <p className="detail__desc">{p.description}</p>
               <ul className="highlights">
                 {p.highlights.map((h) => <li key={h}><Check size={15} /> {h}</li>)}
@@ -127,7 +130,7 @@ export default function PropertyDetail() {
 
             {p.units && (
               <motion.section className="detail__block" {...fade()}>
-                <h2 className="detail__h2">Unidades disponibles</h2>
+                <h2 className="detail__h2">{t('Unidades disponibles')}</h2>
                 <div className="units">
                   {p.units.map((u) => (
                     <div key={u.name} className="unit">
@@ -144,7 +147,7 @@ export default function PropertyDetail() {
             )}
 
             <motion.section className="detail__block" {...fade()}>
-              <h2 className="detail__h2">Características</h2>
+              <h2 className="detail__h2">{t('Características')}</h2>
               <div className="features">
                 {p.sections.map((s) => (
                   <div key={s.title} className="features__group">
@@ -159,8 +162,8 @@ export default function PropertyDetail() {
 
             {p.payment && (
               <motion.section className="detail__block" {...fade()}>
-                <h2 className="detail__h2">Plan de pago</h2>
-                {p.delivery && <p className="detail__delivery"><CalendarCheck size={16} /> Entrega estimada: <strong>{p.delivery}</strong></p>}
+                <h2 className="detail__h2">{t('Plan de pago')}</h2>
+                {p.delivery && <p className="detail__delivery"><CalendarCheck size={16} /> {t('Entrega estimada:')} <strong>{p.delivery}</strong></p>}
                 <ol className="timeline">
                   {p.payment.map((s, i) => (
                     <motion.li key={s.label} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
@@ -176,8 +179,8 @@ export default function PropertyDetail() {
             )}
 
             <motion.section className="detail__block" {...fade()}>
-              <h2 className="detail__h2">Ubicación</h2>
-              <p className="detail__desc">{p.zone}, {p.city}. La ubicación exacta se comparte al agendar la visita.</p>
+              <h2 className="detail__h2">{t('Ubicación')}</h2>
+              <p className="detail__desc">{p.zone}, {p.city}. {t('La ubicación exacta se comparte al agendar la visita.')}</p>
               <PropertyMap properties={[p]} single height={340} />
             </motion.section>
           </div>
@@ -188,24 +191,24 @@ export default function PropertyDetail() {
                 <div className="agent">
                   <span className={`agent__avatar${agent.fullBody ? ' is-full' : ''}`}><img src={agent.photo} alt={agent.name} /></span>
                   <div>
-                    <small>Tu asesor</small>
+                    <small>{t('Tu asesor')}</small>
                     <strong>{agent.name}</strong>
-                    <span>{agent.role}</span>
+                    <span>{t(agent.role)}</span>
                   </div>
                 </div>
               )}
               {!p.sold && (
-                <button className="btn-submit" onClick={() => openVisit(p)}>
-                  <span>Agendar visita</span> <CalendarCheck size={16} />
+                <button className="btn-submit" onClick={() => openVisit(raw)}>
+                  <span>{t('Agendar visita')}</span> <CalendarCheck size={16} />
                 </button>
               )}
-              <a className="btn-wa" href={waLink(`Hola, me interesa: ${p.title} (${p.zone}). ¿Me pueden dar más información?`)} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon size={17} /> Escribir por WhatsApp
+              <a className="btn-wa" href={waLink(t('Hola, me interesa: {p} ({z}). ¿Me pueden dar más información?', { p: p.title, z: p.zone }))} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon size={17} /> {t('Escribir por WhatsApp')}
               </a>
               {agent?.phone && (
                 <div className="agent__lines">
                   <a href={telHref(agent.phone)}><Phone size={14} /> {agent.phone}</a>
-                  <a href={waHref(agent.phone, `Hola ${agent.name}, me interesa: ${p.title}.`)} target="_blank" rel="noopener noreferrer">WhatsApp del asesor</a>
+                  <a href={waHref(agent.phone, t('Hola {n}, me interesa: {p}.', { n: agent.name, p: p.title }))} target="_blank" rel="noopener noreferrer">{t('WhatsApp del asesor')}</a>
                 </div>
               )}
 
@@ -218,13 +221,13 @@ export default function PropertyDetail() {
         <div className="container">
           <div className="section-head">
             <div>
-              <p className="eyebrow">También te puede interesar</p>
-              <RevealText tag="h2" className="h2">Propiedades similares</RevealText>
+              <p className="eyebrow">{t('También te puede interesar')}</p>
+              <RevealText tag="h2" className="h2">{t('Propiedades similares')}</RevealText>
             </div>
-            <Link to="/propiedades" className="link-arrow">Ver todas <ArrowRight size={16} /></Link>
+            <Link to="/propiedades" className="link-arrow">{t('Ver todas')} <ArrowRight size={16} /></Link>
           </div>
           <motion.div className="catalog__cards catalog__cards--3" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.15 }} variants={{ visible: { transition: { staggerChildren: 0.08 } } }}>
-            {similar(p).map((x) => <PropertyCard key={x.id} p={x} />)}
+            {similar(raw).map((x) => <PropertyCard key={x.id} p={x} />)}
           </motion.div>
         </div>
       </section>
@@ -232,12 +235,12 @@ export default function PropertyDetail() {
       <div className="mobile-bar">
         <div>
           <small>{p.zone}</small>
-          <strong>{p.sold ? 'Vendida' : formatPrice(p.price, currency, true)}</strong>
+          <strong>{p.sold ? t('Vendida') : formatPrice(p.price, currency, true)}</strong>
         </div>
         {p.sold ? (
-          <Link className="btn-submit" to="/propiedades"><span>Ver disponibles</span></Link>
+          <Link className="btn-submit" to="/propiedades"><span>{t('Ver disponibles')}</span></Link>
         ) : (
-          <button className="btn-submit" onClick={() => openVisit(p)}><span>Agendar visita</span></button>
+          <button className="btn-submit" onClick={() => openVisit(raw)}><span>{t('Agendar visita')}</span></button>
         )}
       </div>
     </article>

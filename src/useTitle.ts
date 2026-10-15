@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SITE_URL } from './data/site';
+import { t } from './i18n';
 
 const BASE = 'Martínez Home RD';
 const DEFAULT_DESC =
@@ -37,10 +38,10 @@ const setCanonical = (href: string) => {
 };
 
 /** Title, description, canonical URL and Open Graph tags for the current route. */
-export function useSeo({ title, description = DEFAULT_DESC, image = DEFAULT_IMAGE, noindex }: Seo = {}) {
+export function useSeo({ title, description = t(DEFAULT_DESC), image = DEFAULT_IMAGE, noindex }: Seo = {}) {
   const { pathname } = useLocation();
   useEffect(() => {
-    const full = title ? `${title} | ${BASE}` : `${BASE} | Inmobiliaria en Santo Domingo Este`;
+    const full = title ? `${title} | ${BASE}` : `${BASE} | ${t('Inmobiliaria en Santo Domingo Este')}`;
     const url = `${SITE_URL}${pathname === '/' ? '/' : pathname.replace(/\/$/, '')}`;
     const img = image.startsWith('http') ? image : `${SITE_URL}${image}`;
     document.title = full;

@@ -1,5 +1,6 @@
 import { AVAILABLE, CITIES, ZONES, type Property } from './properties';
 import { priceUSD } from '../store';
+import { t } from '../i18n';
 
 export const OPERATIONS = ['Todos', 'Venta', 'Alquiler', 'Proyectos'] as const;
 export type OperationFilter = (typeof OPERATIONS)[number];
@@ -28,9 +29,9 @@ export const budgetActive = ([lo, hi]: [number, number]) => lo > BUDGET_MIN || h
 
 const k = (n: number) => `${Math.round(n / 1000)}K`;
 export function budgetLabel([lo, hi]: [number, number]) {
-  if (!budgetActive([lo, hi])) return 'Cualquier presupuesto';
-  if (lo <= BUDGET_MIN) return `Hasta US$${k(hi)}`;
-  if (hi >= BUDGET_MAX) return `Desde US$${k(lo)}`;
+  if (!budgetActive([lo, hi])) return t('Cualquier presupuesto');
+  if (lo <= BUDGET_MIN) return t('Hasta {v}', { v: `US$${k(hi)}` });
+  if (hi >= BUDGET_MAX) return t('Desde {v}', { v: `US$${k(lo)}` });
   return `US$${k(lo)} – ${k(hi)}`;
 }
 

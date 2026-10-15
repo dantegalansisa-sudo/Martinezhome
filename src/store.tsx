@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { Currency, Price, Property } from './data/properties';
 import { USD_TO_DOP } from './data/site';
+import { t } from './i18n';
 
 /** 'original' shows each listing in the currency it was published in. */
 export type CurrencyMode = 'original' | Currency;
@@ -84,12 +85,12 @@ export const money = (amount: number, c: Currency, compact = false) => {
 
 /** Price in the user's chosen display currency; converted values are marked with ≈. */
 export function formatPrice(price: Price | undefined, mode: CurrencyMode, compact = false) {
-  if (!price) return 'Precio a consultar';
+  if (!price) return t('Precio a consultar');
   const target: Currency = mode === 'original' ? price.currency : mode;
   const conv = (n: number) => fromUSD(toUSD(n, price.currency), target);
   const approx = target !== price.currency ? '≈ ' : '';
-  const main = `${approx}${money(conv(price.amount), target, compact)}${price.monthly ? (compact ? '/mes' : ' / mes') : ''}`;
-  return price.from ? `Desde ${main}` : main;
+  const main = `${approx}${money(conv(price.amount), target, compact)}${price.monthly ? (compact ? t('/mes') : t(' / mes')) : ''}`;
+  return price.from ? t('Desde {v}', { v: main }) : main;
 }
 
 /** Normalized USD value used to filter and sort mixed-currency listings. */

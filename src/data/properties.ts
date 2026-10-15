@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 export type Operation = 'venta' | 'alquiler';
 export type PropertyKind = 'Casa' | 'Apartamento' | 'Villa' | 'Penthouse';
 export type Status = 'planos' | 'entrega';
@@ -621,12 +622,12 @@ export const ZONES = Array.from(new Set(P.map((p) => p.zone))).sort();
 export const CITIES = Array.from(new Set(P.map((p) => p.city)));
 
 export const statusLabel = (p: Property) =>
-  p.status === 'planos' ? (p.delivery ? `Entrega ${p.delivery}` : 'En planos') : p.status === 'entrega' ? 'Lista para entrega' : undefined;
+  p.status === 'planos' ? (p.delivery ? t('Entrega {d}', { d: p.delivery }) : t('En planos')) : p.status === 'entrega' ? t('Lista para entrega') : undefined;
 
 /** Auto + manual tags shown on cards */
 export const autoTags = (p: Property) => {
-  const t: string[] = [];
+  const out: string[] = [];
   const s = statusLabel(p);
-  if (s) t.push(s);
-  return [...t, ...p.tags].slice(0, 2);
+  if (s) out.push(s);
+  return [...out, ...p.tags].slice(0, 2);
 };

@@ -7,6 +7,7 @@ import { InstagramIcon } from '../components/BrandIcons';
 import { CONTACT, REELS } from '../data/site';
 import { EASINGS } from '../easings';
 import { useIsMobile } from '../useMedia';
+import { t } from '../i18n';
 
 const container = { hidden: {}, visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } } };
 const card = {
@@ -24,14 +25,14 @@ function Reel({ reel, onOpen }: { reel: (typeof REELS)[number]; onOpen: () => vo
       onMouseEnter={() => video.current?.play().catch(() => {})}
       onMouseLeave={() => { if (video.current) { video.current.pause(); video.current.currentTime = 0; } }}
       onClick={onOpen}
-      aria-label={`Ver video: ${reel.title}`}
+      aria-label={t('Ver video: {title}', { title: t(reel.title) })}
     >
       <video ref={video} src={reel.src} poster={reel.poster} muted loop playsInline preload="none" />
       <span className="reel__shade" />
       <span className="reel__ig"><InstagramIcon size={16} /></span>
       <span className="reel__play"><Play size={22} fill="currentColor" /></span>
       <span className="reel__meta">
-        <span className="reel__title">{reel.title}</span>
+        <span className="reel__title">{t(reel.title)}</span>
         <span className="reel__views"><Play size={11} fill="currentColor" /> {reel.views}</span>
       </span>
     </motion.button>
@@ -57,13 +58,13 @@ export default function Social({ onOpen }: { onOpen: (src: string) => void }) {
     <section className="section social" id="redes">
       <div className="container social__grid">
         <div className="social__text">
-          <p className="eyebrow">Síguenos en redes</p>
-          <RevealText tag="h2" className="h2">{'Tips, recorridos\ny mucho más'}</RevealText>
+          <p className="eyebrow">{t('Síguenos en redes')}</p>
+          <RevealText tag="h2" className="h2">{t('Tips, recorridos\ny mucho más')}</RevealText>
           <motion.p className="lead" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }}>
-            Conoce propiedades, consejos y todo lo que pasa detrás de cámaras. Síguenos en Instagram <strong>@martinezhomerd</strong> y forma parte de nuestra comunidad.
+            {t('Conoce propiedades, consejos y todo lo que pasa detrás de cámaras. Síguenos en Instagram')} <strong>@martinezhomerd</strong> {t('y forma parte de nuestra comunidad.')}
           </motion.p>
           <MagneticButton href={CONTACT.instagram} external className="btn-dark">
-            <InstagramIcon size={16} /> Síguenos en Instagram <span className="btn-dark__icon"><ArrowRight size={15} /></span>
+            <InstagramIcon size={16} /> {t('Síguenos en Instagram')} <span className="btn-dark__icon"><ArrowRight size={15} /></span>
           </MagneticButton>
         </div>
         {mobile ? (

@@ -6,6 +6,7 @@ import RevealText from '../components/RevealText';
 import { AVAILABLE } from '../data/properties';
 import { EASINGS } from '../easings';
 import { useIsDesktop } from '../useMedia';
+import { t } from '../i18n';
 
 const SERVICES = [
   { icon: Home, title: 'Compra', text: 'Encuentra tu hogar ideal.' },
@@ -49,7 +50,7 @@ function Frame({ shot, className, y, delay }: { shot: (typeof SHOTS)[number]; cl
           <motion.img
             key={shot.src}
             src={shot.src}
-            alt={`Propiedad en ${shot.label}`}
+            alt={t('Propiedad en {z}', { z: shot.label })}
             loading="lazy"
             initial={{ opacity: 0, scale: 1.12 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -79,8 +80,8 @@ function Collage() {
 
   useEffect(() => {
     if (paused) return;
-    const t = setInterval(() => setI((n) => (n + 1) % SHOTS.length), INTERVAL);
-    return () => clearInterval(t);
+    const timer = setInterval(() => setI((n) => (n + 1) % SHOTS.length), INTERVAL);
+    return () => clearInterval(timer);
   }, [paused]);
 
   const at = (k: number) => SHOTS[(i + k) % SHOTS.length];
@@ -99,7 +100,7 @@ function Collage() {
         transition={{ delay: 0.7, type: 'spring', stiffness: 260, damping: 18 }}
       >
         <strong>{AVAILABLE.length}</strong>
-        <span>propiedades<br />disponibles</span>
+        <span>{t('propiedades')}<br />{t('disponibles')}</span>
       </motion.div>
 
       <div className="collage__dots" aria-hidden>
@@ -114,7 +115,7 @@ function Collage() {
         viewport={{ once: true }}
         transition={{ delay: 0.9, duration: 0.7, ease: EASINGS.smooth }}
       >
-        <span>¿Quieres vender tu propiedad?<br /><strong>Te ayudamos a venderla.</strong></span>
+        <span>{t('¿Quieres vender tu propiedad?')}<br /><strong>{t('Te ayudamos a venderla.')}</strong></span>
         <span className="round-btn"><ArrowRight size={16} /></span>
       </MotionLink>
     </div>
@@ -127,17 +128,17 @@ export default function Approach() {
       <div className="container approach__grid">
         <Collage />
         <div className="approach__content">
-          <p className="eyebrow">Nuestro enfoque</p>
-          <RevealText tag="h2" className="h2">{'Soluciones inmobiliarias\npara cada etapa de tu vida'}</RevealText>
+          <p className="eyebrow">{t('Nuestro enfoque')}</p>
+          <RevealText tag="h2" className="h2">{t('Soluciones inmobiliarias\npara cada etapa de tu vida')}</RevealText>
           <motion.p className="lead" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.3 }}>
-            Te acompañamos en todo el proceso, desde la búsqueda hasta la firma, con un servicio cercano, transparente y enfocado en tus objetivos. Tu respaldo seguro en bienes raíces.
+            {t('Te acompañamos en todo el proceso, desde la búsqueda hasta la firma, con un servicio cercano, transparente y enfocado en tus objetivos. Tu respaldo seguro en bienes raíces.')}
           </motion.p>
           <motion.ul className="services" variants={container} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
             {SERVICES.map(({ icon: Icon, title, text }) => (
               <motion.li key={title} className="service" variants={item} whileHover={{ y: -6 }}>
                 <span className="service__icon"><Icon size={26} strokeWidth={1.4} /></span>
-                <strong>{title}</strong>
-                <span>{text}</span>
+                <strong>{t(title)}</strong>
+                <span>{t(text)}</span>
               </motion.li>
             ))}
           </motion.ul>

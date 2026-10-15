@@ -6,6 +6,7 @@ import RevealText from '../components/RevealText';
 import TeamCard from '../components/TeamCard';
 import { TEAM, type Member } from '../data/team';
 import { useIsMobile } from '../useMedia';
+import { t } from '../i18n';
 
 const container = { hidden: {}, visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } } };
 
@@ -49,8 +50,8 @@ function PinnedTeam() {
     <section ref={section} className="team-pin" id="equipo" style={{ height: `calc(100svh + ${shift}px)` }}>
       <div className="team-pin__sticky">
         <div className="container">
-          <p className="eyebrow">Nuestro equipo</p>
-          <RevealText tag="h2" className="h2">{'Personas que te\nacompañan en cada paso'}</RevealText>
+          <p className="eyebrow">{t('Nuestro equipo')}</p>
+          <RevealText tag="h2" className="h2">{t('Personas que te\nacompañan en cada paso')}</RevealText>
         </div>
         <div ref={row} className="team-pin__viewport">
           <motion.div className="team-pin__row" style={{ x }}>
@@ -59,7 +60,7 @@ function PinnedTeam() {
         </div>
         <div className="container team-pin__foot">
           <span className="team-pin__track"><motion.span style={{ width: bar }} /></span>
-          <Link to="/equipo" className="link-arrow">Conoce al equipo <ArrowUpRight size={16} /></Link>
+          <Link to="/equipo" className="link-arrow">{t('Conoce al equipo')} <ArrowUpRight size={16} /></Link>
         </div>
       </div>
     </section>
@@ -74,10 +75,10 @@ export default function TeamStrip() {
       <div className="container">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Nuestro equipo</p>
-            <RevealText tag="h2" className="h2">{'Personas que te\nacompañan en cada paso'}</RevealText>
+            <p className="eyebrow">{t('Nuestro equipo')}</p>
+            <RevealText tag="h2" className="h2">{t('Personas que te\nacompañan en cada paso')}</RevealText>
           </div>
-          <Link to="/equipo" className="link-arrow">Conoce al equipo <ArrowUpRight size={16} /></Link>
+          <Link to="/equipo" className="link-arrow">{t('Conoce al equipo')} <ArrowUpRight size={16} /></Link>
         </div>
         <motion.div className="team-row" variants={container} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}>
           {TEAM.map((m) => <TeamCard key={m.id} m={m} compact />)}

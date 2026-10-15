@@ -6,6 +6,7 @@ import RevealText from '../components/RevealText';
 import PropertyCard from '../components/PropertyCard';
 import { AVAILABLE, type Property } from '../data/properties';
 import { useIsMobile } from '../useMedia';
+import { t } from '../i18n';
 
 const TABS: { label: string; match: (p: Property) => boolean }[] = [
   { label: 'Destacadas', match: (p) => !!p.featured },
@@ -76,27 +77,27 @@ export default function Featured() {
       <div className="container">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Propiedades destacadas</p>
-            <RevealText tag="h2" className="h2">Encuentra tu próximo hogar</RevealText>
+            <p className="eyebrow">{t('Propiedades destacadas')}</p>
+            <RevealText tag="h2" className="h2">{t('Encuentra tu próximo hogar')}</RevealText>
           </div>
           <div className="featured__tools">
             <div className="tabs" role="tablist">
-              {TABS.map((t, i) => (
-                <button key={t.label} role="tab" aria-selected={tab === i} className={`tab${tab === i ? ' tab--active' : ''}`} onClick={() => setTab(i)}>
-                  {t.label}
+              {TABS.map((tb, i) => (
+                <button key={tb.label} role="tab" aria-selected={tab === i} className={`tab${tab === i ? ' tab--active' : ''}`} onClick={() => setTab(i)}>
+                  {t(tb.label)}
                   {tab === i && <motion.span layoutId="tab-pill" className="tab__pill" transition={{ type: 'spring', stiffness: 380, damping: 32 }} />}
                 </button>
               ))}
             </div>
             <Link to="/propiedades" className="link-arrow">
-              Ver las {AVAILABLE.length} propiedades <ArrowUpRight size={16} />
+              {t('Ver las {n} propiedades', { n: AVAILABLE.length })} <ArrowUpRight size={16} />
             </Link>
           </div>
         </div>
       </div>
 
       <div className="featured__wrap container">
-        <button className="slider-btn slider-btn--prev" onClick={() => slide(-1)} aria-label="Anterior"><ChevronLeft size={18} /></button>
+        <button className="slider-btn slider-btn--prev" onClick={() => slide(-1)} aria-label={t('Anterior')}><ChevronLeft size={18} /></button>
         <motion.div
           ref={track}
           key={tab}
@@ -116,7 +117,7 @@ export default function Featured() {
             )
           )}
         </motion.div>
-        <button className="slider-btn slider-btn--next" onClick={() => slide(1)} aria-label="Siguiente"><ChevronRight size={18} /></button>
+        <button className="slider-btn slider-btn--next" onClick={() => slide(1)} aria-label={t('Siguiente')}><ChevronRight size={18} /></button>
       </div>
     </section>
   );

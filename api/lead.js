@@ -23,6 +23,24 @@ const TYPES = {
   venta: { subject: 'Nuevo propietario quiere vender', title: 'Un propietario quiere trabajar con ustedes', confirm: 'Recibimos los datos de tu propiedad' },
 };
 
+// English copy for the client's confirmation when the visitor browsed the site in English.
+// The agency notification stays in Spanish, with a note on the visitor's language.
+const CONFIRM_EN = {
+  contacto: 'We received your request',
+  visita: 'Your visit is booked',
+  venta: 'We received your property details',
+};
+const EN_WORDS = {
+  Nombre: 'Name', Teléfono: 'Phone', Correo: 'Email', Interés: 'Interest', 'Tipo de propiedad': 'Property type', Presupuesto: 'Budget',
+  'Precio esperado': 'Expected price', 'Zona de interés': 'Area of interest', 'Contactar por': 'Contact by', Mensaje: 'Message',
+  Propiedad: 'Property', Fecha: 'Date', Hora: 'Time', Modalidad: 'Format', Enlace: 'Link', Quiere: 'Wants to',
+  'Sector / ciudad': 'Neighborhood / city', Detalles: 'Details',
+  Comprar: 'Buy', Alquilar: 'Rent', Vender: 'Sell', Invertir: 'Invest', Casa: 'House', Apartamento: 'Apartment', Villa: 'Villa',
+  Solar: 'Lot', Local: 'Commercial space', 'Local comercial': 'Commercial space', Llamada: 'Phone call', Presencial: 'In person',
+  Videollamada: 'Video call', 'Más de US$400K': 'Over US$400K', 'Hasta US$100K': 'Up to US$100K',
+};
+const en = (v) => EN_WORDS[v] ?? String(v).replace(/^(\d{1,2}:\d{2}) ([ap])\. m\.$/, (_, h, ap) => `${h} ${ap.toUpperCase()}M`);
+
 const esc = (v) =>
   String(v ?? '')
     .replace(/&/g, '&amp;')
@@ -33,8 +51,8 @@ const esc = (v) =>
 const clean = (v, max = 600) => String(v ?? '').trim().slice(0, max);
 const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 
-function layout(heading, inner) {
-  return `<!doctype html><html lang="es"><body style="margin:0;background:#f7f4ef;font-family:Arial,Helvetica,sans-serif;color:#1b2433">
+function layout(heading, inner, lang = 'es') {
+  return `<!doctype html><html lang="${lang}"><body style="margin:0;background:#f7f4ef;font-family:Arial,Helvetica,sans-serif;color:#1b2433">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7f4ef;padding:32px 12px">
     <tr><td align="center">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:18px;overflow:hidden">
@@ -47,7 +65,7 @@ function layout(heading, inner) {
           ${inner}
         </td></tr>
         <tr><td style="padding:18px 28px;background:#f7f4ef;font-size:12px;color:#6b7180;line-height:1.6">
-          Martínez Home Inmobiliaria · ${ADDRESS}<br>Tel./WhatsApp ${PHONE} · <a href="${SITE}" style="color:#e1141b">martinezhomerd.com</a>
+          ${lang === 'en' ? 'Martínez Home Real Estate' : 'Martínez Home Inmobiliaria'} · ${ADDRESS}<br>${lang === 'en' ? 'Phone' : 'Tel.'}/WhatsApp ${PHONE} · <a href="${SITE}" style="color:#e1141b">martinezhomerd.com</a>
         </td></tr>
       </table>
     </td></tr>
@@ -134,7 +152,8 @@ export default async function handler(req, res) {
   }
 
   const extra = Array.isArray(body.fields) ? body.fields.slice(0, 20).map(([k, v]) => [clean(k, 60), clean(v)]).filter(([, v]) => v) : [];
-  const fields = [['Nombre', name], ['Teléfono', phone], ...(email ? [['Correo', email]] : []), ...extra];
+  const english = body.lang === 'en';
+  const fields = [['Nombre', name], ['Teléfono', phone], ...(email ? [['Correo', email]] : []), ...extra, ...(english ? [['Idioma', 'Inglés — responder en inglés']] : [])];
   const t = TYPES[type];
   const to = process.env.LEADS_TO || DEFAULT_TO;
   const from = process.env.RESEND_FROM || DEFAULT_FROM;
@@ -158,29 +177,47 @@ export default async function handler(req, res) {
 
     if (isEmail(email)) {
       const visit = type === 'visita' && body.visit && /^\d{4}-\d{2}-\d{2}$/.test(body.visit.date) ? body.visit : null;
+      const confirm = english ? CONFIRM_EN[type] : t.confirm;
+      const shown = (extra.length ? extra : fields).map(([k, v]) => (english ? [en(k), en(v)] : [k, v]));
+      const copy = english
+        ? {
+            intro: 'Thank you for reaching out. A Martínez Home advisor will contact you within 24 hours.',
+            invite: 'The appointment is attached so you can add it to your calendar.',
+            more: 'Need anything sooner? Message us at',
+            event: 'Visit with Martínez Home',
+            file: 'visit-martinez-home.ics',
+          }
+        : {
+            intro: 'Gracias por escribirnos. Un asesor de Martínez Home te contactará en menos de 24 horas.',
+            invite: 'Adjuntamos la cita para que la agregues a tu calendario.',
+            more: '¿Necesitas algo antes? Escríbenos al',
+            event: 'Visita con Martínez Home',
+            file: 'visita-martinez-home.ics',
+          };
       await send(key, {
         from,
         to: [email],
         reply_to: to,
-        subject: `${t.confirm} · Martínez Home`,
+        subject: `${confirm} · Martínez Home`,
         html: layout(
-          `${esc(t.confirm)}, ${esc(name.split(' ')[0])}`,
+          `${esc(confirm)}, ${esc(name.split(' ')[0])}`,
           `<p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:#2a3446">
-            Gracias por escribirnos. Un asesor de Martínez Home te contactará en menos de 24 horas.
-            ${visit ? 'Adjuntamos la cita para que la agregues a tu calendario.' : ''}
+            ${copy.intro}
+            ${visit ? copy.invite : ''}
           </p>
-          ${rows(extra.length ? extra : fields)}
-          <p style="margin:22px 0 0;font-size:14px;color:#6b7180">¿Necesitas algo antes? Escríbenos al <a href="https://wa.me/18297982079" style="color:#e1141b">${PHONE}</a>.</p>`
+          ${rows(shown)}
+          <p style="margin:22px 0 0;font-size:14px;color:#6b7180">${copy.more} <a href="https://wa.me/18297982079" style="color:#e1141b">${PHONE}</a>.</p>`,
+          english ? 'en' : 'es'
         ),
         attachments: visit
           ? [
               {
-                filename: 'visita-martinez-home.ics',
+                filename: copy.file,
                 content: Buffer.from(
                   ics(
                     { date: visit.date, hour: Number(visit.hour) || 9, minute: Number(visit.minute) || 0 },
-                    'Visita con Martínez Home',
-                    extra.map(([k, v]) => `${k}: ${v}`).join('\n')
+                    copy.event,
+                    shown.map(([k, v]) => `${k}: ${v}`).join('\n')
                   )
                 ).toString('base64'),
               },

@@ -5,9 +5,11 @@ import { ArrowRight, Heart, Menu, X } from 'lucide-react';
 import MagneticButton from '../components/MagneticButton';
 import { NAV } from '../data/site';
 import { useStore } from '../store';
+import LangSwitch from '../components/LangSwitch';
+import { t } from '../i18n';
 
 export const Brand = () => (
-  <Link to="/" className="brand" aria-label="Martínez Home RD — inicio">
+  <Link to="/" className="brand" aria-label={t('Martínez Home RD — inicio')}>
     <img src="/images/logo-mark.png" alt="" className="brand__icon" />
     <span className="brand__text">
       <span>MARTÍNEZ</span>
@@ -55,13 +57,14 @@ export default function Navbar() {
     >
       <div className="container nav__inner">
         <Brand />
-        <nav className="nav__links" aria-label="Principal">
+        <nav className="nav__links" aria-label={t('Principal')}>
           {NAV.map((n) => (
-            <Link key={n.label} to={n.to} className={`nav__link${isActive(n.to) ? ' is-active' : ''}`}>{n.label}</Link>
+            <Link key={n.label} to={n.to} className={`nav__link${isActive(n.to) ? ' is-active' : ''}`}>{t(n.label)}</Link>
           ))}
         </nav>
         <div className="nav__actions">
-          <Link to="/favoritos" className="nav__fav" aria-label={`Favoritos (${favorites.length})`}>
+          <LangSwitch />
+          <Link to="/favoritos" className="nav__fav" aria-label={`${t('Favoritos')} (${favorites.length})`}>
             <Heart size={18} />
             <AnimatePresence>
               {favorites.length > 0 && (
@@ -73,11 +76,11 @@ export default function Navbar() {
           </Link>
           <div className="nav__cta">
             <MagneticButton onClick={() => openVisit()} className="btn-pill">
-              <span>Agenda una cita</span>
+              <span>{t('Agenda una cita')}</span>
               <span className="btn-pill__icon"><ArrowRight size={16} /></span>
             </MagneticButton>
           </div>
-          <button className="nav__burger" aria-label={open ? 'Cerrar menú' : 'Abrir menú'} onClick={() => setOpen(!open)}>
+          <button className="nav__burger" aria-label={open ? t('Cerrar menú') : t('Abrir menú')} onClick={() => setOpen(!open)}>
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
@@ -94,12 +97,13 @@ export default function Navbar() {
           >
             {[...NAV, { label: 'Favoritos', to: '/favoritos' }, { label: 'Vende con nosotros', to: '/vende-con-nosotros' }].map((n, i) => (
               <motion.div key={n.label} initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 + i * 0.04 }}>
-                <Link to={n.to} className="mobile-menu__link">{n.label}</Link>
+                <Link to={n.to} className="mobile-menu__link">{t(n.label)}</Link>
               </motion.div>
             ))}
             <button className="btn-dark" onClick={() => { setOpen(false); openVisit(); }}>
-              Agenda una cita <ArrowRight size={16} />
+              {t('Agenda una cita')} <ArrowRight size={16} />
             </button>
+            <div className="mobile-menu__lang"><LangSwitch id="menu" /></div>
           </motion.div>
         )}
       </AnimatePresence>

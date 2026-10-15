@@ -1,6 +1,8 @@
 import LegalPage, { type LegalSection } from '../components/LegalPage';
 import { CONTACT } from '../data/site';
 import { useSeo } from '../useTitle';
+import { getLang, t } from '../i18n';
+import { PRIVACY_EN, PRIVACY_EN_META } from './legal-en';
 
 const SECTIONS: LegalSection[] = [
   {
@@ -167,11 +169,14 @@ const SECTIONS: LegalSection[] = [
 ];
 
 export default function Privacy() {
+  const en = getLang() === 'en';
   useSeo({
-    title: 'Política de privacidad',
-    description: 'Cómo Martínez Home Inmobiliaria recopila, usa y protege tus datos personales conforme a la Ley 172-13 de República Dominicana.',
+    title: t('Política de privacidad'),
+    description: t('Cómo Martínez Home Inmobiliaria recopila, usa y protege tus datos personales conforme a la Ley 172-13 de República Dominicana.'),
   });
-  return (
+  return en ? (
+    <LegalPage {...PRIVACY_EN_META} sections={PRIVACY_EN} other={{ prefix: 'our', label: 'Terms and Conditions', to: '/terminos' }} />
+  ) : (
     <LegalPage
       eyebrow="Legal"
       title="Política de privacidad"

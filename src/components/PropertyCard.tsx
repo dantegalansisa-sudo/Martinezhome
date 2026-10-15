@@ -4,6 +4,8 @@ import { ArrowUpRight, Bath, BedDouble, Heart, MapPin, Maximize } from 'lucide-r
 import { autoTags, img, type Property } from '../data/properties';
 import { formatPrice, useStore } from '../store';
 import { EASINGS } from '../easings';
+import { localize } from '../data/localize';
+import { t } from '../i18n';
 
 export const cardVariants = {
   hidden: { opacity: 0, y: 48, scale: 0.96 },
@@ -16,7 +18,7 @@ export function FavoriteButton({ id, className = '' }: { id: number; className?:
   return (
     <motion.button
       className={`fav-btn${on ? ' is-on' : ''} ${className}`}
-      aria-label={on ? 'Quitar de favoritos' : 'Guardar en favoritos'}
+      aria-label={on ? t('Quitar de favoritos') : t('Guardar en favoritos')}
       aria-pressed={on}
       whileTap={{ scale: 0.8 }}
       onClick={(e) => {
@@ -33,8 +35,9 @@ export function FavoriteButton({ id, className = '' }: { id: number; className?:
 }
 
 /** `inView` makes the card reveal itself when scrolled to (used in long grids, where a parent stagger would fire too early). */
-export default function PropertyCard({ p, variants = true, inView = false }: { p: Property; variants?: boolean; inView?: boolean }) {
+export default function PropertyCard({ p: src, variants = true, inView = false }: { p: Property; variants?: boolean; inView?: boolean }) {
   const { currency } = useStore();
+  const p = localize(src);
   const tags = autoTags(p);
   return (
     <motion.article
@@ -46,14 +49,14 @@ export default function PropertyCard({ p, variants = true, inView = false }: { p
       <Link to={`/propiedades/${p.slug}`} className="prop__link" aria-label={p.title}>
         <div className="prop__media">
           <img src={img(p, 1, 'sm')} alt={p.title} loading="lazy" style={p.coverFocus ? { objectPosition: p.coverFocus } : undefined} />
-          <span className={`prop__badge prop__badge--${p.operation}`}>{p.operation === 'venta' ? 'Venta' : 'Alquiler'}</span>
-          {p.sold && <span className="prop__sold">Vendida</span>}
+          <span className={`prop__badge prop__badge--${p.operation}`}>{p.operation === 'venta' ? t('Venta') : t('Alquiler')}</span>
+          {p.sold && <span className="prop__sold">{t('Vendida')}</span>}
           {!p.sold && tags.length > 0 && (
             <span className="prop__tags">
-              {tags.map((t) => <span key={t} className="prop__tag">{t}</span>)}
+              {tags.map((tg) => <span key={tg} className="prop__tag">{tg}</span>)}
             </span>
           )}
-          <span className="prop__count">{p.images} fotos</span>
+          <span className="prop__count">{t('{n} fotos', { n: p.images })}</span>
         </div>
         <div className="prop__body">
           <p className="prop__loc"><MapPin size={13} /> {p.zone}, {p.city}</p>
@@ -63,9 +66,9 @@ export default function PropertyCard({ p, variants = true, inView = false }: { p
             {p.beds && <li><BedDouble size={15} /> {p.beds}</li>}
             {p.baths && <li><Bath size={15} /> {p.baths}</li>}
             {p.area && <li><Maximize size={14} /> {p.area}</li>}
-            {!p.beds && !p.baths && !p.area && <li>{p.kind}</li>}
+            {!p.beds && !p.baths && !p.area && <li>{t(p.kind)}</li>}
           </ul>
-          <span className="prop__cta">Ver propiedad <ArrowUpRight size={15} /></span>
+          <span className="prop__cta">{t('Ver propiedad')} <ArrowUpRight size={15} /></span>
         </div>
       </Link>
       <FavoriteButton id={p.id} className="prop__fav" />

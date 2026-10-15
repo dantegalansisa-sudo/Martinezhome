@@ -6,6 +6,8 @@ import { useStore } from '../store';
 import LeadDone from './LeadDone';
 import { sendLead, warmLead, type LeadResult } from '../lib/lead';
 import { EASINGS } from '../easings';
+import { getLang, locale, t } from '../i18n';
+import { localize } from '../data/localize';
 
 const SLOTS = [
   { label: '9:00 a. m.', hour: 9, minute: 0 },
@@ -27,8 +29,8 @@ const nextDays = () => {
   return out;
 };
 
-const fmtDay = (d: Date) => d.toLocaleDateString('es-DO', { weekday: 'short' }).replace('.', '');
-const fmtLong = (d: Date) => d.toLocaleDateString('es-DO', { weekday: 'long', day: 'numeric', month: 'long' });
+const fmtDay = (d: Date) => d.toLocaleDateString(locale(), { weekday: 'short' }).replace('.', '');
+const fmtLong = (d: Date) => d.toLocaleDateString(locale(), { weekday: 'long', day: 'numeric', month: 'long' });
 const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
 export default function VisitModal() {
@@ -67,16 +69,17 @@ export default function VisitModal() {
     if (sending || slot < 0) return;
     const p = visit.property;
     const s = SLOTS[slot];
-    const property = p ? `${p.title} (${p.zone})` : 'Aún no decide — quiere asesoría';
+    const lp = p && localize(p);
+    const property = lp ? `${lp.title} (${lp.zone})` : t('Aún no decide — quiere asesoría');
     const text = [
-      'Hola Martínez Home, quiero agendar una visita.',
-      `Propiedad: ${property}`,
-      `Fecha: ${fmtLong(days[day])}`,
-      `Hora: ${s.label}`,
-      `Modalidad: ${mode}`,
-      `Nombre: ${name}`,
-      `Teléfono: ${phone}`,
-      `Correo: ${email}`,
+      t('Hola Martínez Home, quiero agendar una visita.'),
+      `${t('Propiedad')}: ${property}`,
+      `${t('Fecha')}: ${fmtLong(days[day])}`,
+      `${t('Hora')}: ${t(s.label)}`,
+      `${t('Modalidad')}: ${t(mode)}`,
+      `${t('Nombre')}: ${name}`,
+      `${t('Teléfono')}: ${phone}`,
+      `${t('Correo')}: ${email}`,
     ].join('\n');
     setSending(true);
     const r = await sendLead(
@@ -86,6 +89,7 @@ export default function VisitModal() {
         phone,
         email,
         website: trap,
+        lang: getLang(),
         fields: [
           ['Propiedad', property],
           ['Fecha', fmtLong(days[day])],
@@ -118,17 +122,17 @@ export default function VisitModal() {
             aria-modal="true"
             aria-labelledby="visit-title"
           >
-            <button type="button" className="modal__close" onClick={closeVisit} aria-label="Cerrar"><X size={18} /></button>
+            <button type="button" className="modal__close" onClick={closeVisit} aria-label={t('Cerrar')}><X size={18} /></button>
 
             {result ? (
-              <LeadDone result={result} name={name} email={email} whatsappText={lastText} onAgain={closeVisit} againLabel="Cerrar" />
+              <LeadDone result={result} name={name} email={email} whatsappText={lastText} onAgain={closeVisit} againLabel={t('Cerrar')} />
             ) : (
               <>
                 <span className="visit__icon"><CalendarCheck size={22} /></span>
-                <h2 id="visit-title" className="visit__title">Agenda tu visita</h2>
-                <p className="visit__sub">{visit.property ? visit.property.title : 'Te acompañamos a conocer la propiedad ideal para ti.'}</p>
+                <h2 id="visit-title" className="visit__title">{t('Agenda tu visita')}</h2>
+                <p className="visit__sub">{visit.property ? localize(visit.property).title : t('Te acompañamos a conocer la propiedad ideal para ti.')}</p>
 
-                <p className="visit__label">Elige el día</p>
+                <p className="visit__label">{t('Elige el día')}</p>
                 <div className="days">
                   {days.map((d, i) => (
                     <button type="button" key={i} className={`day${day === i ? ' is-on' : ''}`} onClick={() => setDay(i)}>
@@ -138,37 +142,37 @@ export default function VisitModal() {
                   ))}
                 </div>
 
-                <p className="visit__label">Hora</p>
+                <p className="visit__label">{t('Hora')}</p>
                 <div className="slots">
                   {SLOTS.map((s, i) => (
-                    <button type="button" key={s.label} className={`slot${slot === i ? ' is-on' : ''}`} onClick={() => setSlot(i)}>{s.label}</button>
+                    <button type="button" key={s.label} className={`slot${slot === i ? ' is-on' : ''}`} onClick={() => setSlot(i)}>{t(s.label)}</button>
                   ))}
                 </div>
 
                 <div className="visit__mode">
                   {(['Presencial', 'Videollamada'] as const).map((m) => (
                     <label key={m} className={`radio${mode === m ? ' is-on' : ''}`}>
-                      <input type="radio" name="mode" checked={mode === m} onChange={() => setMode(m)} /> {m}
+                      <input type="radio" name="mode" checked={mode === m} onChange={() => setMode(m)} /> {t(m)}
                     </label>
                   ))}
                 </div>
 
                 <div className="visit__fields">
-                  <input required placeholder="Tu nombre" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
-                  <input required type="tel" placeholder="Teléfono / WhatsApp" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" />
-                  <input required type="email" className="visit__email" placeholder="Correo electrónico (te enviamos la confirmación)" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
+                  <input required placeholder={t('Tu nombre')} value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
+                  <input required type="tel" placeholder={t('Teléfono / WhatsApp')} value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" />
+                  <input required type="email" className="visit__email" placeholder={t('Correo electrónico (te enviamos la confirmación)')} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
                   <input className="hp" tabIndex={-1} autoComplete="off" aria-hidden value={trap} onChange={(e) => setTrap(e.target.value)} name="website" />
                 </div>
 
                 <button type="submit" className="btn-submit" disabled={slot < 0 || sending}>
                   <span>
-                    {sending ? 'Agendando…' : slot >= 0 ? `Confirmar ${fmtDay(days[day])} ${days[day].getDate()} · ${SLOTS[slot].label}` : 'Selecciona una hora'}
+                    {sending ? t('Agendando…') : slot >= 0 ? `${t('Confirmar')} ${fmtDay(days[day])} ${days[day].getDate()} · ${t(SLOTS[slot].label)}` : t('Selecciona una hora')}
                   </span>
                   <ArrowRight size={16} />
                 </button>
                 <p className="visit__note">
-                  Recibirás la confirmación por correo, con la cita para tu calendario. Al enviar aceptas nuestra{' '}
-                  <Link to="/privacidad" onClick={closeVisit}>Política de privacidad</Link>.
+                  {t('Recibirás la confirmación por correo, con la cita para tu calendario. Al enviar aceptas nuestra')}{' '}
+                  <Link to="/privacidad" onClick={closeVisit}>{t('Política de privacidad')}</Link>.
                 </p>
               </>
             )}

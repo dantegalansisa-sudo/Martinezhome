@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import LegalPage, { type LegalSection } from '../components/LegalPage';
 import { CONTACT } from '../data/site';
 import { useSeo } from '../useTitle';
+import { getLang, t } from '../i18n';
+import { TERMS_EN, TERMS_EN_META } from './legal-en';
 
 const SECTIONS: LegalSection[] = [
   {
@@ -193,11 +195,14 @@ const SECTIONS: LegalSection[] = [
 ];
 
 export default function Terms() {
+  const en = getLang() === 'en';
   useSeo({
-    title: 'Términos y condiciones',
-    description: 'Condiciones de uso del sitio de Martínez Home Inmobiliaria: información de propiedades, precios, planes de pago, visitas y servicios de intermediación en República Dominicana.',
+    title: t('Términos y condiciones'),
+    description: t('Condiciones de uso del sitio de Martínez Home Inmobiliaria: información de propiedades, precios, planes de pago, visitas y servicios de intermediación en República Dominicana.'),
   });
-  return (
+  return en ? (
+    <LegalPage {...TERMS_EN_META} sections={TERMS_EN} other={{ prefix: 'our', label: 'Privacy Policy', to: '/privacidad' }} />
+  ) : (
     <LegalPage
       eyebrow="Legal"
       title="Términos y condiciones"

@@ -5,6 +5,7 @@ import { ArrowRight, BadgeDollarSign, CalendarCheck, Camera, Handshake, KeyRound
 import RevealText from '../components/RevealText';
 import { useStore } from '../store';
 import { EASINGS } from '../easings';
+import { t } from '../i18n';
 
 const FLOWS = {
   comprar: {
@@ -36,13 +37,13 @@ export default function HowItWorks() {
     <section className="section how" id="como-funciona">
       <div className="container">
         <div className="how__head">
-          <p className="eyebrow">Cómo funciona</p>
-          <RevealText tag="h2" className="h2">Tu próxima propiedad en 3 pasos</RevealText>
-          <div className="how__switch" role="tablist" aria-label="Proceso">
+          <p className="eyebrow">{t('Cómo funciona')}</p>
+          <RevealText tag="h2" className="h2">{t('Tu próxima propiedad en 3 pasos')}</RevealText>
+          <div className="how__switch" role="tablist" aria-label={t('Proceso')}>
             {(Object.keys(FLOWS) as Flow[]).map((f) => (
               <button key={f} role="tab" aria-selected={flow === f} className={`how__tab${flow === f ? ' is-on' : ''}`} onClick={() => setFlow(f)}>
                 {flow === f && <motion.span layoutId="how-pill" className="how__pill" transition={{ type: 'spring', stiffness: 380, damping: 32 }} />}
-                <span>{FLOWS[f].label}</span>
+                <span>{t(FLOWS[f].label)}</span>
               </button>
             ))}
           </div>
@@ -75,8 +76,8 @@ export default function HowItWorks() {
                 >
                   <span className={`how__icon how__icon--${i}`}><Icon size={26} strokeWidth={1.6} /></span>
                   <span className="how__num">0{i + 1}</span>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
+                  <h3>{t(title)}</h3>
+                  <p>{t(text)}</p>
                 </motion.li>
               ))}
             </motion.ol>
@@ -85,9 +86,9 @@ export default function HowItWorks() {
 
         <div className="how__cta">
           {flow === 'comprar' ? (
-            <button className="btn-dark" onClick={() => openVisit()}>Agenda una visita <span className="btn-dark__icon"><ArrowRight size={15} /></span></button>
+            <button className="btn-dark" onClick={() => openVisit()}>{t('Agenda una visita')} <span className="btn-dark__icon"><ArrowRight size={15} /></span></button>
           ) : (
-            <Link className="btn-dark" to="/vende-con-nosotros">Vende con nosotros <span className="btn-dark__icon"><ArrowRight size={15} /></span></Link>
+            <Link className="btn-dark" to="/vende-con-nosotros">{t('Vende con nosotros')} <span className="btn-dark__icon"><ArrowRight size={15} /></span></Link>
           )}
         </div>
       </div>

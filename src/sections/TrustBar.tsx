@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { CalendarClock, Headset, Scale, ShieldCheck } from 'lucide-react';
 import { EASINGS } from '../easings';
+import { t } from '../i18n';
 
 const ITEMS = [
   { icon: ShieldCheck, title: 'Propiedades verificadas', text: 'Revisamos títulos y documentos' },
@@ -12,7 +13,7 @@ const ITEMS = [
 /** White card that overlaps the bottom of the hero, like a shelf of guarantees. */
 export default function TrustBar() {
   return (
-    <section className="trust" aria-label="Por qué elegirnos">
+    <section className="trust" aria-label={t('Por qué elegirnos')}>
       <div className="container">
         <motion.ul
           className="trust__card"
@@ -28,8 +29,8 @@ export default function TrustBar() {
             >
               <span className={`trust__icon trust__icon--${i % 2 ? 'sand' : 'ink'}`}><Icon size={20} strokeWidth={1.7} /></span>
               <span>
-                <strong>{title}</strong>
-                <small>{text}</small>
+                <strong>{t(title)}</strong>
+                <small>{t(text)}</small>
               </span>
             </motion.li>
           ))}

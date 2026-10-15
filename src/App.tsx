@@ -8,6 +8,7 @@ import Navbar from './sections/Navbar';
 import Footer from './sections/Footer';
 import Home from './pages/Home';
 import { StoreProvider } from './store';
+import { LangProvider } from './i18n';
 import { waLink } from './data/site';
 
 const Properties = lazy(() => import('./pages/Properties'));
@@ -76,23 +77,27 @@ function Layout() {
 
 export default function App() {
   return (
-    <StoreProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="propiedades" element={<Properties />} />
-            <Route path="propiedades/:slug" element={<PropertyDetail />} />
-            <Route path="equipo" element={<Team />} />
-            <Route path="vende-con-nosotros" element={<Sell />} />
-            <Route path="favoritos" element={<Favorites />} />
-            <Route path="casita" element={<CursorPreview />} />
-            <Route path="privacidad" element={<Privacy />} />
-            <Route path="terminos" element={<Terms />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </StoreProvider>
+    <LangProvider>
+      {(lang) => (
+        <StoreProvider key={lang}>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="propiedades" element={<Properties />} />
+                <Route path="propiedades/:slug" element={<PropertyDetail />} />
+                <Route path="equipo" element={<Team />} />
+                <Route path="vende-con-nosotros" element={<Sell />} />
+                <Route path="favoritos" element={<Favorites />} />
+                <Route path="casita" element={<CursorPreview />} />
+                <Route path="privacidad" element={<Privacy />} />
+                <Route path="terminos" element={<Terms />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </StoreProvider>
+      )}
+    </LangProvider>
   );
 }

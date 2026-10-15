@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import RevealText from './RevealText';
 import { EASINGS } from '../easings';
+import { t } from '../i18n';
 
 interface Props {
   eyebrow: string;
@@ -18,8 +19,8 @@ export default function PageHeader({ eyebrow, title, lead, crumbs = [], children
     <header className="page-head">
       <div className="page-head__glow" aria-hidden />
       <div className="container">
-        <motion.nav className="crumbs" aria-label="Ruta" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
-          <Link to="/">Inicio</Link>
+        <motion.nav className="crumbs" aria-label={t('Ruta')} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+          <Link to="/">{t('Inicio')}</Link>
           {crumbs.map((c) => (
             <span key={c.label}>
               <ChevronRight size={13} />

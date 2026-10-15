@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Building2, CalendarDays, Check, ChevronDown, DollarSign, Home, MapPin, RotateCcw, Search, Sparkles, Tag, X } from 'lucide-react';
 import { img } from '../data/properties';
+import { localize } from '../data/localize';
 import {
   ANY_BUDGET,
   ANY_LOCATION,
@@ -27,6 +28,7 @@ import { waLink } from '../data/site';
 import { formatPrice, useStore } from '../store';
 import { EASINGS } from '../easings';
 import { useIsDesktop, useIsMobile } from '../useMedia';
+import { t } from '../i18n';
 
 const OP_ICONS = { Todos: Home, Venta: Tag, Alquiler: CalendarDays, Proyectos: Building2 } as const;
 type Pop = 'loc' | 'type' | 'budget' | null;
@@ -120,7 +122,7 @@ function Popover({
             >
               <div className="hs__sheet-head">
                 <strong>{title}</strong>
-                <button onClick={onClose} aria-label="Cerrar">
+                <button onClick={onClose} aria-label={t('Cerrar')}>
                   <X size={18} />
                 </button>
               </div>
@@ -159,7 +161,7 @@ function OptionList({ options, value, onPick, counts }: { options: string[]; val
         return (
           <li key={o}>
             <button type="button" role="option" aria-selected={on} className={on ? 'is-on' : ''} onClick={() => onPick(o)}>
-              <span>{o}</span>
+              <span>{t(o)}</span>
               <em>{counts[o]}</em>
               {on && <Check size={15} />}
             </button>
@@ -192,12 +194,12 @@ function BudgetPicker({
     <div className="bp">
       <div className="bp__values">
         <div>
-          <small>Mínimo</small>
+          <small>{t('Mínimo')}</small>
           <strong>{money(lo)}</strong>
         </div>
         <span className="bp__dash" />
         <div>
-          <small>Máximo</small>
+          <small>{t('Máximo')}</small>
           <strong>{hi >= BUDGET_MAX ? `${money(BUDGET_MAX)}+` : money(hi)}</strong>
         </div>
       </div>
@@ -230,7 +232,7 @@ function BudgetPicker({
           max={BUDGET_MAX}
           step={BUDGET_STEP}
           value={lo}
-          aria-label="Presupuesto mínimo"
+          aria-label={t('Presupuesto mínimo')}
           onChange={(e) => onChange([Math.min(Number(e.target.value), hi - BUDGET_STEP * 2), hi])}
         />
         <input
@@ -239,7 +241,7 @@ function BudgetPicker({
           max={BUDGET_MAX}
           step={BUDGET_STEP}
           value={hi}
-          aria-label="Presupuesto máximo"
+          aria-label={t('Presupuesto máximo')}
           onChange={(e) => onChange([lo, Math.max(Number(e.target.value), lo + BUDGET_STEP * 2)])}
         />
       </div>
@@ -254,7 +256,7 @@ function BudgetPicker({
           const on = b.range[0] === lo && b.range[1] === hi;
           return (
             <button type="button" key={b.label} className={`pill pill--sm${on ? ' is-on' : ''}`} onClick={() => onChange(b.range)}>
-              {b.label}
+              {t(b.label)}
             </button>
           );
         })}
@@ -262,14 +264,14 @@ function BudgetPicker({
 
       <div className="bp__foot">
         <button type="button" className="bp__reset" onClick={() => onChange(ANY_BUDGET)} disabled={!budgetActive(value)}>
-          <RotateCcw size={14} /> Limpiar
+          <RotateCcw size={14} /> {t('Limpiar')}
         </button>
         <button type="button" className="bp__apply" onClick={onApply}>
-          Ver{' '}
+          {t('Ver')}{' '}
           <motion.b key={count} initial={{ y: -8, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
             {count}
           </motion.b>{' '}
-          {count === 1 ? 'propiedad' : 'propiedades'}
+          {count === 1 ? t('propiedad') : t('propiedades')}
         </button>
       </div>
     </div>
@@ -328,13 +330,13 @@ export default function HeroSearch() {
 
   return (
     <div className="hs" ref={wrap}>
-      <motion.div className="chips" {...fadeUp(1.05)} role="tablist" aria-label="Tipo de operación">
+      <motion.div className="chips" {...fadeUp(1.05)} role="tablist" aria-label={t('Tipo de operación')}>
         {OPERATIONS.map((op) => {
           const Icon = OP_ICONS[op];
           const on = s.op === op;
           return (
             <button key={op} role="tab" aria-selected={on} className={`chip${on ? ' chip--active' : ''}`} onClick={() => update({ op: op as OperationFilter })}>
-              <Icon size={15} /> {op}
+              <Icon size={15} /> {t(op)}
               <motion.span key={opCounts[op]} className="chip__count" initial={{ scale: 0.6 }} animate={{ scale: 1 }}>
                 {opCounts[op]}
               </motion.span>
@@ -345,22 +347,22 @@ export default function HeroSearch() {
 
       <motion.div className="hs__bar" {...fadeUp(1.2)}>
         <div className="hs__slot">
-          <FieldButton icon={MapPin} label="Ubicación" value={s.loc} open={pop === 'loc'} onClick={() => toggle('loc')} />
-          <Popover open={pop === 'loc'} mobile={mobile} onClose={() => setPop(null)} title="Ubicación">
+          <FieldButton icon={MapPin} label={t('Ubicación')} value={t(s.loc)} open={pop === 'loc'} onClick={() => toggle('loc')} />
+          <Popover open={pop === 'loc'} mobile={mobile} onClose={() => setPop(null)} title={t('Ubicación')}>
             <OptionList options={LOCATIONS} value={s.loc} counts={locCounts} onPick={(loc) => update({ loc })} />
           </Popover>
         </div>
         <span className="hs__divider" />
         <div className="hs__slot">
-          <FieldButton icon={Home} label="Tipo de propiedad" value={s.type} open={pop === 'type'} onClick={() => toggle('type')} />
-          <Popover open={pop === 'type'} mobile={mobile} onClose={() => setPop(null)} title="Tipo de propiedad">
+          <FieldButton icon={Home} label={t('Tipo de propiedad')} value={t(s.type)} open={pop === 'type'} onClick={() => toggle('type')} />
+          <Popover open={pop === 'type'} mobile={mobile} onClose={() => setPop(null)} title={t('Tipo de propiedad')}>
             <OptionList options={TYPES} value={s.type} counts={typeCounts} onPick={(type) => update({ type })} />
           </Popover>
         </div>
         <span className="hs__divider" />
         <div className="hs__slot hs__slot--budget">
-          <FieldButton icon={DollarSign} label="Presupuesto" value={budgetLabel(s.budget)} open={pop === 'budget'} onClick={() => toggle('budget')} accent />
-          <Popover open={pop === 'budget'} mobile={mobile} onClose={() => setPop(null)} title="¿Cuánto quieres invertir?" wide>
+          <FieldButton icon={DollarSign} label={t('Presupuesto')} value={budgetLabel(s.budget)} open={pop === 'budget'} onClick={() => toggle('budget')} accent />
+          <Popover open={pop === 'budget'} mobile={mobile} onClose={() => setPop(null)} title={t('¿Cuánto quieres invertir?')} wide>
             <BudgetPicker
               value={s.budget}
               onChange={(budget) => update({ budget }, false)}
@@ -373,10 +375,10 @@ export default function HeroSearch() {
             />
           </Popover>
         </div>
-        <motion.button className="hs__go" onClick={go} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} aria-label={`Ver ${results.length} propiedades`}>
+        <motion.button className="hs__go" onClick={go} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} aria-label={t('Ver {n} propiedades', { n: results.length })}>
           <Search size={18} />
           <span>
-            Ver{' '}
+            {t('Ver')}{' '}
             <motion.b key={results.length} initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
               {results.length}
             </motion.b>
@@ -397,17 +399,19 @@ export default function HeroSearch() {
               <span>
                 <Sparkles size={15} />{' '}
                 {results.length === 0
-                  ? 'Sin coincidencias exactas'
-                  : `${results.length} ${results.length === 1 ? 'propiedad encaja' : 'propiedades encajan'} con tu búsqueda`}
+                  ? t('Sin coincidencias exactas')
+                  : results.length === 1
+                    ? t('1 propiedad encaja con tu búsqueda')
+                    : t('{n} propiedades encajan con tu búsqueda', { n: results.length })}
               </span>
               {budgetActive(s.budget) && <em>{budgetLabel(s.budget)}</em>}
-              <button onClick={() => setPanel(false)} aria-label="Cerrar sugerencias">
+              <button onClick={() => setPanel(false)} aria-label={t('Cerrar sugerencias')}>
                 <X size={15} />
               </button>
             </div>
             {results.length > 0 ? (
               <div className="hs__list">
-                {results.slice(0, 3).map((p, i) => (
+                {results.slice(0, 3).map(localize).map((p, i) => (
                   <motion.div key={p.id} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}>
                     <Link to={`/propiedades/${p.slug}`} className="hs__item">
                       <img src={img(p, 1, 'sm')} alt="" />
@@ -423,16 +427,16 @@ export default function HeroSearch() {
             ) : (
               <p className="hs__empty">
                 {s.op === 'Alquiler'
-                  ? 'Estamos actualizando nuestros alquileres. Cuéntanos qué buscas y te enviamos opciones.'
-                  : 'Prueba otro rango o zona, o deja que un asesor la busque por ti.'}{' '}
-                <a href={waLink('Hola Martínez Home, no encontré en la web la propiedad que busco. ¿Me ayudan?')} target="_blank" rel="noopener noreferrer">
-                  Te ayudamos a buscarla
+                  ? t('Estamos actualizando nuestros alquileres. Cuéntanos qué buscas y te enviamos opciones.')
+                  : t('Prueba otro rango o zona, o deja que un asesor la busque por ti.')}{' '}
+                <a href={waLink(t('Hola Martínez Home, no encontré en la web la propiedad que busco. ¿Me ayudan?'))} target="_blank" rel="noopener noreferrer">
+                  {t('Te ayudamos a buscarla')}
                 </a>
               </p>
             )}
             {results.length > 0 && (
               <button className="hs__all" onClick={go}>
-                Ver {results.length === 1 ? 'la propiedad' : `las ${results.length} propiedades`} <ArrowUpRight size={15} />
+                {results.length === 1 ? t('Ver la propiedad') : t('Ver las {n} propiedades', { n: results.length })} <ArrowUpRight size={15} />
               </button>
             )}
           </motion.div>

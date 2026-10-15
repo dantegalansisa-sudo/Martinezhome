@@ -8,6 +8,7 @@ import LeadDone from '../components/LeadDone';
 import { sendLead, warmLead, type LeadResult } from '../lib/lead';
 import { EASINGS } from '../easings';
 import { useIsDesktop } from '../useMedia';
+import { getLang, t } from '../i18n';
 
 const INTERESTS = ['Comprar', 'Alquilar', 'Vender', 'Invertir'] as const;
 const KINDS = ['Casa', 'Apartamento', 'Villa', 'Solar', 'Local'];
@@ -56,15 +57,15 @@ export default function Contact() {
     if (step === 0) return go(1);
     if (sending) return;
     const text = [
-      `Hola Martínez Home, quiero ${interest.toLowerCase()} una propiedad.`,
-      `Tipo: ${kind}`,
-      budget && `${selling ? 'Precio esperado' : 'Presupuesto'}: ${budget}`,
-      zone && `Zona: ${zone}`,
-      `Nombre: ${form.name}`,
-      `Teléfono: ${form.phone}`,
-      form.email && `Correo: ${form.email}`,
-      `Prefiero que me contacten por: ${channel}`,
-      form.message && `Mensaje: ${form.message}`,
+      t('Hola Martínez Home, quiero {what} una propiedad.', { what: t(interest).toLowerCase() }),
+      `${t('Tipo')}: ${t(kind)}`,
+      budget && `${selling ? t('Precio esperado') : t('Presupuesto')}: ${t(budget)}`,
+      zone && `${t('Zona')}: ${zone}`,
+      `${t('Nombre')}: ${form.name}`,
+      `${t('Teléfono')}: ${form.phone}`,
+      form.email && `${t('Correo')}: ${form.email}`,
+      `${t('Prefiero que me contacten por')}: ${t(channel)}`,
+      form.message && `${t('Mensaje')}: ${form.message}`,
     ].filter(Boolean).join('\n');
     setSending(true);
     const fields: [string, string][] = [
@@ -75,7 +76,7 @@ export default function Contact() {
       ['Contactar por', channel],
       ['Mensaje', form.message],
     ];
-    const r = await sendLead({ type: 'contacto', name: form.name, phone: form.phone, email: form.email, fields, website: trap }, text);
+    const r = await sendLead({ type: 'contacto', name: form.name, phone: form.phone, email: form.email, fields, website: trap, lang: getLang() }, text);
     setLastText(text);
     setResult(r);
     setSending(false);
@@ -95,17 +96,17 @@ export default function Contact() {
       <div className="contact__veil" />
       <div className="container contact__grid">
         <div className="contact__text">
-          <p className="eyebrow eyebrow--light">Hablemos de tu próxima propiedad</p>
-          <RevealText tag="h2" className="h2 h2--light">{'¿Listo para dar\nel siguiente paso?'}</RevealText>
+          <p className="eyebrow eyebrow--light">{t('Hablemos de tu próxima propiedad')}</p>
+          <RevealText tag="h2" className="h2 h2--light">{t('¿Listo para dar\nel siguiente paso?')}</RevealText>
           <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.3 }}>
-            Cuéntanos qué buscas y un asesor te contactará con opciones a tu medida en menos de 24 horas.
+            {t('Cuéntanos qué buscas y un asesor te contactará con opciones a tu medida en menos de 24 horas.')}
           </motion.p>
           <motion.ul className="contact__lines" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.45 }}>
             {CONTACT.phones.map((ph, i) => (
               <li key={ph}>
                 <Phone size={15} />
                 <a href={`tel:+1${ph.replace(/\D/g, '')}`}>{ph}</a>
-                {i === 0 && <span className="contact__main">Principal · WhatsApp</span>}
+                {i === 0 && <span className="contact__main">{t('Principal · WhatsApp')}</span>}
               </li>
             ))}
             <li><MapPin size={15} /> <span>{CONTACT.address}</span></li>
@@ -127,8 +128,8 @@ export default function Contact() {
             ) : (
               <motion.form key="form" onSubmit={submit} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="cform__head">
-                  <span>Paso {step + 1} de 2</span>
-                  <strong>{step === 0 ? '¿Qué estás buscando?' : 'Tus datos de contacto'}</strong>
+                  <span>{t('Paso {n} de 2', { n: step + 1 })}</span>
+                  <strong>{step === 0 ? t('¿Qué estás buscando?') : t('Tus datos de contacto')}</strong>
                   <span className="cform__bar"><motion.span animate={{ width: step === 0 ? '50%' : '100%' }} transition={{ duration: 0.5, ease: EASINGS.smooth }} /></span>
                 </div>
 
@@ -136,39 +137,39 @@ export default function Contact() {
                   <motion.div key={step} className="cform__step" custom={dir} variants={slide} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35, ease: EASINGS.smooth }}>
                     {step === 0 ? (
                       <>
-                        <p className="cform__label">Quiero</p>
+                        <p className="cform__label">{t('Quiero')}</p>
                         <div className="cform__chips">
                           {INTERESTS.map((i) => (
-                            <button type="button" key={i} className={`pill${interest === i ? ' is-on' : ''}`} onClick={() => setInterest(i)}>{i}</button>
+                            <button type="button" key={i} className={`pill${interest === i ? ' is-on' : ''}`} onClick={() => setInterest(i)}>{t(i)}</button>
                           ))}
                         </div>
-                        <p className="cform__label">Tipo de propiedad</p>
+                        <p className="cform__label">{t('Tipo de propiedad')}</p>
                         <div className="cform__chips">
                           {KINDS.map((k) => (
-                            <button type="button" key={k} className={`pill${kind === k ? ' is-on' : ''}`} onClick={() => setKind(k)}>{k}</button>
+                            <button type="button" key={k} className={`pill${kind === k ? ' is-on' : ''}`} onClick={() => setKind(k)}>{t(k)}</button>
                           ))}
                         </div>
-                        <p className="cform__label">{selling ? 'Precio esperado' : 'Presupuesto'}</p>
+                        <p className="cform__label">{selling ? t('Precio esperado') : t('Presupuesto')}</p>
                         <div className="cform__chips cform__chips--wrap">
                           {BUDGETS.map((b) => (
-                            <button type="button" key={b} className={`pill pill--sm${budget === b ? ' is-on' : ''}`} onClick={() => setBudget(budget === b ? '' : b)}>{b}</button>
+                            <button type="button" key={b} className={`pill pill--sm${budget === b ? ' is-on' : ''}`} onClick={() => setBudget(budget === b ? '' : b)}>{t(b)}</button>
                           ))}
                         </div>
-                        <label className="field"><MapPin size={16} /><input placeholder="Zona de interés (opcional)" value={zone} onChange={(e) => setZone(e.target.value)} /></label>
+                        <label className="field"><MapPin size={16} /><input placeholder={t('Zona de interés (opcional)')} value={zone} onChange={(e) => setZone(e.target.value)} /></label>
                       </>
                     ) : (
                       <>
-                        <label className="field"><User size={16} /><input required placeholder="Nombre completo" value={form.name} onChange={set('name')} autoComplete="name" /></label>
-                        <label className="field"><Phone size={16} /><input type="tel" required placeholder="Teléfono / WhatsApp" value={form.phone} onChange={set('phone')} autoComplete="tel" /></label>
-                        <label className="field"><Mail size={16} /><input type="email" required placeholder="Correo electrónico" value={form.email} onChange={set('email')} autoComplete="email" /></label>
+                        <label className="field"><User size={16} /><input required placeholder={t('Nombre completo')} value={form.name} onChange={set('name')} autoComplete="name" /></label>
+                        <label className="field"><Phone size={16} /><input type="tel" required placeholder={t('Teléfono / WhatsApp')} value={form.phone} onChange={set('phone')} autoComplete="tel" /></label>
+                        <label className="field"><Mail size={16} /><input type="email" required placeholder={t('Correo electrónico')} value={form.email} onChange={set('email')} autoComplete="email" /></label>
                         <input className="hp" tabIndex={-1} autoComplete="off" aria-hidden value={trap} onChange={(e) => setTrap(e.target.value)} name="website" />
-                        <p className="cform__label">Prefiero que me contacten por</p>
+                        <p className="cform__label">{t('Prefiero que me contacten por')}</p>
                         <div className="cform__chips">
                           {CHANNELS.map((c) => (
-                            <button type="button" key={c} className={`pill${channel === c ? ' is-on' : ''}`} onClick={() => setChannel(c)}>{c}</button>
+                            <button type="button" key={c} className={`pill${channel === c ? ' is-on' : ''}`} onClick={() => setChannel(c)}>{t(c)}</button>
                           ))}
                         </div>
-                        <label className="field field--area"><MessageSquare size={16} /><textarea rows={2} placeholder="Mensaje (opcional)" value={form.message} onChange={set('message')} /></label>
+                        <label className="field field--area"><MessageSquare size={16} /><textarea rows={2} placeholder={t('Mensaje (opcional)')} value={form.message} onChange={set('message')} /></label>
                       </>
                     )}
                   </motion.div>
@@ -176,13 +177,13 @@ export default function Contact() {
 
                 <div className="cform__actions">
                   {step === 1 && (
-                    <button type="button" className="cform__back" onClick={() => go(0)} aria-label="Volver al paso anterior"><ArrowLeft size={18} /></button>
+                    <button type="button" className="cform__back" onClick={() => go(0)} aria-label={t('Volver al paso anterior')}><ArrowLeft size={18} /></button>
                   )}
                   <button type="submit" className="btn-submit" disabled={sending}>
-                    <span>{step === 0 ? 'Continuar' : sending ? 'Enviando…' : 'Enviar solicitud'}</span> <ArrowRight size={16} />
+                    <span>{step === 0 ? t('Continuar') : sending ? t('Enviando…') : t('Enviar solicitud')}</span> <ArrowRight size={16} />
                   </button>
                 </div>
-                <p className="cform__note">Tus datos solo se usan para contactarte sobre tu solicitud. <Link to="/privacidad">Política de privacidad</Link></p>
+                <p className="cform__note">{t('Tus datos solo se usan para contactarte sobre tu solicitud.')} <Link to="/privacidad">{t('Política de privacidad')}</Link></p>
               </motion.form>
             )}
           </AnimatePresence>

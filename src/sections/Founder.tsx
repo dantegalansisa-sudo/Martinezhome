@@ -5,6 +5,7 @@ import MagneticButton from '../components/MagneticButton';
 import { useParallax } from '../components/useParallax';
 import { CONTACT } from '../data/site';
 import { EASINGS } from '../easings';
+import { t } from '../i18n';
 
 export default function Founder() {
   const { ref, y } = useParallax(40);
@@ -12,21 +13,21 @@ export default function Founder() {
     <section className="section founder" id="fundadora">
       <div className="container founder__grid">
         <div className="founder__text">
-          <p className="eyebrow">Nuestra fundadora</p>
-          <RevealText tag="h2" className="h2">{'Una visión que\nconstruye hogares'}</RevealText>
+          <p className="eyebrow">{t('Nuestra fundadora')}</p>
+          <RevealText tag="h2" className="h2">{t('Una visión que\nconstruye hogares')}</RevealText>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }}>
             <p className="lead">
-              Martínez Home nace de la pasión de <strong>{CONTACT.ceo}</strong> por conectar a las familias dominicanas con espacios que transforman vidas.
-              Desde Santo Domingo Este, lidera un equipo comprometido con la confianza, la transparencia y un servicio verdaderamente personalizado.
+              {t('Martínez Home nace de la pasión de')} <strong>{CONTACT.ceo}</strong> {t('por conectar a las familias dominicanas con espacios que transforman vidas.')}{' '}
+              {t('Desde Santo Domingo Este, lidera un equipo comprometido con la confianza, la transparencia y un servicio verdaderamente personalizado.')}
             </p>
             <ul className="founder__values">
-              <li>Confianza</li>
-              <li>Inversiones</li>
-              <li>Soluciones</li>
+              <li>{t('Confianza')}</li>
+              <li>{t('Inversiones')}</li>
+              <li>{t('Soluciones')}</li>
             </ul>
           </motion.div>
           <MagneticButton to="/equipo" className="btn-dark">
-            Conoce a nuestro equipo <span className="btn-dark__icon"><ArrowRight size={15} /></span>
+            {t('Conoce a nuestro equipo')} <span className="btn-dark__icon"><ArrowRight size={15} /></span>
           </MagneticButton>
         </div>
 
@@ -39,7 +40,7 @@ export default function Founder() {
                 visible: { clipPath: 'inset(0% 0 0 0)', transition: { duration: 1.2, ease: EASINGS.premium } },
               }}
             >
-              <motion.img src="/images/ceo-vanessa.webp" alt="Lic. Vanessa Martínez, CEO y fundadora de Martínez Home RD" style={{ y, scale: 1.12 }} />
+              <motion.img src="/images/ceo-vanessa.webp" alt={t('Lic. Vanessa Martínez, CEO y fundadora de Martínez Home RD')} style={{ y, scale: 1.12 }} />
             </motion.div>
             <span className="founder__badge"><BadgeCheck size={16} /> CEO · Martínez Home RD</span>
           </motion.div>
@@ -52,10 +53,10 @@ export default function Founder() {
             transition={{ duration: 0.9, delay: 0.5, ease: EASINGS.smooth }}
           >
             <Quote size={26} className="founder__quote-icon" />
-            <blockquote>Mi compromiso es acompañarte a encontrar el lugar donde realmente quieras estar.</blockquote>
+            <blockquote>{t('Mi compromiso es acompañarte a encontrar el lugar donde realmente quieras estar.')}</blockquote>
             <figcaption>
               <span className="signature">Vanessa Martínez</span>
-              <strong>CEO &amp; Fundadora</strong>
+              <strong>{t('CEO & Fundadora')}</strong>
               <span>Martínez Home RD</span>
             </figcaption>
           </motion.figure>

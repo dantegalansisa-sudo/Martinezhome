@@ -8,12 +8,14 @@ import CurrencySwitch from '../components/CurrencySwitch';
 import { img, PROPERTIES, statusLabel, type Property } from '../data/properties';
 import { formatPrice, useStore } from '../store';
 import { useSeo } from '../useTitle';
+import { t } from '../i18n';
+import { localize } from '../data/localize';
 
 const MAX_COMPARE = 3;
 
 const ROWS: { label: string; get: (p: Property, cur: ReturnType<typeof useStore>['currency']) => string | undefined }[] = [
   { label: 'Precio', get: (p, c) => formatPrice(p.price, c) },
-  { label: 'Tipo', get: (p) => p.kind },
+  { label: 'Tipo', get: (p) => t(p.kind) },
   { label: 'Ubicación', get: (p) => `${p.zone}, ${p.city}` },
   { label: 'Estado', get: (p) => statusLabel(p) },
   { label: 'Habitaciones', get: (p) => p.beds },
@@ -21,14 +23,14 @@ const ROWS: { label: string; get: (p: Property, cur: ReturnType<typeof useStore>
   { label: 'Construcción', get: (p) => p.area },
   { label: 'Solar', get: (p) => p.lot },
   { label: 'Parqueos', get: (p) => p.parking },
-  { label: 'Plan de pago', get: (p) => (p.payment ? 'Disponible' : undefined) },
+  { label: 'Plan de pago', get: (p) => (p.payment ? t('Disponible') : undefined) },
   { label: 'Destacado', get: (p) => p.highlights[0] },
 ];
 
 export default function Favorites() {
-  useSeo({ title: 'Favoritos', noindex: true });
+  useSeo({ title: t('Favoritos'), noindex: true });
   const { favorites, toggleFavorite, currency } = useStore();
-  const saved = favorites.map((id) => PROPERTIES.find((p) => p.id === id)).filter(Boolean) as Property[];
+  const saved = favorites.map((id) => PROPERTIES.find((p) => p.id === id)).filter(Boolean).map((p) => localize(p as Property));
   const [picked, setPicked] = useState<number[]>(() => favorites.slice(0, MAX_COMPARE));
 
   // Drop properties that were un-favorited from the comparison.
@@ -41,10 +43,10 @@ export default function Favorites() {
   return (
     <>
       <PageHeader
-        eyebrow="Tu selección"
-        title="Favoritos y comparador"
-        lead="Guarda las propiedades que te gustan y compáralas lado a lado para decidir con claridad."
-        crumbs={[{ label: 'Favoritos' }]}
+        eyebrow={t('Tu selección')}
+        title={t('Favoritos y comparador')}
+        lead={t('Guarda las propiedades que te gustan y compáralas lado a lado para decidir con claridad.')}
+        crumbs={[{ label: t('Favoritos') }]}
       />
 
       <section className="section favs">
@@ -52,14 +54,14 @@ export default function Favorites() {
           {saved.length === 0 ? (
             <motion.div className="empty" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
               <span className="empty__icon"><Heart size={26} /></span>
-              <h2>Aún no tienes favoritos</h2>
-              <p>Toca el corazón en cualquier propiedad para guardarla aquí y luego compararla.</p>
-              <Link to="/propiedades" className="btn-dark">Explorar propiedades <span className="btn-dark__icon"><ArrowRight size={15} /></span></Link>
+              <h2>{t('Aún no tienes favoritos')}</h2>
+              <p>{t('Toca el corazón en cualquier propiedad para guardarla aquí y luego compararla.')}</p>
+              <Link to="/propiedades" className="btn-dark">{t('Explorar propiedades')} <span className="btn-dark__icon"><ArrowRight size={15} /></span></Link>
             </motion.div>
           ) : (
             <>
               <div className="favs__bar">
-                <p><GitCompareArrows size={18} /> Selecciona hasta {MAX_COMPARE} propiedades para comparar</p>
+                <p><GitCompareArrows size={18} /> {t('Selecciona hasta {n} propiedades para comparar', { n: MAX_COMPARE })}</p>
                 <CurrencySwitch id="favs" />
               </div>
               <div className="favs__pick">
@@ -88,7 +90,7 @@ export default function Favorites() {
                                 <img src={img(p, 1, 'sm')} alt="" />
                                 <span>{p.title}</span>
                               </Link>
-                              <button className="compare__remove" onClick={() => toggleFavorite(p.id)} aria-label="Quitar de favoritos"><X size={14} /></button>
+                              <button className="compare__remove" onClick={() => toggleFavorite(p.id)} aria-label={t('Quitar de favoritos')}><X size={14} /></button>
                             </th>
                           ))}
                         </tr>
@@ -96,7 +98,7 @@ export default function Favorites() {
                       <tbody>
                         {ROWS.map((r) => (
                           <tr key={r.label}>
-                            <th scope="row">{r.label}</th>
+                            <th scope="row">{t(r.label)}</th>
                             {compare.map((p) => <td key={p.id}>{r.get(p, currency) ?? '—'}</td>)}
                           </tr>
                         ))}
@@ -105,12 +107,12 @@ export default function Favorites() {
                   </motion.div>
                 ) : (
                   <motion.p key="hint" className="favs__hint" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    Selecciona al menos 2 propiedades para ver la comparación.
+                    {t('Selecciona al menos 2 propiedades para ver la comparación.')}
                   </motion.p>
                 )}
               </AnimatePresence>
 
-              <h2 className="favs__title">Guardadas ({saved.length})</h2>
+              <h2 className="favs__title">{t('Guardadas ({n})', { n: saved.length })}</h2>
               <motion.div className="catalog__cards catalog__cards--3" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.07 } } }}>
                 {saved.map((p) => <PropertyCard key={p.id} p={p} />)}
               </motion.div>

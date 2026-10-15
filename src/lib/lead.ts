@@ -12,6 +12,8 @@ export interface Lead {
   visit?: { date: string; hour: number; minute: number };
   /** Honeypot value — must stay empty */
   website?: string;
+  /** Visitor's language, so the client's confirmation email matches it */
+  lang?: 'es' | 'en';
 }
 
 /**

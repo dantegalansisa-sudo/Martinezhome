@@ -3,6 +3,7 @@ import { ArrowUpRight, MapPin, Phone } from 'lucide-react';
 import { InstagramIcon, ThreadsIcon, WhatsAppIcon } from '../components/BrandIcons';
 import { CONTACT, NAV } from '../data/site';
 import { Brand } from './Navbar';
+import { t } from '../i18n';
 
 export default function Footer() {
   return (
@@ -10,9 +11,9 @@ export default function Footer() {
       <div className="container">
         <div className="footer__top">
           <Brand />
-          <nav className="footer__nav" aria-label="Pie de página">
-            {NAV.map((n) => <Link key={n.label} to={n.to}>{n.label}</Link>)}
-            <Link to="/vende-con-nosotros">Vende con nosotros</Link>
+          <nav className="footer__nav" aria-label={t('Pie de página')}>
+            {NAV.map((n) => <Link key={n.label} to={n.to}>{t(n.label)}</Link>)}
+            <Link to="/vende-con-nosotros">{t('Vende con nosotros')}</Link>
           </nav>
           <div className="footer__social">
             <a href={CONTACT.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /></a>
@@ -25,11 +26,11 @@ export default function Footer() {
           <span><MapPin size={14} /> {CONTACT.address}</span>
         </div>
         <div className="footer__bottom">
-          <span>© 2026 Martínez Home Inmobiliaria. Todos los derechos reservados.</span>
-          <span><Link to="/terminos">Términos y condiciones</Link> | <Link to="/privacidad">Política de privacidad</Link></span>
+          <span>© 2026 Martínez Home Inmobiliaria. {t('Todos los derechos reservados.')}</span>
+          <span><Link to="/terminos">{t('Términos y condiciones')}</Link> | <Link to="/privacidad">{t('Política de privacidad')}</Link></span>
         </div>
         <div className="footer__credit">
-          <span>Diseño y desarrollo web por</span>
+          <span>{t('Diseño y desarrollo web por')}</span>
           <a href="https://www.nexixtechstudio.com" target="_blank" rel="noopener">
             NEXIX Tech Studio <ArrowUpRight size={13} />
           </a>

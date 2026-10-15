@@ -12,6 +12,7 @@ import TeamStrip from '../sections/TeamStrip';
 import Social from '../sections/Social';
 import Contact from '../sections/Contact';
 import { useSeo } from '../useTitle';
+import { t } from '../i18n';
 
 export default function Home() {
   const [video, setVideo] = useState<string | null>(null);
@@ -51,7 +52,7 @@ export default function Home() {
               exit={{ scale: 0.9, y: 30 }}
               transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
             />
-            <button className="lightbox__close" aria-label="Cerrar video"><X size={22} /></button>
+            <button className="lightbox__close" aria-label={t('Cerrar video')}><X size={22} /></button>
           </motion.div>
         )}
       </AnimatePresence>

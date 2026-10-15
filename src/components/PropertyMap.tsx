@@ -6,6 +6,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { img, type Property } from '../data/properties';
 import { formatPrice, useStore } from '../store';
+import { t } from '../i18n';
+import { localize } from '../data/localize';
 
 interface Props {
   properties: Property[];
@@ -51,7 +53,7 @@ export default function PropertyMap({ properties, single, height = 560 }: Props)
     }
 
     properties.forEach((p) => {
-      const label = formatPrice(p.price, currency, true).replace('Desde ', '').replace('Precio a consultar', 'Consultar');
+      const label = p.price ? formatPrice({ ...p.price, from: false }, currency, true) : t('Consultar');
       const marker = L.marker(p.coords, {
         icon: L.divIcon({ className: '', html: `<span class="map-pin">${label}</span>`, iconSize: [0, 0], iconAnchor: [0, 0] }),
         riseOnHover: true,
@@ -77,19 +79,19 @@ export default function PropertyMap({ properties, single, height = 560 }: Props)
               exit={{ opacity: 0, y: 20, scale: 0.96 }}
               transition={{ duration: 0.3 }}
             >
-              <button className="map__close" onClick={() => setActive(null)} aria-label="Cerrar"><X size={16} /></button>
+              <button className="map__close" onClick={() => setActive(null)} aria-label={t('Cerrar')}><X size={16} /></button>
               <img src={img(active, 1, 'sm')} alt="" />
               <div>
-                <small>{active.zone}</small>
-                <strong>{active.title}</strong>
+                <small>{localize(active).zone}</small>
+                <strong>{localize(active).title}</strong>
                 <span>{formatPrice(active.price, currency)}</span>
-                <Link to={`/propiedades/${active.slug}`}>Ver propiedad <ArrowUpRight size={14} /></Link>
+                <Link to={`/propiedades/${active.slug}`}>{t('Ver propiedad')} <ArrowUpRight size={14} /></Link>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       )}
-      {single && <span className="map__note">Ubicación aproximada</span>}
+      {single && <span className="map__note">{t('Ubicación aproximada')}</span>}
     </div>
   );
 }

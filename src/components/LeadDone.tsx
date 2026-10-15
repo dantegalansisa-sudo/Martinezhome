@@ -3,6 +3,7 @@ import { AlertCircle, Check, MailCheck } from 'lucide-react';
 import { WhatsAppIcon } from './BrandIcons';
 import { waLink } from '../data/site';
 import type { LeadResult } from '../lib/lead';
+import { t } from '../i18n';
 
 interface Props {
   result: LeadResult;
@@ -14,7 +15,7 @@ interface Props {
 }
 
 /** Shared "request received" screen for the contact, visit and sell forms. */
-export default function LeadDone({ result, name, email, whatsappText, onAgain, againLabel = 'Enviar otra solicitud' }: Props) {
+export default function LeadDone({ result, name, email, whatsappText, onAgain, againLabel }: Props) {
   const first = name.split(' ')[0];
   const failed = result.via === 'failed';
   const Icon = failed ? AlertCircle : result.via === 'email' ? MailCheck : Check;
@@ -32,32 +33,32 @@ export default function LeadDone({ result, name, email, whatsappText, onAgain, a
 
       {result.via === 'email' && (
         <>
-          <h3>¡Gracias, {first || 'por escribirnos'}!</h3>
+          <h3>{first ? t('¡Gracias, {name}!', { name: first }) : t('¡Gracias por escribirnos!')}</h3>
           <p>
-            Recibimos tu solicitud y un asesor te contactará en menos de 24 horas.
-            {result.confirmation && email && <> Te enviamos un correo de confirmación a <strong>{email}</strong>.</>}
+            {t('Recibimos tu solicitud y un asesor te contactará en menos de 24 horas.')}
+            {result.confirmation && email && <> {t('Te enviamos un correo de confirmación a')} <strong>{email}</strong>.</>}
           </p>
         </>
       )}
       {result.via === 'whatsapp' && (
         <>
-          <h3>¡Gracias, {first || 'por escribirnos'}!</h3>
-          <p>Abrimos WhatsApp con tu solicitud lista para enviar. Si no se abrió, usa el botón de abajo.</p>
+          <h3>{first ? t('¡Gracias, {name}!', { name: first }) : t('¡Gracias por escribirnos!')}</h3>
+          <p>{t('Abrimos WhatsApp con tu solicitud lista para enviar. Si no se abrió, usa el botón de abajo.')}</p>
         </>
       )}
       {failed && (
         <>
-          <h3>No pudimos enviar tu solicitud</h3>
-          <p>Hubo un problema de conexión. Envíanosla por WhatsApp y te respondemos de inmediato.</p>
+          <h3>{t('No pudimos enviar tu solicitud')}</h3>
+          <p>{t('Hubo un problema de conexión. Envíanosla por WhatsApp y te respondemos de inmediato.')}</p>
         </>
       )}
 
       {(result.via !== 'email' || failed) && (
         <a className="btn-wa" href={waLink(whatsappText)} target="_blank" rel="noopener noreferrer">
-          <WhatsAppIcon size={17} /> {failed ? 'Enviar por WhatsApp' : 'Abrir WhatsApp'}
+          <WhatsAppIcon size={17} /> {failed ? t('Enviar por WhatsApp') : t('Abrir WhatsApp')}
         </a>
       )}
-      {onAgain && <button type="button" className="cform__again" onClick={onAgain}>{againLabel}</button>}
+      {onAgain && <button type="button" className="cform__again" onClick={onAgain}>{againLabel ?? t('Enviar otra solicitud')}</button>}
     </div>
   );
 }

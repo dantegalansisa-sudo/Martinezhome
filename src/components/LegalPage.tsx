@@ -5,6 +5,7 @@ import { ArrowRight, Printer } from 'lucide-react';
 import PageHeader from './PageHeader';
 import { CONTACT, waLink } from '../data/site';
 import { EASINGS } from '../easings';
+import { t } from '../i18n';
 
 export interface LegalSection {
   id: string;
@@ -41,13 +42,13 @@ export default function LegalPage({ eyebrow, title, lead, updated, sections, oth
   return (
     <>
       <PageHeader eyebrow={eyebrow} title={title} lead={lead} crumbs={[{ label: title }]}>
-        <p className="legal__updated">Última actualización: {updated}</p>
+        <p className="legal__updated">{t('Última actualización:')} {updated}</p>
       </PageHeader>
 
       <section className="legal">
         <div className="container legal__grid">
-          <aside className="legal__toc" aria-label="Contenido">
-            <p className="filters__label">Contenido</p>
+          <aside className="legal__toc" aria-label={t('Contenido')}>
+            <p className="filters__label">{t('Contenido')}</p>
             <ol>
               {sections.map((s, i) => (
                 <li key={s.id}>
@@ -57,7 +58,7 @@ export default function LegalPage({ eyebrow, title, lead, updated, sections, oth
                 </li>
               ))}
             </ol>
-            <button className="legal__print" onClick={() => window.print()}><Printer size={14} /> Imprimir</button>
+            <button className="legal__print" onClick={() => window.print()}><Printer size={14} /> {t('Imprimir')}</button>
           </aside>
 
           <article className="legal__body">
@@ -78,15 +79,15 @@ export default function LegalPage({ eyebrow, title, lead, updated, sections, oth
 
             <div className="legal__contact">
               <div>
-                <strong>¿Tienes preguntas sobre este documento?</strong>
-                <p>Escríbenos al {CONTACT.phone} o visítanos en {CONTACT.address}.</p>
+                <strong>{t('¿Tienes preguntas sobre este documento?')}</strong>
+                <p>{t('Escríbenos al {p} o visítanos en {a}.', { p: CONTACT.phone, a: CONTACT.address })}</p>
               </div>
-              <a className="btn-dark" href={waLink(`Hola Martínez Home, tengo una consulta sobre: ${title}.`)} target="_blank" rel="noopener noreferrer">
-                Escríbenos <span className="btn-dark__icon"><ArrowRight size={15} /></span>
+              <a className="btn-dark" href={waLink(t('Hola Martínez Home, tengo una consulta sobre: {d}.', { d: title }))} target="_blank" rel="noopener noreferrer">
+                {t('Escríbenos')} <span className="btn-dark__icon"><ArrowRight size={15} /></span>
               </a>
             </div>
             <p className="legal__other">
-              Consulta también {other.prefix} <Link to={other.to}>{other.label}</Link>.
+              {t('Consulta también')} {other.prefix} <Link to={other.to}>{other.label}</Link>.
             </p>
           </article>
         </div>
