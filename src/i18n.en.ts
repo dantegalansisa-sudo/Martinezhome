@@ -471,4 +471,25 @@ export const EN: Record<string, string> = {
   'Escríbenos al {p} o visítanos en {a}.': 'Message us at {p} or visit us at {a}.',
   'Hola Martínez Home, tengo una consulta sobre: {d}.': 'Hi Martínez Home, I have a question about: {d}.',
   'Consulta también': 'See also',
+
+  // Legal support
+  'Respaldo legal': 'Legal backing',
+  'Una inmobiliaria\ncon abogada al frente': 'A real estate agency\nled by a lawyer',
+  'La Lic. Vanessa Martínez es abogada. Por eso, en Martínez Home la asesoría legal no es un servicio aparte: va de la mano con cada compra, venta o inversión.':
+    "Lic. Vanessa Martínez is a lawyer. That's why at Martínez Home legal advice isn't an extra service: it comes with every purchase, sale or investment.",
+  'Ideal si vives fuera del país o inviertes por primera vez en República Dominicana.': "Ideal if you live abroad or are investing in the Dominican Republic for the first time.",
+  'Hola Martínez Home, me gustaría recibir asesoría legal sobre una propiedad.': "Hi Martínez Home, I'd like legal advice about a property.",
+  'Consulta legal por WhatsApp': 'Legal consultation on WhatsApp',
+  'Revisión de títulos': 'Title review',
+  'Verificamos el certificado de título y la situación jurídica del inmueble antes de que reserves.': "We verify the certificate of title and the property's legal status before you make a reservation.",
+  'Contratos claros': 'Clear contracts',
+  'Redactamos y revisamos promesas de compraventa y contratos de alquiler que protegen tus intereses.': 'We draft and review purchase agreements and lease contracts that protect your interests.',
+  'Debida diligencia': 'Due diligence',
+  'Confirmamos que no existan cargas ni gravámenes y que los impuestos estén al día.': 'We confirm there are no liens or encumbrances and that taxes are paid up to date.',
+  'Cierre y traspaso': 'Closing and transfer',
+  'Te acompañamos en la firma y el traspaso hasta que la propiedad quede a tu nombre.': 'We support you through signing and the title transfer until the property is in your name.',
+  'Abogada · CEO de Martínez Home RD': 'Lawyer · CEO of Martínez Home RD',
+  'Asesoría legal': 'Legal advice',
+  'Recorrido en video': 'Video tour',
+  'Penthouse con jacuzzi · Av. Ecológica': 'Penthouse with jacuzzi · Av. Ecológica',
 };

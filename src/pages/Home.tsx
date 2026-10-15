@@ -8,6 +8,7 @@ import TrustBar from '../sections/TrustBar';
 import ExploreZones from '../sections/ExploreZones';
 import HowItWorks from '../sections/HowItWorks';
 import Founder from '../sections/Founder';
+import LegalSupport from '../sections/LegalSupport';
 import TeamStrip from '../sections/TeamStrip';
 import Social from '../sections/Social';
 import Contact from '../sections/Contact';
@@ -33,6 +34,7 @@ export default function Home() {
       <HowItWorks />
       <Approach />
       <Founder />
+      <LegalSupport />
       <TeamStrip />
       <Social onOpen={setVideo} />
       <Contact />

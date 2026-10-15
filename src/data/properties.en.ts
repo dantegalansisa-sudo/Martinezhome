@@ -292,4 +292,44 @@ export const LISTINGS_EN: Record<string, ListingCopy> = {
     ],
     tags: ['Negotiable', 'Gated community'],
   },
+  'viviendas-exclusivas-prado-oriental': {
+    title: 'Exclusive project of only 4 homes',
+    summary: '47.56 m² private rooftop terrace with pre-installation for a gas BBQ and a jacuzzi.',
+    description:
+      'Live the way you always dreamed in a modern project of only four homes. Premium finishes, plaster ceilings, crown moldings and a spectacular private rooftop terrace to enjoy with your family.',
+    highlights: ['Only 4 units', '47.56 m² rooftop terrace', 'Premium finishes', 'Flexible payment plan'],
+    sections: [
+      { title: 'Layout', items: ['3 spacious bedrooms', 'Primary bedroom with walk-in closet and private bath', 'Living room, dining room and family room', 'Modern kitchen', 'Laundry area', '3.5 bathrooms', "Maid's room with bathroom", 'EV charging outlet'] },
+      { title: 'Areas', items: ['252.56 m² in total', '205.97 m² built', '47.56 m² terrace', '8 m² patio', '110 m² lot'] },
+      { title: 'Premium finishes', items: ['Imported porcelain and ceramic tile', 'Modern façade', 'Crown moldings and plaster ceilings', 'Decorative fascia in living, dining and family room', 'Independent cistern and water pump'] },
+      { title: 'Rooftop terrace', items: ['Pre-installation for a gas BBQ', 'Space for a jacuzzi', '1 bathroom', 'Porcelain tile finish'] },
+      { title: 'Pre-installations', items: ['Air conditioning', 'Power inverter', 'Security cameras', 'Gas', 'Water heater'] },
+    ],
+    payment: [
+      { label: 'Reservation', value: 'US$3,000' },
+      { label: 'Contract signing', value: 'Within 15 days' },
+      { label: '10% down payment', value: 'At contract signing' },
+      { label: '20% down payment', value: 'Monthly or bimonthly installments' },
+      { label: 'Remaining 70%', value: 'On delivery (bank financing or direct payment)' },
+    ],
+    tags: ['Only 4 units'],
+  },
+  'penthouse-avenida-ecologica': {
+    title: 'Penthouse with jacuzzi on Av. Ecológica',
+    area: '174 m² + 19 m² terrace',
+    summary: 'Ready to move in: 3 bedrooms with en-suite baths, jacuzzi included, private terrace and a social area with plunge pool and BBQ.',
+    description:
+      'A move-in-ready penthouse on Avenida Ecológica, with 174 m² of built area and a 19 m² private terrace. Three bedrooms, each with its own bathroom, a family room, a jacuzzi included and a rooftop social area with a plunge pool, BBQ and terrace.',
+    highlights: ['Ready to move in', 'Jacuzzi included', '19 m² private terrace', '2 covered parking spaces'],
+    sections: [
+      { title: 'Layout', items: ['3 bedrooms, each with its own bathroom', 'Family room', 'Living and dining room', 'Modular kitchen', "Maid's room", 'Laundry area', 'Jacuzzi included'] },
+      { title: 'Amenities', items: ['Social area with plunge pool', 'BBQ area', 'Rooftop terrace', 'Access control', 'Security cameras', '2 covered parking spaces'] },
+    ],
+    payment: [
+      { label: 'Reservation', value: 'US$2,000' },
+      { label: 'Down payment', value: '20%' },
+      { label: 'Remaining balance', value: 'On delivery (bank financing or direct payment)' },
+    ],
+    tags: ['Jacuzzi included'],
+  },
 };

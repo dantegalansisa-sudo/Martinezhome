@@ -60,6 +60,8 @@ export interface Property {
   sold?: boolean;
   /** CSS object-position for the cover photo, when the subject isn't centred */
   coverFocus?: string;
+  /** Vertical walkthrough video (poster: same path with .jpg) */
+  video?: string;
   agent: string;
 }
 
@@ -606,6 +608,72 @@ const P: Property[] = [
     images: 8,
     render: true,
     agent: 'cristhian-almanzar',
+  },
+  {
+    id: 9,
+    slug: 'viviendas-exclusivas-prado-oriental',
+    title: 'Proyecto exclusivo de solo 4 viviendas',
+    kind: 'Casa',
+    operation: 'venta',
+    status: 'entrega',
+    zone: 'Prado Oriental',
+    city: 'Santo Domingo Este',
+    coords: [18.4927, -69.8031],
+    price: { amount: 255000, currency: 'USD' },
+    beds: '3', bedsMin: 3, baths: '3.5', area: '252.56 m²', lot: '110 m²',
+    summary: 'Terraza privada en el techo de 47.56 m² con preinstalación para BBQ y jacuzzi.',
+    description:
+      'Vive como siempre lo soñaste en un proyecto de solo cuatro viviendas de arquitectura moderna. Terminaciones premium, techos en yeso, cornisas y una espectacular terraza privada en el techo para disfrutar en familia.',
+    highlights: ['Solo 4 unidades', 'Terraza en techo de 47.56 m²', 'Terminaciones premium', 'Plan de pago flexible'],
+    sections: [
+      { title: 'Distribución', items: ['3 amplias habitaciones', 'Principal con walk-in closet y baño privado', 'Sala, comedor y family room', 'Cocina moderna', 'Área de lavado', '3.5 baños', 'Habitación de servicio con baño', 'Salida para motores eléctricos'] },
+      { title: 'Metrajes', items: ['252.56 m² en total', '205.97 m² de construcción', '47.56 m² de terraza', '8 m² de patio', '110 m² de solar'] },
+      { title: 'Terminaciones premium', items: ['Porcelanato y cerámica importada', 'Fachada moderna', 'Cornisas y techos en yeso', 'Decoración con facia en sala, comedor y family room', 'Cisterna y bomba de agua independiente'] },
+      { title: 'Terraza en el techo', items: ['Preinstalación para BBQ de gas', 'Espacio para jacuzzi', '1 baño', 'Acabado en porcelanato'] },
+      { title: 'Preinstalaciones', items: ['Aire acondicionado', 'Inversor', 'Cámaras de seguridad', 'Gas', 'Calentador de agua'] },
+    ],
+    payment: [
+      { label: 'Reserva', value: 'US$3,000' },
+      { label: 'Firma del contrato', value: 'A los 15 días' },
+      { label: '10% inicial', value: 'A la firma del contrato' },
+      { label: '20% inicial', value: 'Cuotas mensuales o bimensuales durante la construcción' },
+      { label: '70% restante', value: 'Contra entrega (financiamiento bancario o pago directo)' },
+    ],
+    tags: ['Solo 4 unidades'],
+    images: 8,
+    featured: true,
+    agent: 'radaisa-martinez',
+  },
+  {
+    id: 25,
+    slug: 'penthouse-avenida-ecologica',
+    title: 'Penthouse con jacuzzi en Av. Ecológica',
+    kind: 'Penthouse',
+    operation: 'venta',
+    status: 'entrega',
+    zone: 'Av. Ecológica',
+    city: 'Santo Domingo Este',
+    coords: [18.5061, -69.8019],
+    price: { amount: 264000, currency: 'USD' },
+    beds: '3', bedsMin: 3, baths: '3', area: '174 m² + 19 m² de terraza', parking: '2',
+    summary: 'Entrega inmediata: 3 habitaciones con baño, jacuzzi incluido, terraza privada y área social con picuzzi y BBQ.',
+    description:
+      'Un penthouse de entrega inmediata en la Avenida Ecológica, con 174 m² de construcción y 19 m² de terraza privada. Tres habitaciones, cada una con su baño, family room, jacuzzi incluido y un área social en la azotea con picuzzi, BBQ y terraza.',
+    highlights: ['Entrega inmediata', 'Jacuzzi incluido', '19 m² de terraza privada', '2 parqueos techados'],
+    sections: [
+      { title: 'Distribución', items: ['3 habitaciones, cada una con su baño', 'Family room', 'Sala y comedor', 'Cocina modular', 'Habitación de servicio', 'Área de lavado', 'Jacuzzi incluido'] },
+      { title: 'Amenidades', items: ['Área social con picuzzi', 'Área de BBQ', 'Terraza en la azotea', 'Control de acceso', 'Cámaras de seguridad', '2 parqueos techados'] },
+    ],
+    payment: [
+      { label: 'Reserva', value: 'US$2,000' },
+      { label: 'Inicial', value: '20%' },
+      { label: 'Restante', value: 'Contra entrega (financiamiento bancario o pago directo)' },
+    ],
+    tags: ['Jacuzzi incluido'],
+    images: 7,
+    video: '/videos/penthouse-avenida-ecologica.mp4',
+    featured: true,
+    agent: 'joel-polanco',
   },
 ];
 

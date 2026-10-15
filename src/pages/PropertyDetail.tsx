@@ -128,6 +128,15 @@ export default function PropertyDetail() {
               </ul>
             </motion.section>
 
+            {p.video && (
+              <motion.section className="detail__block" {...fade()}>
+                <h2 className="detail__h2">{t('Recorrido en video')}</h2>
+                <div className="detail__video">
+                  <video src={p.video} poster={p.video.replace(/\.mp4$/, '.jpg')} controls playsInline preload="none" />
+                </div>
+              </motion.section>
+            )}
+
             {p.units && (
               <motion.section className="detail__block" {...fade()}>
                 <h2 className="detail__h2">{t('Unidades disponibles')}</h2>

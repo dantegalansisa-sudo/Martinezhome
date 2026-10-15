@@ -27,6 +27,7 @@ export const NAV: { label: string; to: string }[] = [
 ];
 
 export const REELS = [
+  { src: '/videos/penthouse-avenida-ecologica.mp4', poster: '/videos/penthouse-avenida-ecologica.jpg', views: '5.3K', title: 'Penthouse con jacuzzi · Av. Ecológica' },
   { src: '/videos/nuevo-recorrido-2.mp4', poster: '/videos/nuevo-recorrido-2.jpg', views: '7.6K', title: 'Casa moderna de 3 niveles · Recorrido' },
   { src: '/videos/nuevo-recorrido.mp4', poster: '/videos/nuevo-recorrido.jpg', views: '9.8K', title: 'Recorrido: casa con fachada en piedra' },
   { src: '/videos/casa-sde.mp4', poster: '/videos/casa-sde.jpg', views: '12.4K', title: 'Casa 210 m² · ¡Casi lista para entrega!' },

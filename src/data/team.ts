@@ -22,7 +22,7 @@ export const TEAM: Member[] = [
   {
     id: 'vanessa-martinez', name: 'Lic. Vanessa Martínez', role: 'CEO & Fundadora', photo: '/team/vanessa-martinez.webp',
     phone: '829-797-2079', email: 'Vanessam.martinezp@gmail.com', lead: true,
-    years: 15, specialties: ['Inversión', 'Proyectos en planos', 'Negociación'],
+    years: 15, specialties: ['Asesoría legal', 'Inversión', 'Proyectos en planos'],
     quote: 'Mi compromiso es acompañarte a encontrar el lugar donde realmente quieras estar.',
   },
   {

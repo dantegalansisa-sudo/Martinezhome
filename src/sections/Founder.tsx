@@ -23,6 +23,7 @@ export default function Founder() {
             <ul className="founder__values">
               <li>{t('Confianza')}</li>
               <li>{t('Inversiones')}</li>
+              <li>{t('Asesoría legal')}</li>
               <li>{t('Soluciones')}</li>
             </ul>
           </motion.div>
@@ -42,7 +43,7 @@ export default function Founder() {
             >
               <motion.img src="/images/ceo-vanessa.webp" alt={t('Lic. Vanessa Martínez, CEO y fundadora de Martínez Home RD')} style={{ y, scale: 1.12 }} />
             </motion.div>
-            <span className="founder__badge"><BadgeCheck size={16} /> CEO · Martínez Home RD</span>
+            <span className="founder__badge"><BadgeCheck size={16} /> {t('Abogada · CEO de Martínez Home RD')}</span>
           </motion.div>
 
           <motion.figure
