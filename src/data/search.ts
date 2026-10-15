@@ -1,4 +1,4 @@
-import { CITIES, PROPERTIES, ZONES, type Property } from './properties';
+import { AVAILABLE, CITIES, ZONES, type Property } from './properties';
 import { priceUSD } from '../store';
 
 export const OPERATIONS = ['Todos', 'Venta', 'Alquiler', 'Proyectos'] as const;
@@ -7,7 +7,7 @@ export type OperationFilter = (typeof OPERATIONS)[number];
 export const ANY_LOCATION = 'Todas las zonas';
 export const ANY_TYPE = 'Todos los tipos';
 export const LOCATIONS = [ANY_LOCATION, ...CITIES, ...ZONES.filter((z) => !CITIES.includes(z))];
-export const TYPES = [ANY_TYPE, 'Casa', 'Apartamento', 'Villa'];
+export const TYPES = [ANY_TYPE, 'Casa', 'Apartamento', 'Penthouse', 'Villa'];
 
 /** Slider bounds in USD (RD$ listings are converted with the reference rate). The top value means "no limit". */
 export const BUDGET_MIN = 50000;
@@ -51,14 +51,15 @@ export function matches(p: Property, s: SearchState) {
     const [lo, hi] = s.budget;
     const usd = priceUSD(p);
     // Listings without a published price can't be placed in a budget range.
-    if (usd === undefined) return false;
+    // Rents are monthly amounts, and listings without a price can't be placed in a purchase-budget range.
+    if (usd === undefined || p.price?.monthly) return false;
     if (usd < lo) return false;
     if (hi < BUDGET_MAX && usd > hi) return false;
   }
   return true;
 }
 
-export const search = (s: SearchState) => PROPERTIES.filter((p) => matches(p, s));
+export const search = (s: SearchState) => AVAILABLE.filter((p) => matches(p, s));
 
 /** Same search expressed as catalog query params. */
 export function toQuery(s: SearchState) {
@@ -79,9 +80,9 @@ export function toQuery(s: SearchState) {
 export function histogram(buckets = 18) {
   const size = (BUDGET_MAX - BUDGET_MIN) / buckets;
   const counts = Array.from({ length: buckets }, () => 0);
-  PROPERTIES.forEach((p) => {
+  AVAILABLE.forEach((p) => {
     const usd = priceUSD(p);
-    if (usd === undefined) return;
+    if (usd === undefined || p.price?.monthly) return;
     const i = Math.min(Math.max(Math.floor((usd - BUDGET_MIN) / size), 0), buckets - 1);
     counts[i]++;
   });

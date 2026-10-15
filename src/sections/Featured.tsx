@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import RevealText from '../components/RevealText';
 import PropertyCard from '../components/PropertyCard';
-import { PROPERTIES, type Property } from '../data/properties';
+import { AVAILABLE, type Property } from '../data/properties';
 import { useIsMobile } from '../useMedia';
 
 const TABS: { label: string; match: (p: Property) => boolean }[] = [
@@ -61,7 +61,7 @@ export default function Featured() {
   const [tab, setTab] = useState(0);
   const mobile = useIsMobile();
   const track = useRef<HTMLDivElement>(null);
-  const list = PROPERTIES.filter(TABS[tab].match).slice(0, 8);
+  const list = AVAILABLE.filter(TABS[tab].match).slice(0, 8);
   useFocusCarousel(track, mobile, tab);
 
   const slide = (dir: number) => {
@@ -89,7 +89,7 @@ export default function Featured() {
               ))}
             </div>
             <Link to="/propiedades" className="link-arrow">
-              Ver las {PROPERTIES.length} propiedades <ArrowUpRight size={16} />
+              Ver las {AVAILABLE.length} propiedades <ArrowUpRight size={16} />
             </Link>
           </div>
         </div>

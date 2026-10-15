@@ -188,8 +188,9 @@
 .mosaic__render { position: absolute; left: 16px; bottom: 16px; padding: 6px 12px; border-radius: 999px; background: rgba(13,17,24,.6); color: #fff; font-size: 11.5px; font-weight: 600; backdrop-filter: blur(6px); }
 
 .viewer { position: fixed; inset: 0; z-index: 400; background: rgba(8,11,17,.96); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 70px 20px 120px; }
-.viewer__stage { position: relative; width: 100%; height: 100%; display: grid; place-items: center; overflow: hidden; }
-.viewer__stage img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; cursor: grab; user-select: none; -webkit-user-drag: none; }
+/* The stage takes the space left by the padding; the photo fills it with `contain`, so the whole picture is always visible. */
+.viewer__stage { position: relative; flex: 1; min-height: 0; width: 100%; overflow: hidden; }
+.viewer__stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; cursor: grab; user-select: none; -webkit-user-drag: none; }
 .viewer__close { position: absolute; top: 18px; right: 18px; width: 48px; height: 48px; border-radius: 50%; background: #fff; color: var(--ink); display: grid; place-items: center; z-index: 2; }
 .viewer__count { position: absolute; top: 30px; left: 24px; color: rgba(255,255,255,.75); font-size: 14px; font-weight: 600; }
 .viewer__nav { position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,.12); color: #fff; display: grid; place-items: center; z-index: 2; transition: background .3s; }

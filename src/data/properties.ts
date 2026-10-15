@@ -10,6 +10,8 @@ export interface Price {
   from?: boolean;
   /** Upper bound of a price range */
   to?: number;
+  /** Rent: amount is per month */
+  monthly?: boolean;
 }
 
 export interface Unit {
@@ -53,6 +55,10 @@ export interface Property {
   images: number;
   render?: boolean;
   featured?: boolean;
+  /** Sold listings stay visible as social proof but drop out of searches */
+  sold?: boolean;
+  /** CSS object-position for the cover photo, when the subject isn't centred */
+  coverFocus?: string;
   agent: string;
 }
 
@@ -253,41 +259,6 @@ const P: Property[] = [
     agent: 'joel-polanco',
   },
   {
-    id: 9,
-    slug: 'viviendas-exclusivas-prado-oriental',
-    title: 'Proyecto exclusivo de solo 4 viviendas',
-    kind: 'Casa',
-    operation: 'venta',
-    status: 'planos',
-    zone: 'Prado Oriental',
-    city: 'Santo Domingo Este',
-    coords: [18.4927, -69.8031],
-    price: { amount: 255000, currency: 'USD' },
-    beds: '3', bedsMin: 3, baths: '3.5', area: '252.56 m²', lot: '110 m²',
-    summary: 'Terraza privada en el techo de 47.56 m² con preinstalación para BBQ y jacuzzi.',
-    description:
-      'Vive como siempre lo soñaste en un proyecto de solo cuatro viviendas. Terminaciones premium, techos en yeso, cornisas y una espectacular terraza privada en el techo para disfrutar en familia.',
-    highlights: ['Solo 4 unidades', 'Terraza en techo de 47.56 m²', 'Terminaciones premium', 'Plan de pago flexible'],
-    sections: [
-      { title: 'Distribución', items: ['3 amplias habitaciones', 'Principal con walk-in closet y baño privado', 'Sala, comedor y family room', 'Cocina moderna', 'Área de lavado', '3.5 baños', 'Habitación de servicio con baño', 'Salida para motores eléctricos'] },
-      { title: 'Metrajes', items: ['252.56 m² en total', '205.97 m² de construcción', '47.56 m² de terraza', '8 m² de patio', '110 m² de solar'] },
-      { title: 'Terminaciones premium', items: ['Porcelanato y cerámica importada', 'Fachada moderna', 'Cornisas y techos en yeso', 'Decoración con facia en sala, comedor y family room', 'Cisterna y bomba de agua independiente'] },
-      { title: 'Terraza en el techo', items: ['Preinstalación para BBQ de gas', 'Espacio para jacuzzi', '1 baño', 'Acabado en porcelanato'] },
-      { title: 'Preinstalaciones', items: ['Aire acondicionado', 'Inversor', 'Cámaras de seguridad', 'Gas', 'Calentador de agua'] },
-    ],
-    payment: [
-      { label: 'Reserva', value: 'US$3,000' },
-      { label: 'Firma del contrato', value: 'A los 15 días' },
-      { label: '10% inicial', value: 'A la firma del contrato' },
-      { label: '20% inicial', value: 'Cuotas mensuales o bimensuales durante la construcción' },
-      { label: '70% restante', value: 'Contra entrega (financiamiento bancario o pago directo)' },
-    ],
-    tags: ['Solo 4 unidades'],
-    images: 7,
-    featured: true,
-    agent: 'radaisa-martinez',
-  },
-  {
     id: 11,
     slug: 'ultimas-unidades-prado-oriental',
     title: 'Apartamento y penthouse — últimas unidades',
@@ -363,7 +334,7 @@ const P: Property[] = [
     title: 'Casa moderna con piscina en Ciudad Jardín',
     kind: 'Casa',
     operation: 'venta',
-    status: 'entrega',
+    status: 'planos',
     zone: 'Residencial Ciudad Jardín',
     city: 'Santo Domingo Este',
     coords: [18.4655, -69.7262],
@@ -371,7 +342,7 @@ const P: Property[] = [
     beds: '4', bedsMin: 4, baths: '4.5', area: '270 m²', lot: '181 m²', parking: '2',
     summary: 'Piscina privada, aires incluidos y residencial con casa club, a 7 min del aeropuerto.',
     description:
-      'Una casa amplia, moderna y lista para disfrutar, dentro de un residencial con seguridad 24/7, casa club con piscina, restaurante y hasta una cueva natural. A solo 7 minutos del Aeropuerto Internacional de Las Américas.',
+      'Un proyecto de casa amplia y moderna, en planos, dentro de un residencial con seguridad 24/7, casa club con piscina, restaurante y hasta una cueva natural. A solo 7 minutos del Aeropuerto Internacional de Las Américas.',
     highlights: ['Piscina privada', 'Aires acondicionados incluidos', 'Casa club con piscina', 'Seguridad 24/7'],
     sections: [
       { title: 'La casa', items: ['4 habitaciones', '4 baños + baño de visitas', 'Piscina privada', 'Cocina fría y cocina caliente', 'Sala de estar familiar', 'Cuarto de servicio', 'Terraza destechada', 'Marquesina doble'] },
@@ -381,6 +352,7 @@ const P: Property[] = [
     ],
     tags: ['Con piscina', 'Alta demanda'],
     images: 7,
+    render: true,
     featured: true,
     agent: 'alba-peguero',
   },
@@ -476,7 +448,7 @@ const P: Property[] = [
     ],
     tags: ['Con piscina', 'Lujo'],
     images: 8,
-    featured: true,
+    sold: true,
     agent: 'cristhian-almanzar',
   },
   {
@@ -561,9 +533,84 @@ const P: Property[] = [
     images: 7,
     agent: 'joel-polanco',
   },
+  {
+    id: 22,
+    slug: 'penthouse-alquiler-avenida-espana',
+    title: 'Penthouse en alquiler con terraza privada',
+    kind: 'Penthouse',
+    operation: 'alquiler',
+    zone: 'Próximo a la Av. España',
+    city: 'Santo Domingo Este',
+    coords: [18.4782, -69.8705],
+    price: { amount: 50000, currency: 'DOP', monthly: true },
+    beds: '3', bedsMin: 3, area: '256 m²', parking: '2',
+    summary: 'Amplio penthouse de 256 m² con terraza privada techada, baño en la terraza y 2 parqueos techados.',
+    description:
+      'Una propiedad amplia y cómoda, ideal para quienes buscan disfrutar de una terraza privada y una excelente ubicación próxima a la Avenida España, con vistas abiertas de la ciudad.',
+    highlights: ['256 m²', 'Terraza privada techada', 'Baño en la terraza', '2 parqueos techados'],
+    sections: [
+      { title: 'Distribución', items: ['3 habitaciones', 'Sala y comedor', 'Cocina', 'Área de lavado', 'Habitación de servicio'] },
+      { title: 'Extras', items: ['Terraza privada techada', 'Baño en el área de la terraza', '2 parqueos techados'] },
+    ],
+    tags: ['Terraza privada'],
+    images: 8,
+    agent: 'mary-rivas',
+  },
+  {
+    id: 23,
+    slug: 'apartamento-amueblado-vista-al-mar',
+    title: 'Apartamento amueblado con vista al mar',
+    kind: 'Apartamento',
+    operation: 'alquiler',
+    zone: 'Charles de Gaulle / Autopista San Isidro',
+    city: 'Santo Domingo Este',
+    coords: [18.5034, -69.8112],
+    price: { amount: 45000, currency: 'DOP', monthly: true },
+    beds: '3', bedsMin: 3, parking: 'Sí',
+    summary: 'Totalmente amueblado, con balcón al mar, piscina, ascensor y seguridad 24 horas. Listo para mudarte.',
+    description:
+      'Disfruta de comodidad, seguridad y una hermosa vista al mar en un apartamento completamente amueblado y listo para mudarte, con fácil conexión a la Autopista San Isidro y a pocos minutos de plazas, supermercados y servicios.',
+    highlights: ['Totalmente amueblado', 'Balcón con vista al mar', 'Piscina en la azotea', 'Seguridad 24 horas'],
+    sections: [
+      { title: 'El apartamento', items: ['3 habitaciones', '2 habitaciones con aire acondicionado', 'Sala y comedor', 'Cocina', 'Balcón con vista al mar', 'Totalmente amueblado'] },
+      { title: 'El edificio', items: ['Ascensor', 'Lobby climatizado', 'Seguridad 24 horas', 'Picuzzi', 'Área social', 'Parqueo'] },
+    ],
+    tags: ['Amueblado', 'Vista al mar'],
+    images: 8,
+    coverFocus: '50% 0%',
+    featured: true,
+    agent: 'mary-rivas',
+  },
+  {
+    id: 24,
+    slug: 'casa-gurabo-santiago',
+    title: 'Elegante casa en Gurabo, Santiago',
+    kind: 'Casa',
+    operation: 'venta',
+    zone: 'Urb. Don Fernando, Gurabo',
+    city: 'Santiago',
+    coords: [19.4793, -70.6676],
+    price: { amount: 25000000, currency: 'DOP' },
+    beds: '4', bedsMin: 4, baths: '4.5', area: '300 m²', lot: '302 m²', parking: '4',
+    summary: 'Proyecto cerrado con seguridad 24/7: 4 habitaciones con baño, cocina fría con isla y patio de 100 m². Precio negociable.',
+    description:
+      'Ubicada en la Urbanización Don Fernando, un proyecto cerrado con acceso controlado y seguridad 24/7. Una casa elegante con family room, cocina fría con isla y cocina caliente, terraza integrada a un patio de 100 m² y terminaciones de primera.',
+    highlights: ['Precio negociable', 'Patio de 100 m²', 'Cocina con isla y tope de cuarzo', 'Marquesina para 4 vehículos'],
+    sections: [
+      { title: 'Primer nivel', items: ['Recibidor y sala de estar', 'Amplio comedor', 'Habitación con clóset y baño', 'Cocina fría con isla', 'Cocina caliente', 'Área de lavado', 'Terraza con acceso directo al patio', 'Baño de visitas'] },
+      { title: 'Segundo nivel', items: ['Family room', 'Clóset de ropa blanca', 'Principal con walk-in closet, baño y balcón', '2 habitaciones con walk-in closet y baño'] },
+      { title: 'Equipamiento y terminaciones', items: ['Estufa empotrable, extractor y horno de gas', 'Topes en cuarzo', 'Ventanas P92', 'Sistema de cámaras y alarma', 'Calentador eléctrico', 'Cisterna de 4,000 galones'] },
+    ],
+    tags: ['Negociable', 'Proyecto cerrado'],
+    images: 8,
+    render: true,
+    agent: 'cristhian-almanzar',
+  },
 ];
 
 export const PROPERTIES = P;
+/** Listings that can still be bought or rented. */
+export const AVAILABLE = P.filter((p) => !p.sold);
 
 export const img = (p: Property, n: number, size: 'sm' | 'lg' = 'lg') =>
   `/props/${p.slug}/${String(n).padStart(2, '0')}${size === 'sm' ? '-sm' : ''}.webp`;

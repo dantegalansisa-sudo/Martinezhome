@@ -49,7 +49,7 @@ export default function Gallery({ p }: { p: Property }) {
           <div ref={strip} className="carousel__strip" onScroll={onStrip}>
             {shots.map((n, i) => (
               <button key={n} className="carousel__slide" onClick={() => setOpen(i)} aria-label={`Ver foto ${i + 1}`}>
-                <img src={img(p, n, i === 0 ? 'lg' : 'sm')} alt={`${p.title} — foto ${i + 1}`} loading={i > 1 ? 'lazy' : undefined} />
+                <img src={img(p, n, i === 0 ? 'lg' : 'sm')} alt={`${p.title} — foto ${i + 1}`} loading={i > 1 ? 'lazy' : undefined} style={i === 0 && p.coverFocus ? { objectPosition: p.coverFocus } : undefined} />
               </button>
             ))}
           </div>
@@ -77,7 +77,7 @@ export default function Gallery({ p }: { p: Property }) {
               visible: { opacity: 1, clipPath: 'inset(0 0 0% 0)', transition: { duration: 0.9, ease: EASINGS.premium } },
             }}
           >
-            <img src={img(p, n, i === 0 ? 'lg' : 'sm')} alt={`${p.title} — foto ${i + 1}`} />
+            <img src={img(p, n, i === 0 ? 'lg' : 'sm')} alt={`${p.title} — foto ${i + 1}`} style={i === 0 && p.coverFocus ? { objectPosition: p.coverFocus } : undefined} />
             {i === mosaic.length - 1 && shots.length > mosaic.length && (
               <span className="mosaic__more"><Images size={16} /> +{shots.length - mosaic.length} fotos</span>
             )}

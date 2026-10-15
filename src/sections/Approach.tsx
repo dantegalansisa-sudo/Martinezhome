@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useScroll, useTransform, type MotionValue } fr
 import { Link } from 'react-router-dom';
 import { ArrowRight, BarChart3, Home, KeyRound, UserRound } from 'lucide-react';
 import RevealText from '../components/RevealText';
-import { PROPERTIES } from '../data/properties';
+import { AVAILABLE } from '../data/properties';
 import { EASINGS } from '../easings';
 import { useIsDesktop } from '../useMedia';
 
@@ -98,7 +98,7 @@ function Collage() {
         viewport={{ once: true }}
         transition={{ delay: 0.7, type: 'spring', stiffness: 260, damping: 18 }}
       >
-        <strong>{PROPERTIES.length}</strong>
+        <strong>{AVAILABLE.length}</strong>
         <span>propiedades<br />disponibles</span>
       </motion.div>
 

@@ -7,7 +7,7 @@ import PropertyCard, { FavoriteButton } from '../components/PropertyCard';
 import CurrencySwitch from '../components/CurrencySwitch';
 import RevealText from '../components/RevealText';
 import { WhatsAppIcon } from '../components/BrandIcons';
-import { PROPERTIES, statusLabel, type Property } from '../data/properties';
+import { AVAILABLE, PROPERTIES, statusLabel, type Property } from '../data/properties';
 import { member, telHref, waHref } from '../data/team';
 import { waLink } from '../data/site';
 import { formatPrice, useStore } from '../store';
@@ -24,7 +24,7 @@ const fade = (delay = 0) => ({
 
 /** Same zone first, then same kind, excluding the current listing. */
 const similar = (p: Property) =>
-  PROPERTIES.filter((x) => x.id !== p.id)
+  AVAILABLE.filter((x) => x.id !== p.id)
     .map((x) => ({ x, score: (x.zone === p.zone ? 2 : 0) + (x.kind === p.kind ? 1 : 0) + (x.city === p.city ? 1 : 0) }))
     .sort((a, b) => b.score - a.score)
     .slice(0, 3)
@@ -90,6 +90,17 @@ export default function PropertyDetail() {
           </motion.div>
         </div>
 
+        {p.sold && (
+          <div className="sold-banner" role="status">
+            <div>
+              <strong>Esta propiedad ya fue vendida</strong>
+              <p>Te ayudamos a encontrar una similar en la misma zona y presupuesto.</p>
+            </div>
+            <a className="btn-dark" href={waLink(`Hola, vi que ${p.title} ya se vendió. Busco algo similar en ${p.zone}.`)} target="_blank" rel="noopener noreferrer">
+              Busco algo similar <span className="btn-dark__icon"><ArrowRight size={15} /></span>
+            </a>
+          </div>
+        )}
         <Gallery p={p} />
 
         <div className="detail__grid">
@@ -183,9 +194,11 @@ export default function PropertyDetail() {
                   </div>
                 </div>
               )}
-              <button className="btn-submit" onClick={() => openVisit(p)}>
-                <span>Agendar visita</span> <CalendarCheck size={16} />
-              </button>
+              {!p.sold && (
+                <button className="btn-submit" onClick={() => openVisit(p)}>
+                  <span>Agendar visita</span> <CalendarCheck size={16} />
+                </button>
+              )}
               <a className="btn-wa" href={waLink(`Hola, me interesa: ${p.title} (${p.zone}). ¿Me pueden dar más información?`)} target="_blank" rel="noopener noreferrer">
                 <WhatsAppIcon size={17} /> Escribir por WhatsApp
               </a>
@@ -219,9 +232,13 @@ export default function PropertyDetail() {
       <div className="mobile-bar">
         <div>
           <small>{p.zone}</small>
-          <strong>{formatPrice(p.price, currency, true)}</strong>
+          <strong>{p.sold ? 'Vendida' : formatPrice(p.price, currency, true)}</strong>
         </div>
-        <button className="btn-submit" onClick={() => openVisit(p)}><span>Agendar visita</span></button>
+        {p.sold ? (
+          <Link className="btn-submit" to="/propiedades"><span>Ver disponibles</span></Link>
+        ) : (
+          <button className="btn-submit" onClick={() => openVisit(p)}><span>Agendar visita</span></button>
+        )}
       </div>
     </article>
   );

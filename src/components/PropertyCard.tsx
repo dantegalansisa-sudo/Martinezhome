@@ -38,16 +38,17 @@ export default function PropertyCard({ p, variants = true, inView = false }: { p
   const tags = autoTags(p);
   return (
     <motion.article
-      className="prop"
+      className={`prop${p.sold ? ' prop--sold' : ''}`}
       variants={variants || inView ? cardVariants : undefined}
       {...(inView ? { initial: 'hidden', whileInView: 'visible', viewport: { once: true, amount: 0.2 } } : {})}
       whileHover={{ y: -8, transition: { duration: 0.25 } }}
     >
       <Link to={`/propiedades/${p.slug}`} className="prop__link" aria-label={p.title}>
         <div className="prop__media">
-          <img src={img(p, 1, 'sm')} alt={p.title} loading="lazy" />
-          <span className="prop__badge prop__badge--venta">{p.operation === 'venta' ? 'Venta' : 'Alquiler'}</span>
-          {tags.length > 0 && (
+          <img src={img(p, 1, 'sm')} alt={p.title} loading="lazy" style={p.coverFocus ? { objectPosition: p.coverFocus } : undefined} />
+          <span className={`prop__badge prop__badge--${p.operation}`}>{p.operation === 'venta' ? 'Venta' : 'Alquiler'}</span>
+          {p.sold && <span className="prop__sold">Vendida</span>}
+          {!p.sold && tags.length > 0 && (
             <span className="prop__tags">
               {tags.map((t) => <span key={t} className="prop__tag">{t}</span>)}
             </span>

@@ -1,4 +1,4 @@
-import { PROPERTIES, type Property } from './properties';
+import { AVAILABLE, type Property } from './properties';
 
 export interface ZoneGroup {
   id: string;
@@ -19,4 +19,4 @@ export const ZONE_GROUPS: ZoneGroup[] = [
 ];
 
 export const zoneGroup = (id: string) => ZONE_GROUPS.find((z) => z.id === id);
-export const countIn = (z: ZoneGroup) => PROPERTIES.filter(z.match).length;
+export const countIn = (z: ZoneGroup) => AVAILABLE.filter(z.match).length;

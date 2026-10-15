@@ -88,7 +88,7 @@ export function formatPrice(price: Price | undefined, mode: CurrencyMode, compac
   const target: Currency = mode === 'original' ? price.currency : mode;
   const conv = (n: number) => fromUSD(toUSD(n, price.currency), target);
   const approx = target !== price.currency ? '≈ ' : '';
-  const main = `${approx}${money(conv(price.amount), target, compact)}`;
+  const main = `${approx}${money(conv(price.amount), target, compact)}${price.monthly ? (compact ? '/mes' : ' / mes') : ''}`;
   return price.from ? `Desde ${main}` : main;
 }
 

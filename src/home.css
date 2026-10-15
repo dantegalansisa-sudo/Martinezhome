@@ -286,3 +286,12 @@
 @media (max-width: 760px) {
   .focus-item { transition: transform .18s ease-out; transform-origin: 50% 50%; scroll-snap-stop: always; }
 }
+
+/* ---------- Sold listings ---------- */
+.prop--sold .prop__media img { filter: grayscale(.55) brightness(.92); }
+.prop__sold { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-8deg); padding: 8px 22px; border: 3px solid #fff; border-radius: 10px; background: rgba(225,20,27,.92); color: #fff; font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; box-shadow: 0 12px 30px -10px rgba(0,0,0,.5); }
+.prop__badge--alquiler::before { background: #2f7d5b; }
+.sold-banner { display: flex; align-items: center; gap: 14px; margin: 0 0 24px; padding: 16px 20px; border-radius: 18px; background: rgba(225,20,27,.07); border: 1px solid rgba(225,20,27,.2); }
+.sold-banner strong { color: var(--red); font-size: 15px; }
+.sold-banner p { margin: 2px 0 0; font-size: 14px; color: var(--ink-2); }
+.sold-banner a { margin-left: auto; white-space: nowrap; }

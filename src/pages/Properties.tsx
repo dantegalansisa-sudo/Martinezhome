@@ -15,7 +15,7 @@ import { useSeo } from '../useTitle';
 
 const BUDGET: [number, number] = [50000, 500000];
 const STEP = 5000;
-const KINDS = ['Casa', 'Apartamento', 'Villa'];
+const KINDS = ['Casa', 'Apartamento', 'Penthouse', 'Villa'];
 const SORTS = [
   { value: 'recientes', label: 'Más recientes' },
   { value: 'precio-asc', label: 'Precio: menor a mayor' },
@@ -42,7 +42,7 @@ export default function Properties() {
 
   useSeo({
     title: op === 'alquiler' ? 'Propiedades en alquiler' : estado === 'planos' ? 'Proyectos en planos' : 'Casas y apartamentos en venta',
-    description: `${PROPERTIES.length} propiedades en venta: casas, apartamentos, villas y proyectos en Santo Domingo Este, Distrito Nacional, Punta Cana y Baní. Filtra por zona, presupuesto y habitaciones.`,
+    description: `${PROPERTIES.filter((p) => !p.sold).length} propiedades en venta y alquiler: casas, apartamentos, villas y proyectos en Santo Domingo Este, Distrito Nacional, Punta Cana y Baní. Filtra por zona, presupuesto y habitaciones.`,
   });
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function Properties() {
       if (hab && (p.bedsMin ?? 0) < hab) return false;
       if (budgetActive) {
         const usd = priceUSD(p);
-        if (usd === undefined || usd < min || (max < BUDGET[1] && usd > max)) return false;
+        if (usd === undefined || p.price?.monthly || usd < min || (max < BUDGET[1] && usd > max)) return false;
       }
       return true;
     });
@@ -87,7 +87,8 @@ export default function Properties() {
       };
       out.sort((a, b) => key(a) - key(b) || 0);
     }
-    return out;
+    // Sold listings stay visible as social proof, but always after the available ones.
+    return [...out.filter((p) => !p.sold), ...out.filter((p) => p.sold)];
   }, [op, tipo, zona, area, ciudad, estado, hab, min, max, budgetActive, orden]);
 
   const active = [op, tipo, zona, area?.id, ciudad, estado, hab ? 1 : '', budgetActive ? 1 : ''].filter(Boolean).length;

@@ -1,4 +1,4 @@
-import { PROPERTIES } from './properties';
+import { AVAILABLE } from './properties';
 
 export interface Member {
   id: string;
@@ -44,21 +44,21 @@ export const TEAM: Member[] = [
     quote: 'Escucho lo que buscas y te muestro solo lo que vale tu tiempo.',
   },
   {
+    id: 'mary-rivas', name: 'Mary Rivas', role: 'Asesora inmobiliaria', photo: '/team/mary-rivas.webp', fullBody: true,
+    years: 3, specialties: ['Alquileres', 'Primera vivienda'],
+    quote: 'Te acompaño paso a paso, desde la primera visita hasta la entrega de llaves.',
+  },
+  {
     id: 'radaisa-martinez', name: 'Radaisa Martínez', role: 'Asesora inmobiliaria', photo: '/team/radaisa-martinez.webp', fullBody: true,
     phone: '809-421-5148', email: 'radaisamartinez15@gmail.com',
     years: 5, specialties: ['Inversión', 'Punta Cana'],
     quote: 'Una buena inversión empieza con la información correcta.',
   },
-  {
-    id: 'mary-rivas', name: 'Mary Rivas', role: 'Asesora inmobiliaria', photo: '/team/mary-rivas.webp', fullBody: true,
-    years: 3, specialties: ['Alquileres', 'Primera vivienda'],
-    quote: 'Te acompaño paso a paso, desde la primera visita hasta la entrega de llaves.',
-  },
 ];
 
 export const member = (id: string) => TEAM.find((m) => m.id === id);
 /** Number of published listings assigned to an advisor. */
-export const listingsOf = (id: string) => PROPERTIES.filter((p) => p.agent === id).length;
+export const listingsOf = (id: string) => AVAILABLE.filter((p) => p.agent === id).length;
 export const telHref = (phone: string) => `tel:+1${phone.replace(/\D/g, '')}`;
 export const waHref = (phone: string, text?: string) =>
   `https://wa.me/1${phone.replace(/\D/g, '')}${text ? `?text=${encodeURIComponent(text)}` : ''}`;
