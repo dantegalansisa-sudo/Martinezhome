@@ -684,7 +684,7 @@ const P: Property[] = [
     kind: 'Villa',
     operation: 'venta',
     status: 'planos',
-    delivery: '23 meses',
+    delivery: 'en 23 meses',
     zone: 'Brisa Punta Cana',
     city: 'Punta Cana',
     coords: [18.6888, -68.4392],

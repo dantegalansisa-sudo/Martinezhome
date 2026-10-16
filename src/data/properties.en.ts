@@ -334,7 +334,7 @@ export const LISTINGS_EN: Record<string, ListingCopy> = {
   },
   'villas-brisas-punta-cana': {
     title: 'Villas Brisas de Punta Cana',
-    delivery: '23 months',
+    delivery: 'in 23 months',
     summary: 'A resort-style project of 13 two-story villas with a private club and pool, near Downtown Punta Cana.',
     description:
       'An exclusive resort-style project of 13 detached two-story villas in Brisas de Punta Cana, Calle del Sol, close to Downtown Punta Cana, shopping centers, restaurants and entertainment. Comfort, privacy and an excellent investment opportunity.',
