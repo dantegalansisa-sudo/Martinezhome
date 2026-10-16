@@ -677,6 +677,40 @@ const P: Property[] = [
     featured: true,
     agent: 'joel-polanco',
   },
+  {
+    id: 26,
+    slug: 'villas-brisas-punta-cana',
+    title: 'Villas Brisas de Punta Cana',
+    kind: 'Villa',
+    operation: 'venta',
+    status: 'planos',
+    delivery: '23 meses',
+    zone: 'Brisa Punta Cana',
+    city: 'Punta Cana',
+    coords: [18.6888, -68.4392],
+    price: { amount: 199000, currency: 'USD', from: true },
+    beds: '3', bedsMin: 3, baths: '2.5', parking: '2',
+    summary: 'Proyecto turístico de 13 villas de dos niveles con club privado y piscina, próximo a Downtown Punta Cana.',
+    description:
+      'Un exclusivo proyecto turístico de 13 villas individuales de dos niveles en Brisas de Punta Cana, Calle del Sol, próximo a Downtown Punta Cana, centros comerciales, restaurantes y zonas de entretenimiento. Comodidad, privacidad y una excelente oportunidad de inversión.',
+    highlights: ['Solo 13 villas', 'Club privado con piscina', 'Patio privado de 40 m²', 'Jacuzzi opcional'],
+    sections: [
+      { title: 'Las villas', items: ['3 amplias habitaciones', '2.5 baños', 'Sala, comedor y desayunador', 'Cocina moderna', 'Área de lavado', 'Patio privado de 40 m²', '2 parqueos', 'Jacuzzi opcional para 4 personas'] },
+      { title: 'Amenidades', items: ['Club privado', 'Piscina', 'Área social techada', 'Área de juegos infantiles', 'Garita de seguridad', 'Cámaras y control de acceso', 'Parqueos para visitantes'] },
+      { title: 'Terminaciones', items: ['Pisos de porcelanato importado', 'Cocina y puertas modulares', 'Topes de cuarzo blanco', 'Ventanas y puertas corredizas de cristal con aluminio negro'] },
+    ],
+    payment: [
+      { label: 'Reserva', value: 'US$1,000' },
+      { label: 'Inicial 10%', value: 'Incluye la reserva' },
+      { label: '20% durante la construcción', value: 'En cuotas' },
+      { label: '70% restante', value: 'Contra entrega' },
+    ],
+    tags: ['Club privado'],
+    images: 8,
+    render: true,
+    featured: true,
+    agent: 'vanessa-martinez',
+  },
 ];
 
 export const PROPERTIES = P;

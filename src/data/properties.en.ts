@@ -332,4 +332,24 @@ export const LISTINGS_EN: Record<string, ListingCopy> = {
     ],
     tags: ['Jacuzzi included'],
   },
+  'villas-brisas-punta-cana': {
+    title: 'Villas Brisas de Punta Cana',
+    delivery: '23 months',
+    summary: 'A resort-style project of 13 two-story villas with a private club and pool, near Downtown Punta Cana.',
+    description:
+      'An exclusive resort-style project of 13 detached two-story villas in Brisas de Punta Cana, Calle del Sol, close to Downtown Punta Cana, shopping centers, restaurants and entertainment. Comfort, privacy and an excellent investment opportunity.',
+    highlights: ['Only 13 villas', 'Private club with pool', '40 m² private patio', 'Optional jacuzzi'],
+    sections: [
+      { title: 'The villas', items: ['3 spacious bedrooms', '2.5 bathrooms', 'Living room, dining room and breakfast nook', 'Modern kitchen', 'Laundry area', '40 m² private patio', '2 parking spaces', 'Optional 4-person jacuzzi'] },
+      { title: 'Amenities', items: ['Private club', 'Pool', 'Covered social area', "Children's playground", 'Security gatehouse', 'Cameras and access control', 'Visitor parking'] },
+      { title: 'Finishes', items: ['Imported porcelain tile floors', 'Modular kitchen and doors', 'White quartz countertops', 'Glass sliding windows and doors with black aluminum frames'] },
+    ],
+    payment: [
+      { label: 'Reservation', value: 'US$1,000' },
+      { label: '10% down payment', value: 'Includes the reservation' },
+      { label: '20% during construction', value: 'In installments' },
+      { label: 'Remaining 70%', value: 'On delivery' },
+    ],
+    tags: ['Private club'],
+  },
 };
