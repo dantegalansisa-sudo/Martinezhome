@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
-import { Briefcase, Home, Mail, Phone, Quote } from 'lucide-react';
+import { Briefcase, Mail, Phone, Quote } from 'lucide-react';
 import { WhatsAppIcon } from './BrandIcons';
-import { listingsOf, telHref, waHref, type Member } from '../data/team';
+import { telHref, waHref, type Member } from '../data/team';
 import { waLink } from '../data/site';
 import { EASINGS } from '../easings';
 import { t } from '../i18n';
@@ -15,7 +15,6 @@ const variants = {
 export default function TeamCard({ m, compact }: { m: Member; compact?: boolean }) {
   const first = m.name.replace('Lic. ', '').split(' ')[0];
   const greeting = t('Hola {name}, vi tu perfil en la web de Martínez Home y me gustaría recibir asesoría.', { name: first });
-  const listings = listingsOf(m.id);
   const chips = compact ? m.specialties.slice(0, 2) : m.specialties;
 
   return (
@@ -37,7 +36,6 @@ export default function TeamCard({ m, compact }: { m: Member; compact?: boolean 
       <div className="member__panel">
         <ul className="member__stats">
           <li><Briefcase size={13} /> {t('{n} años de experiencia', { n: m.years })}</li>
-          {listings > 0 && <li><Home size={13} /> {listings} {listings === 1 ? t('propiedad') : t('propiedades')}</li>}
         </ul>
         <div className="member__chips">
           {chips.map((s) => <span key={s}>{t(s)}</span>)}

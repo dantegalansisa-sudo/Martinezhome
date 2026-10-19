@@ -352,4 +352,23 @@ export const LISTINGS_EN: Record<string, ListingCopy> = {
     ],
     tags: ['Private club'],
   },
+  'apartamentos-ciudad-juan-bosch': {
+    title: 'Apartments near Ciudad Juan Bosch',
+    summary: "Eligible for the First Home Bonus: 3 bedrooms, 2 bathrooms and a balcony in a gated community with pool and 24/7 security.",
+    description:
+      'A residential project with buildings of only 4 apartments per floor, a modern design with large windows, a social area with pool and gazebo, 24/7 security, controlled access and play areas. Near Ciudad Juan Bosch, ideal for your first home.',
+    highlights: ['Eligible for the First Home Bonus', 'Only 4 apartments per floor', 'Pool and gazebo', '24/7 security'],
+    sections: [
+      { title: 'Layout', items: ['Living room with balcony', 'Dining room', 'Kitchen', '3 bedrooms (primary with bathroom)', 'Secondary bedrooms with closets', '2 bathrooms', 'Laundry area', '1 parking space'] },
+      { title: 'Finishes', items: ['Fine hardwood', 'Natural granite kitchen countertop', 'Top-quality doors, closets and kitchen cabinets'] },
+      { title: 'Amenities', items: ['Social area with pool and gazebo', 'Play areas', '24/7 security', 'Controlled access'] },
+    ],
+    payment: [
+      { label: 'Reservation', value: 'US$2,000' },
+      { label: 'Down payment', value: '20%' },
+      { label: 'Remaining 80%', value: "On delivery (we'll help you with financing)" },
+      { label: 'Delivery', value: 'In 12, 18 and 24 months' },
+    ],
+    tags: ['First Home Bonus'],
+  },
 };

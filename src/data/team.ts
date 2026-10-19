@@ -1,5 +1,3 @@
-import { AVAILABLE } from './properties';
-
 export interface Member {
   id: string;
   name: string;
@@ -57,8 +55,6 @@ export const TEAM: Member[] = [
 ];
 
 export const member = (id: string) => TEAM.find((m) => m.id === id);
-/** Number of published listings assigned to an advisor. */
-export const listingsOf = (id: string) => AVAILABLE.filter((p) => p.agent === id).length;
 export const telHref = (phone: string) => `tel:+1${phone.replace(/\D/g, '')}`;
 export const waHref = (phone: string, text?: string) =>
   `https://wa.me/1${phone.replace(/\D/g, '')}${text ? `?text=${encodeURIComponent(text)}` : ''}`;

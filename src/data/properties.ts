@@ -711,6 +711,38 @@ const P: Property[] = [
     featured: true,
     agent: 'vanessa-martinez',
   },
+  {
+    id: 27,
+    slug: 'apartamentos-ciudad-juan-bosch',
+    title: 'Apartamentos próximos a Ciudad Juan Bosch',
+    kind: 'Apartamento',
+    operation: 'venta',
+    status: 'planos',
+    zone: 'Ciudad Juan Bosch',
+    city: 'Santo Domingo Este',
+    coords: [18.5268, -69.7462],
+    price: { amount: 73400, currency: 'USD', from: true },
+    beds: '3', bedsMin: 3, baths: '2', area: '78 m²', parking: '1',
+    summary: 'Aplica para el Bono Primera Vivienda: 3 habitaciones, 2 baños y balcón en un residencial con piscina y seguridad 24/7.',
+    description:
+      'Proyecto residencial con edificios de solo 4 apartamentos por piso, diseño moderno con amplias ventanas, área social con piscina y gazebo, seguridad 24/7, acceso controlado y áreas infantiles. Próximo a Ciudad Juan Bosch, ideal para tu primera vivienda.',
+    highlights: ['Aplica para Bono Primera Vivienda', 'Solo 4 apartamentos por piso', 'Piscina y gazebo', 'Seguridad 24/7'],
+    sections: [
+      { title: 'Distribución', items: ['Sala con balcón', 'Comedor', 'Cocina', '3 habitaciones (principal con baño)', 'Habitaciones secundarias con clósets', '2 baños', 'Área de lavado', '1 parqueo'] },
+      { title: 'Terminaciones', items: ['Madera preciosa', 'Tope de cocina en granito natural', 'Puertas, clósets y gabinetes de cocina de primera calidad'] },
+      { title: 'Amenidades', items: ['Área social con piscina y gazebo', 'Áreas infantiles', 'Seguridad 24/7', 'Acceso controlado'] },
+    ],
+    payment: [
+      { label: 'Reserva', value: 'US$2,000' },
+      { label: 'Inicial', value: '20%' },
+      { label: '80% restante', value: 'A la entrega (te apoyamos con el financiamiento)' },
+      { label: 'Entregas', value: 'En 12, 18 y 24 meses' },
+    ],
+    tags: ['Bono Primera Vivienda'],
+    images: 6,
+    featured: true,
+    agent: 'mary-rivas',
+  },
 ];
 
 export const PROPERTIES = P;

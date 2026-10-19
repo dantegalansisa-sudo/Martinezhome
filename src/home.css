@@ -189,7 +189,6 @@
 .member--compact .member__name { font-size: 15px; }
 .member--compact .member__panel { gap: 8px; padding: 12px 12px 14px; }
 .member--compact .member__wa span { display: none; }
-.member--compact .member__stats li:nth-child(2) { display: none; }
 .team-row { align-items: stretch; }
 .team-row > .member { display: flex; flex-direction: column; }
 .team-grid > .member, .team-lead__card .member { display: flex; flex-direction: column; height: 100%; }
