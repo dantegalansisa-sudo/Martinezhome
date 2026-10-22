@@ -371,4 +371,16 @@ export const LISTINGS_EN: Record<string, ListingCopy> = {
     ],
     tags: ['First Home Bonus'],
   },
+  'apartamentos-la-hipica': {
+    title: '2- and 3-bedroom apartments in La Hípica',
+    summary: 'Eligible for the First Home Bonus, with private terraces available on the 4th floor. Near Autopista de San Isidro.',
+    description:
+      'A residential project near Autopista de San Isidro and La Hípica, in Santo Domingo Este. 2- and 3-bedroom apartments, with private terraces available on the 4th floor and bank financing options.',
+    highlights: ['Eligible for the First Home Bonus', 'Private terraces on the 4th floor', 'Bank financing', 'From 52.70 m²'],
+    sections: [
+      { title: 'Apartments', items: ['2 and 3 bedrooms', '1 or 2 bathrooms, depending on the unit type', '1 parking space', 'Private terraces available on the 4th floor', 'From 52.70 m² to 109.55 m² (including open-air terraces)'] },
+      { title: 'First Home Bonus', items: ['RD$294,000, RD$335,000 or RD$446,000 depending on the unit type', 'Price varies by floor, unit type and phase'] },
+    ],
+    tags: ['First Home Bonus'],
+  },
 };

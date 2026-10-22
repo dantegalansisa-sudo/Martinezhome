@@ -743,6 +743,31 @@ const P: Property[] = [
     featured: true,
     agent: 'mary-rivas',
   },
+  {
+    id: 28,
+    slug: 'apartamentos-la-hipica',
+    title: 'Apartamentos de 2 y 3 habitaciones en La Hípica',
+    kind: 'Apartamento',
+    operation: 'venta',
+    zone: 'La Hípica',
+    city: 'Santo Domingo Este',
+    coords: [18.4983, -69.7561],
+    price: { amount: 3825000, currency: 'DOP', from: true, to: 5300000 },
+    beds: '2 – 3', bedsMin: 2, baths: '1 – 2', area: '52.70 – 109.55 m²', parking: '1',
+    summary: 'Aplica para el Bono Primera Vivienda, con terrazas privadas disponibles en el 4.º nivel. Próximo a la Autopista de San Isidro.',
+    description:
+      'Proyecto residencial en un sector próximo a la Autopista de San Isidro y la Hípica, en Santo Domingo Este. Apartamentos de 2 y 3 habitaciones, con terrazas privadas disponibles en el 4.º nivel y facilidades de financiamiento bancario.',
+    highlights: ['Aplica para Bono Primera Vivienda', 'Terrazas privadas en 4.º nivel', 'Financiamiento bancario', 'Desde 52.70 m²'],
+    sections: [
+      { title: 'Apartamentos', items: ['2 y 3 habitaciones', '1 y 2 baños, según tipología', '1 parqueo', 'Terrazas privadas disponibles en el 4.º nivel', 'Desde 52.70 m² hasta 109.55 m² (incluye terrazas destechadas)'] },
+      { title: 'Bono Primera Vivienda', items: ['RD$294,000, RD$335,000 o RD$446,000 según tipología', 'Precio según nivel, tipología y etapa'] },
+    ],
+    tags: ['Bono Primera Vivienda'],
+    images: 7,
+    video: '/videos/apartamentos-la-hipica.mp4',
+    featured: true,
+    agent: 'mary-rivas',
+  },
 ];
 
 export const PROPERTIES = P;
